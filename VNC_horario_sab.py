@@ -1,5 +1,5 @@
 #caminho = ('C:\\Users\\User\\Desktop\\horario.csv')
-caminho = ('C:\\Users\\Rafael Barbosa\\OneDrive\\Área de Trabalho\\vnc_horario_sab.csv')
+caminho = ('vnc_horario_sab.csv')
 import csv
 import datetime
 import tkinter as tk

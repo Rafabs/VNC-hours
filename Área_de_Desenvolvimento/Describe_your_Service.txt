@@ -1,0 +1,2 @@
+** Utilize a seguinte anotação para descrever as operações em andamento e ações subsequentes em cada arquivo **
+---------------------------------------------------------------------------------------------------------------

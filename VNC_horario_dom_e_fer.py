@@ -1,4 +1,3 @@
-#caminho = ('C:\\Users\\User\\Desktop\\horario.csv')
 caminho = ('VNC_horario_dom_e_fer.CSV')
 import csv
 import datetime
@@ -47,6 +46,9 @@ class BusScheduleApp:
         # Loop de atualização dos horários
         self.update_schedule()
 
+        # Adiciona o binding para a tecla ESC fechar o programa
+        self.master.bind("<Escape>", self.close_program)
+
     def update_schedule(self):
         # Ler os horários do arquivo csv
         with open(caminho, 'r', encoding='utf-8') as csv_file:
@@ -88,7 +90,9 @@ class BusScheduleApp:
         # Agendar a próxima atualização
         self.master.after(1000, self.update_schedule)  # 1000 milissegundos = 1 segundo
 
-
+    def close_program(self, event):
+        self.master.destroy()
+        
 # Criação da janela principal e execução do loop de eventos do Tkinter
 root = tk.Tk()
 app = BusScheduleApp(root)

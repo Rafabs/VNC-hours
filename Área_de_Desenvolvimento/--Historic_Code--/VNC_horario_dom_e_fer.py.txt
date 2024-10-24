@@ -1,0 +1,34 @@
+>> 15:55 24/10/2024 RB - VNC-hours/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
+AO PRESSIONAR O BOTÃO "ESC", FECHAR A APLICAÇÃO
+
+de (linha 50)
+Vazio
+
+para (linha 50)
+        self.master.bind("<Escape>", self.close_program)
+
+de (linha 93)
+Vazio
+
+para (linha 93)
+    def close_program(self, event):
+        self.master.destroy()
+
+(X) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------

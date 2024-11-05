@@ -1,0 +1,30 @@
+2024-11-04 23:18:33,751 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:18:38,369 - INFO - Executando script: VNC_horario_seg_sex.py
+2024-11-04 23:18:41,569 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-04 23:20:42,811 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:20:44,614 - INFO - Executando script: VNC_horario_seg_sex.py
+2024-11-04 23:20:48,954 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-04 23:23:00,067 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:24:53,461 - INFO - Executando script: VNC_horario_seg_sex.py
+Programa finalizado pelo usuário.
+2024-11-04 23:24:55,467 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-04 23:25:27,138 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:25:27,900 - INFO - Executando script: VNC_horario_seg_sex.py
+Programa finalizado pelo usuário.
+2024-11-04 23:25:34,370 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-04 23:28:07,635 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:28:08,301 - INFO - Executando script: VNC_horario_seg_sex.py
+2024-11-04 23:28:08,380 - INFO - Executando script: VNC_horario_seg_sex.csv
+2024-11-04 23:28:09,762 - INFO - Script VNC_horario_seg_sex.csv executado com sucesso.
+2024-11-04 23:28:09,790 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-04 23:29:38,353 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:29:38,878 - INFO - Executando script: VNC_horario_seg_sex.py
+2024-11-04 23:29:38,955 - INFO - Executando script: VNC_horario_seg_sex.csv
+2024-11-04 23:29:39,958 - INFO - Script VNC_horario_seg_sex.csv executado com sucesso.
+2024-11-04 23:29:39,991 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-04 23:33:53,763 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-04 23:33:54,308 - INFO - Executando script: VNC_horario_seg_sex.py
+2024-11-04 23:33:54,388 - INFO - Executando script: VNC_horario_seg_sex.csv
+2024-11-04 23:33:55,380 - INFO - Programa finalizado pelo usuário.
+2024-11-04 23:33:55,395 - INFO - Script VNC_horario_seg_sex.csv executado com sucesso.
+2024-11-04 23:33:55,435 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.

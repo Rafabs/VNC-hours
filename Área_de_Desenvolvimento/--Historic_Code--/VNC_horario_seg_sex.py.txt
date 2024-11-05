@@ -1,3 +1,54 @@
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+
+>> 23:35 04/11/2024 RB - VNC-hours/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_e_sex.py
+INCREMENTAR LOG.TXT
+
+de (linha 1)
+caminho = ('VNC_horario_seg_e_sex.CSV')
+
+para (linha 1)
+import os
+
+de (linha 6)
+Vazio
+
+para (linha 6)
+import sys
+
+# Caminho para o log
+log_path = 'log.txt'
+
+# Redireciona a saída padrão para o arquivo log.txt
+sys.stdout = open(log_path, 'a')  # Abre em modo append para adicionar ao log
+
+caminho = 'VNC_horario_seg_e_sex.csv'
+
+de (linha 103)
+Vazio
+
+para (linha 103)
+        print("Programa finalizado pelo usuário.")
+
+de (linha 111)
+Vazio
+
+para (linha 111)
+# Fecha o arquivo de log ao final da execução
+sys.stdout.close()
+
+(X) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+
 >> 15:55 24/10/2024 RB - VNC-hours/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.py
 AO PRESSIONAR O BOTÃO "ESC", FECHAR A APLICAÇÃO
 
@@ -15,20 +66,6 @@ para (linha 93)
         self.master.destroy()
 
 (X) SOLUCIONADO
-( ) EM DESENVOLVIMENTO
-( ) NÃO DEU CERTO
----------------------------------------------------------------------------------------------------------------
-( ) SOLUCIONADO
-( ) EM DESENVOLVIMENTO
-( ) NÃO DEU CERTO
----------------------------------------------------------------------------------------------------------------
-
-( ) SOLUCIONADO
-( ) EM DESENVOLVIMENTO
-( ) NÃO DEU CERTO
----------------------------------------------------------------------------------------------------------------
-
-( ) SOLUCIONADO
 ( ) EM DESENVOLVIMENTO
 ( ) NÃO DEU CERTO
 ---------------------------------------------------------------------------------------------------------------

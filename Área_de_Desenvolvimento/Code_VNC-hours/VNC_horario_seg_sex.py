@@ -1,8 +1,17 @@
-caminho = ('VNC_horario_seg_sex.csv')
+import os
 import csv
 import datetime
 import tkinter as tk
 from tkinter import ttk
+import sys
+
+# Caminho para o log
+log_path = 'log.txt'
+
+# Redireciona a saída padrão para o arquivo log.txt
+sys.stdout = open(log_path, 'a')  # Abre em modo append para adicionar ao log
+
+caminho = 'VNC_horario_seg_sex.csv'
 
 class BusScheduleApp:
     def __init__(self, master):
@@ -91,9 +100,13 @@ class BusScheduleApp:
         self.master.after(1000, self.update_schedule)  # 1000 milissegundos = 1 segundo
 
     def close_program(self, event):
+        print("Programa finalizado pelo usuário.")
         self.master.destroy()
 
 # Criação da janela principal e execução do loop de eventos do Tkinter
 root = tk.Tk()
 app = BusScheduleApp(root)
 root.mainloop()
+
+# Fecha o arquivo de log ao final da execução
+sys.stdout.close()

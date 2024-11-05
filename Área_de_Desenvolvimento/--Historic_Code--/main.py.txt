@@ -1,27 +1,68 @@
->> 15:55 24/10/2024 RB - VNC-hours/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
-AO PRESSIONAR O BOTÃO "ESC", FECHAR A APLICAÇÃO
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
 
-de (linha 50)
+( ) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
+
+>> 23:35 04/11/2024 RB - VNC-hours/Área_de_Desenvolvimento/--Historic_Code--/main.py
+INCREMENTAR LOG.TXT
+
+de (linha 2)
 Vazio
 
-para (linha 50)
-        self.master.bind("<Escape>", self.close_program)
+para (linha 2)
+import logging
 
+# Configuração do sistema de log
+logging.basicConfig(filename='log.txt', filemode='a', level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
+
+de (linha 10)
+Vazio
+
+para (linha 10)
+    logging.info(f"Scripts listados: {scripts}")
+
+de (linha 14)
+Vazio
+
+para (linha 14)
+    logging.info(f"Executando script: {script}")
+
+de (linha 16)
+Vazio
+
+para (linha 16)
+    logging.info(f"Script {script} executado com sucesso.")
+
+de (linha 23)
+Vazio
+
+para (linha 23)
+        logging.warning("Nenhum script disponível para executar.")
+
+de (linha 30)
+Vazio
+
+para (linha 30)
+    try:
+        escolha = int(input("Escolha o número do script que deseja executar: "))
+
+        if 1 <= escolha <= len(scripts_disponiveis):
+            script_escolhido = scripts_disponiveis[escolha - 1]
+            executar_script(script_escolhido)
+        else:
+            print("Escolha inválida.")
+            logging.warning("Escolha inválida feita pelo usuário.")
+    except ValueError:
+        print("Entrada inválida. Por favor, insira um número.")
+        logging.error("Entrada inválida - o usuário não digitou um número.")
+        
 (X) SOLUCIONADO
-( ) EM DESENVOLVIMENTO
-( ) NÃO DEU CERTO
----------------------------------------------------------------------------------------------------------------
-( ) SOLUCIONADO
-( ) EM DESENVOLVIMENTO
-( ) NÃO DEU CERTO
----------------------------------------------------------------------------------------------------------------
-
-( ) SOLUCIONADO
-( ) EM DESENVOLVIMENTO
-( ) NÃO DEU CERTO
----------------------------------------------------------------------------------------------------------------
-
-( ) SOLUCIONADO
 ( ) EM DESENVOLVIMENTO
 ( ) NÃO DEU CERTO
 ---------------------------------------------------------------------------------------------------------------

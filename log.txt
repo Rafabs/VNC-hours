@@ -28,3 +28,7 @@ Programa finalizado pelo usuário.
 2024-11-04 23:33:55,380 - INFO - Programa finalizado pelo usuário.
 2024-11-04 23:33:55,395 - INFO - Script VNC_horario_seg_sex.csv executado com sucesso.
 2024-11-04 23:33:55,435 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+2024-11-06 17:58:31,628 - INFO - Scripts listados: ['VNC_horario_dom_e_fer.py', 'VNC_horario_sab.py', 'VNC_horario_seg_sex.py']
+2024-11-06 17:58:32,594 - INFO - Executando script: VNC_horario_seg_sex.py
+Programa finalizado pelo usuário.
+2024-11-06 17:59:07,637 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.

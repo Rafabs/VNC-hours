@@ -1,5 +1,12 @@
 ** Documente os registros de anotações realizadas em cada trecho de código abaixo (APÓS SOLUCIONADO) **
 
+>> 01:44 16/11/2024 RB - VNC-HOURS/VNC_horario_dom_e_fer.csv
+>> 01:44 16/11/2024 RB - VNC-HOURS/VNC_horario_sab.csv
+>> 01:44 16/11/2024 RB - VNC-HOURS/VNC_horario_seg_sex.csv
+- [ ] ATUALIZAR HORÁRIOS 0007/10 E 0007/22
+# FORAM RETIRADA AS PARTIDAS ENTRE 04h40 e 06h29 das linhas 0007/10 e 0007/22 de todos os dias.
+
+---------------------------------------------------------------------------------------------------------------
 >> 23:35 04/11/2024 RB - VNC-HOURS/main.py
 - [ ] Incrementar log.txt
 # FOI CRIADO UMA FUNÇÃO PARA REGISTRAR LOG DE ABERTURA, FUNCIONAMENTO E ENCERRAMENTO EM MAIN.PY E ARQUIVOS PERIFÉRICOS/DEPENDENTES.

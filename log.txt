@@ -32,3 +32,8 @@ Programa finalizado pelo usuário.
 2024-11-06 17:58:32,594 - INFO - Executando script: VNC_horario_seg_sex.py
 Programa finalizado pelo usuário.
 2024-11-06 17:59:07,637 - INFO - Script VNC_horario_seg_sex.py executado com sucesso.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.

@@ -1,7 +1,7 @@
 import os
 import csv
 import datetime
-import tkinter as tk
+import customtkinter as ctk
 from tkinter import ttk
 import sys
 
@@ -19,92 +19,100 @@ class BusScheduleApp:
         self.master = master
         master.title('VILA NOVA CACHOEIRINHA')
         master.attributes('-fullscreen', True)
-        master.configure(bg='#000000')
-        
-        # Define o estilo da tabela
-        style = ttk.Style()
-        style.theme_use('default')
-        
-        style.configure('Treeview.Heading', background='#000000', foreground='#FFFFFF', rowheight=45, fieldbackground='#FFFFFF', font=('Arial', 30, 'bold'))
-        style.configure('Treeview', background='#333333', foreground='#FFFFFF', rowheight=70, fieldbackground='#F3F3F3', font=('Arial', 30))
-        style.map('Treeview', background=[('selected', '#333333')])
+        ctk.set_appearance_mode("dark")
+        ctk.set_default_color_theme("dark-blue")
 
         # Criação do rótulo para exibir os horários
-        self.schedule_label = tk.Label(master, text='', font=('Arial', 35, 'bold'), bg='#000000', fg='#F8F8F8')
+        self.schedule_label = ctk.CTkLabel(master, text='', font=ctk.CTkFont(size=50, weight="bold"))
         self.schedule_label.pack(pady=10)
 
-        # Criação da tabela para exibir os horários
-        columns = ('PARADA', 'PARTIDA', 'LINHA', 'DESTINO')
-        self.treeview = ttk.Treeview(master, columns=columns, show='headings')
-        for col in columns:
-            if col == 'PARADA':
-                self.treeview.column("PARADA", width=210, minwidth=50, anchor='center')
-                self.treeview.heading("PARADA", text="PARADA")
-            if col == 'PARTIDA':
-                self.treeview.column("PARTIDA", width=210, minwidth=50, anchor='center')
-                self.treeview.heading("PARTIDA", text="PARTIDA")
-            if col == 'LINHA':
-                self.treeview.column("LINHA", width=210, minwidth=50, anchor='center')
-                self.treeview.heading("LINHA", text="LINHA")
-            if col == 'DESTINO':
-                self.treeview.column("DESTINO", width=800, minwidth=50, anchor='w')
-                self.treeview.heading("DESTINO", text="DESTINO")
+        # Criação do frame da tabela
+        self.table_frame = ctk.CTkFrame(master)
+        self.table_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        self.treeview.pack(pady=10)
-    
-        # Loop de atualização dos horários
+        style = ttk.Style() 
+        style.configure("Treeview", font=('Arial', 35), rowheight=80, background="#333333", foreground="#FFFFFF") # Fontes maiores e linhas mais altas 
+        style.configure("Treeview.Heading", font=('Arial', 40, 'bold'), background="#444444")
+
+        # Criação do widget Treeview
+        columns = ('PARADA', 'PARTIDA', 'LINHA', 'DESTINO')
+        self.treeview = ttk.Treeview(self.table_frame, columns=columns, show='headings', height=15)
+
+        for col in columns:
+            self.treeview.heading(col, text=col)
+            if col == 'PARADA':
+                self.treeview.column("PARADA", width=210, anchor='center')
+            elif col == 'PARTIDA':
+                self.treeview.column("PARTIDA", width=210, anchor='center')
+            elif col == 'LINHA':
+                self.treeview.column("LINHA", width=210, anchor='center')
+            elif col == 'DESTINO':
+                self.treeview.column("DESTINO", width=800, anchor='w')
+
+        self.treeview.pack(fill="both", expand=True)
+        # Loop de atualização dos horários e do relógio
         self.update_schedule()
+        self.update_clock()
 
         # Adiciona o binding para a tecla ESC fechar o programa
         self.master.bind("<Escape>", self.close_program)
 
     def update_schedule(self):
-        # Ler os horários do arquivo csv
+        # Ler os horários do arquivo CSV
         with open(caminho, 'r', encoding='utf-8') as csv_file:
             csv_reader = csv.DictReader(csv_file, delimiter=';')
             horarios = [row for row in csv_reader]
 
-        # Filtrar os horários que ainda vão acontecer
+        # Hora atual
         hora_atual = datetime.datetime.now().time()
+
+        # Filtrar os horários que ainda vão acontecer
         horarios_filtrados = []
         for h in horarios:
-            partida_str = h.get('PARTIDA', '')
+            partida_str = h.get('PARTIDA', '').strip()
             if partida_str:
-                partida = datetime.datetime.strptime(partida_str, '%H:%M').time()
-                if partida > hora_atual:
-                    horarios_filtrados.append(h)
+                try:
+                    # Converter o horário de partida para objeto datetime.time
+                    partida = datetime.datetime.strptime(partida_str, '%H:%M').time()
+                    if partida > hora_atual:
+                        horarios_filtrados.append(h)
+                except ValueError:
+                    print(f"Erro ao converter horário: {partida_str}")
 
         # Verificar se há horários disponíveis
         if not horarios_filtrados:
             schedule_text = 'Nenhum horário disponível'
+            self.schedule_label.configure(text=schedule_text)
         else:
-            # Atualizar o rótulo com os horários filtrados
-            schedule_text = 'VILA NOVA CACHOEIRINHA | ' + datetime.datetime.now().strftime('%d/%m/%Y \ %H:%M:%S')
-            self.schedule_label.config(text=schedule_text)
+            # Atualizar o rótulo com a data atual
+            schedule_text = 'VILA NOVA CACHOEIRINHA | ' + datetime.datetime.now().strftime('%d/%m/%Y')
+            self.schedule_label.configure(text=schedule_text)
 
-            # Limpar a tabela
+            # Limpar a tabela antes de atualizar
             self.treeview.delete(*self.treeview.get_children())
 
-            # Exibir os horários filtrados na tabela
+            # Adicionar os horários filtrados na tabela
             for h in horarios_filtrados:
                 parada = h.get('PARADA', '-')
-                partida = datetime.datetime.strptime(h.get('PARTIDA', ''), '%H:%M').time()
-                linha = h.get('LINHA', '')
-                destino = h.get('DESTINO', '')
-                if partida > hora_atual:
-                    self.treeview.insert("", tk.END, values=(parada, partida, linha, destino), tags=("red",))
-                else:
-                    self.treeview.insert("", tk.END, values=(parada, partida, linha, destino))
+                partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                linha = h.get('LINHA', '-')
+                destino = h.get('DESTINO', '-')
+                self.treeview.insert("", "end", values=(parada, partida, linha, destino))
 
-        # Agendar a próxima atualização
-        self.master.after(1000, self.update_schedule)  # 1000 milissegundos = 1 segundo
+        # Agendar a próxima atualização em 60 segundos
+        self.master.after(1000, self.update_schedule)
+
+    def update_clock(self):
+        current_time = datetime.datetime.now().strftime('%d/%m/%Y \ %H:%M:%S')
+        self.schedule_label.configure(text=f"VILA NOVA CACHOEIRINHA | {current_time}")
+        self.master.after(1000, self.update_clock)  # Atualiza o relógio a cada segundo
 
     def close_program(self, event):
         print("Programa finalizado pelo usuário.")
         self.master.destroy()
 
-# Criação da janela principal e execução do loop de eventos do Tkinter
-root = tk.Tk()
+# Criação da janela principal e execução do loop de eventos do customtkinter
+root = ctk.CTk()
 app = BusScheduleApp(root)
 root.mainloop()
 

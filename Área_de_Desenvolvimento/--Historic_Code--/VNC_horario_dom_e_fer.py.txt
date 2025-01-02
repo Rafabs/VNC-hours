@@ -2,6 +2,97 @@
 ( ) EM DESENVOLVIMENTO
 ( ) NÃO DEU CERTO
 ---------------------------------------------------------------------------------------------------------------
+
+>> 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
+- [ ] INSERIR FUNÇÃO PARA EXIBIR DETALHES DAS LINHAS PERIÓDICAMENTE
+
+de (linha 54)
+        Vazio
+
+para (linha 54)
+        # Variável de controle para alternar exibição
+        self.toggle_display = True
+        self.current_line_index = 0
+
+de (linha 82)
+
+        # Verificar se há horários disponíveis
+        if not horarios_filtrados:
+            schedule_text = 'Nenhum horário disponível'
+            self.schedule_label.configure(text=schedule_text)
+        else:
+            # Atualizar o rótulo com a data atual
+            schedule_text = 'VILA NOVA CACHOEIRINHA | ' + datetime.datetime.now().strftime('%d/%m/%Y')
+            self.schedule_label.configure(text=schedule_text)
+
+            # Limpar a tabela antes de atualizar
+            self.treeview.delete(*self.treeview.get_children())
+
+            # Adicionar os horários filtrados na tabela
+            for h in horarios_filtrados:
+                parada = h.get('PARADA', '-')
+                partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                linha = h.get('LINHA', '-')
+                destino = h.get('DESTINO', '-')
+                self.treeview.insert("", "end", values=(parada, partida, linha, destino))
+
+        # Agendar a próxima atualização em 60 segundos
+        self.master.after(1000, self.update_schedule)
+
+    def update_clock(self):
+        current_time = datetime.datetime.now().strftime('%d/%m/%Y \ %H:%M:%S')
+
+para (linha 82)
+        # Agrupar horários por linha
+        linhas_grupo = {}
+        for h in horarios_filtrados:
+            linha = h.get('LINHA', '-')
+            if linha not in linhas_grupo:
+                linhas_grupo[linha] = []
+            linhas_grupo[linha].append(h)
+
+        if horarios_filtrados:
+            # Alternar entre exibição de todas as linhas e linha isolada
+            if self.toggle_display:
+                # Exibir todas as linhas juntas
+                self.treeview.delete(*self.treeview.get_children())
+                for h in horarios_filtrados:
+                    parada = h.get('PARADA', '-')
+                    partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                    linha = h.get('LINHA', '-')
+                    destino = h.get('DESTINO', '-')
+                    self.treeview.insert("", "end", values=(parada, partida, linha, destino))
+            else:
+                # Exibir todas as próximas partidas da linha isolada
+                self.treeview.delete(*self.treeview.get_children())
+                linha_atual = list(linhas_grupo.keys())[self.current_line_index]  # Selecionar a linha atual
+                for h in linhas_grupo[linha_atual]:
+                    parada = h.get('PARADA', '-')
+                    partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                    linha_texto = h.get('LINHA', '-')
+                    destino = h.get('DESTINO', '-')
+                    self.treeview.insert("", "end", values=(parada, partida, linha_texto, destino))
+
+                # Avançar para a próxima linha
+                self.current_line_index = (self.current_line_index + 1) % len(linhas_grupo)
+
+            # Alternar o estado da exibição
+            self.toggle_display = not self.toggle_display
+
+        else:
+            # Se não houver horários futuros, limpar a tabela
+            self.treeview.delete(*self.treeview.get_children())
+
+        # Agendar a próxima atualização em 20 segundos
+        self.master.after(20000, self.update_schedule)
+
+    def update_clock(self):
+        current_time = datetime.datetime.now().strftime('%d/%m/%Y - %H:%M:%S')
+
+(X) SOLUCIONADO
+( ) EM DESENVOLVIMENTO
+( ) NÃO DEU CERTO
+---------------------------------------------------------------------------------------------------------------
 >> 00:46 27/12/2024 RB - VNC-hours/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
 AJUSTAR JANELA PARA UTILIZAR A BIBLIOTECA CUSTOMTKINTER
 

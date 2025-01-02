@@ -30,8 +30,8 @@ class BusScheduleApp:
         self.table_frame = ctk.CTkFrame(master)
         self.table_frame.pack(fill="both", expand=True, padx=20, pady=20)
 
-        style = ttk.Style() 
-        style.configure("Treeview", font=('Arial', 35), rowheight=80, background="#333333", foreground="#FFFFFF") # Fontes maiores e linhas mais altas 
+        style = ttk.Style()
+        style.configure("Treeview", font=('Arial', 35), rowheight=80, background="#333333", foreground="#FFFFFF")
         style.configure("Treeview.Heading", font=('Arial', 40, 'bold'), background="#444444")
 
         # Criação do widget Treeview
@@ -50,6 +50,11 @@ class BusScheduleApp:
                 self.treeview.column("DESTINO", width=800, anchor='w')
 
         self.treeview.pack(fill="both", expand=True)
+
+        # Variável de controle para alternar exibição
+        self.toggle_display = True
+        self.current_line_index = 0
+
         # Loop de atualização dos horários e do relógio
         self.update_schedule()
         self.update_clock()
@@ -79,31 +84,51 @@ class BusScheduleApp:
                 except ValueError:
                     print(f"Erro ao converter horário: {partida_str}")
 
-        # Verificar se há horários disponíveis
-        if not horarios_filtrados:
-            schedule_text = 'Nenhum horário disponível'
-            self.schedule_label.configure(text=schedule_text)
-        else:
-            # Atualizar o rótulo com a data atual
-            schedule_text = 'VILA NOVA CACHOEIRINHA | ' + datetime.datetime.now().strftime('%d/%m/%Y')
-            self.schedule_label.configure(text=schedule_text)
+        # Agrupar horários por linha
+        linhas_grupo = {}
+        for h in horarios_filtrados:
+            linha = h.get('LINHA', '-')
+            if linha not in linhas_grupo:
+                linhas_grupo[linha] = []
+            linhas_grupo[linha].append(h)
 
-            # Limpar a tabela antes de atualizar
+        if horarios_filtrados:
+            # Alternar entre exibição de todas as linhas e linha isolada
+            if self.toggle_display:
+                # Exibir todas as linhas juntas
+                self.treeview.delete(*self.treeview.get_children())
+                for h in horarios_filtrados:
+                    parada = h.get('PARADA', '-')
+                    partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                    linha = h.get('LINHA', '-')
+                    destino = h.get('DESTINO', '-')
+                    self.treeview.insert("", "end", values=(parada, partida, linha, destino))
+            else:
+                # Exibir todas as próximas partidas da linha isolada
+                self.treeview.delete(*self.treeview.get_children())
+                linha_atual = list(linhas_grupo.keys())[self.current_line_index]  # Selecionar a linha atual
+                for h in linhas_grupo[linha_atual]:
+                    parada = h.get('PARADA', '-')
+                    partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                    linha_texto = h.get('LINHA', '-')
+                    destino = h.get('DESTINO', '-')
+                    self.treeview.insert("", "end", values=(parada, partida, linha_texto, destino))
+
+                # Avançar para a próxima linha
+                self.current_line_index = (self.current_line_index + 1) % len(linhas_grupo)
+
+            # Alternar o estado da exibição
+            self.toggle_display = not self.toggle_display
+
+        else:
+            # Se não houver horários futuros, limpar a tabela
             self.treeview.delete(*self.treeview.get_children())
 
-            # Adicionar os horários filtrados na tabela
-            for h in horarios_filtrados:
-                parada = h.get('PARADA', '-')
-                partida = datetime.datetime.strptime(h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
-                linha = h.get('LINHA', '-')
-                destino = h.get('DESTINO', '-')
-                self.treeview.insert("", "end", values=(parada, partida, linha, destino))
-
-        # Agendar a próxima atualização em 60 segundos
-        self.master.after(1000, self.update_schedule)
+        # Agendar a próxima atualização em 20 segundos
+        self.master.after(20000, self.update_schedule)
 
     def update_clock(self):
-        current_time = datetime.datetime.now().strftime('%d/%m/%Y \ %H:%M:%S')
+        current_time = datetime.datetime.now().strftime('%d/%m/%Y - %H:%M:%S')
         self.schedule_label.configure(text=f"VILA NOVA CACHOEIRINHA | {current_time}")
         self.master.after(1000, self.update_clock)  # Atualiza o relógio a cada segundo
 

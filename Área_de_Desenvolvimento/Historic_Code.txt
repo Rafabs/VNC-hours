@@ -1,21 +1,21 @@
 ** Documente os registros de anotações realizadas em cada trecho de código abaixo (APÓS SOLUCIONADO) **
 
->> 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.py
->> 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
->> 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_sab.py
+>> [0005] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.py
+>> [0006] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
+>> [0007] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_sab.py
 - [ ] INSERIR FUNÇÃO PARA EXIBIR DETALHES DAS LINHAS PERIÓDICAMENTE
 # FOI CRIADO UMA FUNÇÃO PARA ALTERNAR A EXIBIÇÃO DOS HORÁRIOS DE TODAS AS LINHAS COM LINHAS EM ESPECÍFICAS,
 ALTERNANDO A CADA 20 seg.
 
 ---------------------------------------------------------------------------------------------------------------
->> 01:44 16/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.csv
->> 01:44 16/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_sab.csv
->> 01:44 16/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.csv
+>> [0002] 01:44 16/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.csv
+>> [0003] 01:44 16/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_sab.csv
+>> [0004] 01:44 16/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.csv
 - [ ] ATUALIZAR HORÁRIOS 0007/10 E 0007/22
 # FORAM RETIRADA AS PARTIDAS ENTRE 04h40 e 06h29 das linhas 0007/10 e 0007/22 de todos os dias.
 
 ---------------------------------------------------------------------------------------------------------------
->> 23:35 04/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/main.py
+>> [0001] 23:35 04/11/2024 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/main.py
 - [ ] Incrementar log.txt
 # FOI CRIADO UMA FUNÇÃO PARA REGISTRAR LOG DE ABERTURA, FUNCIONAMENTO E ENCERRAMENTO EM MAIN.PY E ARQUIVOS PERIFÉRICOS/DEPENDENTES.
 

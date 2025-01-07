@@ -76,3 +76,41 @@ Programa finalizado pelo usuário.
 Programa finalizado pelo usuário.
 Programa finalizado pelo usuário.
 Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+Programa finalizado pelo usuário.
+2025-01-07 01:13:37,137 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-07 01:13:47,591 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:13:54,967 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:13:55,382 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:13:55,735 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:14:34,881 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:15:45,866 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:15:46,449 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-07 01:16:55,579 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-07 01:17:47,768 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-07 01:17:50,224 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:17:52,655 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-07 01:18:28,779 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:19:30,458 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:20:01,963 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:20:08,826 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:20:16,458 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:20:38,522 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:20:46,189 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-07 01:20:46,775 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-07 01:20:47,688 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-07 01:21:03,394 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:21:08,018 - INFO - Programa finalizado pelo usuário.
+2025-01-07 01:21:13,898 - INFO - Programa finalizado pelo usuário.

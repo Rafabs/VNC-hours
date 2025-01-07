@@ -1,5 +1,21 @@
 ** Documente os registros de anotações realizadas em cada trecho de código abaixo (APÓS SOLUCIONADO) **
 
+>> [0008] 18:27 07/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/main.py
+- [ ] CRIAR BOTÕES PARA EXIBIR HORÁRIOS
+# FOI AJUSTADO PARA QUE MAIN.PY SEJA ARQUIVO UNICO E ATRAVÉS DE BOTÕES DISCRETO NO CANTO SUP. ESQ. DA TELA, SEJA 
+EXIBIDO OS HORÁRIOS.
+
+---------------------------------------------------------------------------------------------------------------
+
+>> [0005] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.py
+>> [0006] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
+>> [0007] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_sab.py
+- [ ] INSERIR FUNÇÃO PARA EXIBIR DETALHES DAS LINHAS PERIÓDICAMENTE
+# FOI CRIADO UMA FUNÇÃO PARA ALTERNAR A EXIBIÇÃO DOS HORÁRIOS DE TODAS AS LINHAS COM LINHAS EM ESPECÍFICAS,
+ALTERNANDO A CADA 20 seg.
+
+---------------------------------------------------------------------------------------------------------------
+
 >> [0005] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_seg_sex.py
 >> [0006] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_dom_e_fer.py
 >> [0007] 16:10 02/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/VNC_horario_sab.py

@@ -127,7 +127,7 @@ class BusScheduleApp:
         # Agendar a próxima atualização em 20 segundos
         self.master.after(20000, self.update_schedule)
 
-    def update_clock(self):
+    def update_clocmdck(self):
         current_time = datetime.datetime.now().strftime('%d/%m/%Y - %H:%M:%S')
         self.schedule_label.configure(text=f"VILA NOVA CACHOEIRINHA | {current_time}")
         self.master.after(1000, self.update_clock)  # Atualiza o relógio a cada segundo

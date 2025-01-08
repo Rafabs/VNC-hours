@@ -118,3 +118,49 @@ Programa finalizado pelo usuário.
 2025-01-07 18:25:09,011 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
 2025-01-07 18:25:11,865 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
 2025-01-07 18:26:04,884 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:24:18,139 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:24:18,586 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-08 00:24:19,099 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:24:19,971 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:25:08,033 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:25:55,409 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:27:03,801 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:29:03,338 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:29:31,443 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:34,051 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:34,379 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:29:35,179 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-08 00:29:35,660 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:35,843 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:35,971 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:36,099 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:36,315 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:36,427 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:37,970 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:29:50,859 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:51,242 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:29:51,515 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-08 00:29:52,291 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:52,450 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:52,588 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:52,707 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:52,845 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:29:56,018 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:30:19,916 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:30:20,059 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:30:20,466 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:30:20,595 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:30:20,874 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-08 00:30:21,421 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:30:22,002 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:30:32,011 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:30:32,135 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:30:32,610 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-08 00:30:33,266 - INFO - Programa finalizado pelo usuário.
+2025-01-08 00:30:46,876 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
+2025-01-08 00:30:47,090 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:30:47,218 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:30:47,417 - INFO - Botão 'DOM_FER' acionado. Arquivo carregado: VNC_horario_dom_e_fer.csv
+2025-01-08 00:30:47,682 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:30:47,850 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
+2025-01-08 00:30:48,482 - INFO - Programa finalizado pelo usuário.

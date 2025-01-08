@@ -2,7 +2,28 @@
 ( ) EM DESENVOLVIMENTO
 ( ) NÃO DEU CERTO
 ---------------------------------------------------------------------------------------------------------------
-( ) SOLUCIONADO
+>> [0009] 00:32 08/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/main.py
+- [ ] CRIAR FUNÇÃO OPERAÇÃO ENCERRADA
+
+de (linha 100)
+Vazio
+
+para (linha 100)
+            limite_encerramento = datetime.time(4, 0)
+
+de (linha 117)
+Vazio
+
+para (linha 117)
+            if not horarios_filtrados or hora_atual < limite_encerramento:
+                # Configurar a tag para exibir em vermelho
+                self.treeview.tag_configure("encerrada", foreground="red")                
+                # Exibir "OPERAÇÃO ENCERRADA" no Treeview
+                self.treeview.insert("", "end", values=(
+                    "0000", "0000", "0000", "OPERAÇÃO ENCERRADA"), tags=("encerrada",))
+            else:
+
+(X) SOLUCIONADO
 ( ) EM DESENVOLVIMENTO
 ( ) NÃO DEU CERTO
 ---------------------------------------------------------------------------------------------------------------

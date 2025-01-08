@@ -95,8 +95,9 @@ class BusScheduleApp:
                 csv_reader = csv.DictReader(csv_file, delimiter=';')
                 horarios = [row for row in csv_reader]
 
-            # Hora atual
+            # Hora atual e limite para "operação encerrada"
             hora_atual = datetime.datetime.now().time()
+            limite_encerramento = datetime.time(4, 0)
 
             # Filtrar os horários que ainda vão acontecer
             horarios_filtrados = []
@@ -111,16 +112,23 @@ class BusScheduleApp:
                     except ValueError:
                         logging.error(f"Erro ao converter horário: {partida_str}")
 
-            # Atualizar a tabela com os horários filtrados
+            # Atualizar a tabela com os horários filtrados ou exibir "OPERAÇÃO ENCERRADA"
             self.treeview.delete(*self.treeview.get_children())
-            for h in horarios_filtrados:
-                parada = h.get('PARADA', '-')
-                partida = datetime.datetime.strptime(
-                    h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
-                linha = h.get('LINHA', '-')
-                destino = h.get('DESTINO', '-')
+            if not horarios_filtrados or hora_atual < limite_encerramento:
+                # Configurar a tag para exibir em vermelho
+                self.treeview.tag_configure("encerrada", foreground="red")                
+                # Exibir "OPERAÇÃO ENCERRADA" no Treeview
                 self.treeview.insert("", "end", values=(
-                    parada, partida, linha, destino))
+                    "0000", "0000", "0000", "OPERAÇÃO ENCERRADA"), tags=("encerrada",))
+            else:
+                for h in horarios_filtrados:
+                    parada = h.get('PARADA', '-')
+                    partida = datetime.datetime.strptime(
+                        h.get('PARTIDA', '').strip(), '%H:%M').strftime('%H:%M')
+                    linha = h.get('LINHA', '-')
+                    destino = h.get('DESTINO', '-')
+                    self.treeview.insert("", "end", values=(
+                        parada, partida, linha, destino))
 
         except Exception as e:
             logging.error(f"Erro ao atualizar os horários: {e}")

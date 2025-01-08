@@ -1,5 +1,10 @@
 ** Documente os registros de anotações realizadas em cada trecho de código abaixo (APÓS SOLUCIONADO) **
 
+>> [0009] 00:32 08/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/main.py
+- [ ] CRIAR FUNÇÃO OPERAÇÃO ENCERRADA
+# FOI CRIADA FUNÇÃO E CONFIGURADO COR E HORÁRIO PARA INFORMAÇÃO DE "OPERAÇÃO ENCERRADA"
+---------------------------------------------------------------------------------------------------------------
+
 >> [0008] 18:27 07/01/2025 RB - VNC-HOURS/Área_de_Desenvolvimento/--Historic_Code--/main.py
 - [ ] CRIAR BOTÕES PARA EXIBIR HORÁRIOS
 # FOI AJUSTADO PARA QUE MAIN.PY SEJA ARQUIVO UNICO E ATRAVÉS DE BOTÕES DISCRETO NO CANTO SUP. ESQ. DA TELA, SEJA 

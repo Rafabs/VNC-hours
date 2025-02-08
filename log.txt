@@ -167,3 +167,4 @@ Programa finalizado pelo usuário.
 2025-01-08 01:29:25,837 - INFO - Botão 'SAB' acionado. Arquivo carregado: VNC_horario_sab.csv
 2025-01-08 01:29:27,369 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv
 2025-01-08 02:15:58,431 - INFO - Programa finalizado pelo usuário.
+2025-02-07 22:14:08,777 - INFO - Botão 'SEG_SEX' acionado. Arquivo carregado: VNC_horario_seg_sex.csv

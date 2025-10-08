@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VNC</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Botões escondidos para seleção de arquivo -->
+    <div class="file-selector" id="fileSelector">
+        <button class="file-btn" data-file="seg_sex">SEM</button>
+        <button class="file-btn" data-file="sab">SAB</button>
+        <button class="file-btn" data-file="dom_fer">DOM</button>
+    </div>
+
+    <!-- Cabeçalho estilo painel -->
+    <div class="header">        
+        <div class="header-title">VILA NOVA CACHOEIRINHA</div>
+        <div class="header-clock">
+            <div class="date" id="date">00/00/0000</div>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </div>
+
+    <div class="loading-message" id="loadingMessage">Carregando dados...</div>
+
+    <div class="status-message" id="statusMessage">OPERAÇÃO ENCERRADA</div>
+
+    <div class="table-container">
+        <table id="scheduleTable">
+            <thead>
+                <tr>
+                    <th id="thTime">HORA</th>
+                    <th id="thLine">LINHA</th>
+                    <th id="thDestination">DESTINO</th>
+                    <th id="thVehicle">CARRO</th>
+                    <th id="thPlatform">PLAT.</th>
+                    <th id="thObservation"></th>
+                </tr>
+            </thead>
+            <tbody id="scheduleBody">
+                <!-- Dados serão inseridos aqui via JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="js/translations.js"></script>
+    <script src="js/csvLoader.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

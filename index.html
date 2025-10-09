@@ -45,6 +45,27 @@
         </table>
     </div>
 
+    <!-- Painel de Status das Linhas -->
+    <div class="lines-status" id="linesStatus">
+        <div class="lines-grid" id="linesGrid">
+            <!-- Linhas serão inseridas aqui via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal de Seleção de Status -->
+    <div class="status-modal" id="statusModal">
+        <div class="status-modal-content">
+            <h3 id="modalTitle">ALTERAR STATUS DA LINHA</h3>
+            <div class="status-options">
+                <div class="status-option normal" data-status="normal">OPERAÇÃO NORMAL</div>
+                <div class="status-option reduced" data-status="reduced">VELOCIDADE REDUZIDA</div>
+                <div class="status-option paralyzed" data-status="paralyzed">PARALISADA</div>
+                <div class="status-option ended" data-status="ended">ENCERRADA</div>
+            </div>
+            <button class="close-modal" id="closeModal">FECHAR</button>
+        </div>
+    </div>
+
     <script src="js/translations.js"></script>
     <script src="js/csvLoader.js"></script>
     <script src="js/schedule.js"></script>

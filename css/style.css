@@ -138,18 +138,6 @@ body {
     overflow-y: auto; /* Scroll vertical quando necessário */
 }
 
-/* Indicador de mais partidas */
-.more-departures {
-    text-align: center;
-    padding: 10px;
-    background-color: #2d4059;
-    color: #ffcc00;
-    font-style: italic;
-    border-top: 1px solid #3a506b;
-    position: sticky;
-    bottom: 0;
-}
-
 /* Tabela com fundo escuro */
 table {
     width: 100%;
@@ -190,10 +178,6 @@ tr:last-child td {
     border-bottom: none;
 }
 
-tr:hover {
-    background-color: #1f2d48;
-}
-
 /* Status: EMBARQUE IMEDIATO */
 .immediate {
     background-color: #ff0000;
@@ -215,7 +199,7 @@ tr:hover {
 
 /* Status: PREVISTO */
 .scheduled {
-    background-color: #2d4059;
+    background-color: #59562d;
     color: #fff;
     padding: 5px 10px;
     border-radius: 4px;

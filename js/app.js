@@ -160,7 +160,7 @@ class BusDeparturesApp {
         
         // Atualizar título principal (sempre em maiúsculo)
         if (this.titleElement) {
-            this.titleElement.textContent = 'VILA NOVA CACHOEIRINHA';
+            this.titleElement.textContent = 'Vila Nova Cachoeirinha';
         }
         
         // Atualizar labels da tabela

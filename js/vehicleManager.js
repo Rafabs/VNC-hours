@@ -40,6 +40,7 @@ class VehicleManager {
         category: "manutencao",
       },
     };
+    this.currentScheduleData = []; // Armazenar dados do horário ativo
   }
 
   // Carregar dados dos veículos
@@ -62,6 +63,16 @@ class VehicleManager {
       console.error("Erro ao carregar veículos:", error);
       return new Map();
     }
+  }
+
+  // Definir dados do horário ativo
+  setCurrentScheduleData(scheduleData) {
+    this.currentScheduleData = scheduleData || [];
+    console.log(
+      "Dados de horário definidos para frota:",
+      this.currentScheduleData.length,
+      "partidas"
+    );
   }
 
   // Filtrar veículos da VNC e converter para Map
@@ -98,8 +109,13 @@ class VehicleManager {
     return vehicles;
   }
 
-  // Atualizar veículo com informações dos horários
-  updateVehicleWithSchedule(scheduleData) {
+  // Atualizar veículo com informações dos horários ATUAIS
+  updateVehicleWithSchedule() {
+    if (!this.currentScheduleData || this.currentScheduleData.length === 0) {
+      console.warn("Nenhum dado de horário disponível para atualizar frota");
+      return;
+    }
+
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
@@ -116,8 +132,8 @@ class VehicleManager {
       vehicle.categoria = "aguardando";
     });
 
-    // Processar cada partida do horário
-    scheduleData.forEach((departure) => {
+    // Processar cada partida do horário ATUAL
+    this.currentScheduleData.forEach((departure) => {
       const [hours, minutes] = departure.time.split(":").map(Number);
       const departureTime = hours * 60 + minutes;
       const minutesUntil = departureTime - currentTime;
@@ -139,14 +155,14 @@ class VehicleManager {
 
           vehicle.proximaViagem = this.findNextTrip(
             vehicle.prefixo,
-            scheduleData,
+            this.currentScheduleData,
             currentTime
           );
         } else if (currentTime > retornoTime) {
           // Buscar próxima viagem
           vehicle.proximaViagem = this.findNextTrip(
             vehicle.prefixo,
-            scheduleData,
+            this.currentScheduleData,
             currentTime
           );
 
@@ -189,21 +205,21 @@ class VehicleManager {
           vehicle.linhaAtual = departure.line;
           vehicle.plataforma = departure.platform;
           vehicle.proximaViagem = departure.time;
-          vehicle.duracaoViagem = duracao;
+          vehicle.duracaoViagem = duracaoViagem;
           vehicle.categoria = "plataforma";
         } else if (minutesUntil <= 6 && minutesUntil >= 5) {
           vehicle.status = "ALINHANDO NA PLATAFORMA";
           vehicle.linhaAtual = departure.line;
           vehicle.plataforma = departure.platform;
           vehicle.proximaViagem = departure.time;
-          vehicle.duracaoViagem = duracao;
+          vehicle.duracaoViagem = duracaoViagem;
           vehicle.categoria = "alinhando";
         } else if (minutesUntil <= 60 && minutesUntil >= 7) {
           vehicle.status = "AGUARDANDO";
           vehicle.linhaAtual = departure.line;
           vehicle.plataforma = departure.platform;
           vehicle.proximaViagem = departure.time;
-          vehicle.duracaoViagem = duracao;
+          vehicle.duracaoViagem = duracaoViagem;
           vehicle.categoria = "aguardando";
         }
       }
@@ -216,6 +232,29 @@ class VehicleManager {
         vehicle.categoria = "reserva";
       }
     });
+  }
+
+  // Buscar veículos por prefixo, placa ou linha
+  searchVehicles(searchTerm) {
+    if (!searchTerm || searchTerm.trim() === "") {
+      return Array.from(this.vehicles.values());
+    }
+
+    const term = searchTerm.toLowerCase().trim();
+    const results = [];
+
+    this.vehicles.forEach((vehicle) => {
+      if (
+        vehicle.prefixo.toLowerCase().includes(term) ||
+        vehicle.placa.toLowerCase().includes(term) ||
+        vehicle.linhaAtual.toLowerCase().includes(term) ||
+        vehicle.modelo.toLowerCase().includes(term)
+      ) {
+        results.push(vehicle);
+      }
+    });
+
+    return results;
   }
 
   // Converter minutos para formato HH:MM

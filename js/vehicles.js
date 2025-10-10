@@ -6,86 +6,7 @@ class VehiclesApp {
     this.init();
   }
 
-  initializeElements() {
-    // Elementos DOM
-    this.clockElement = document.getElementById("clock");
-    this.dateElement = document.getElementById("date");
-
-    // Elementos de estatísticas
-    this.totalVehiclesElement = document.getElementById("totalVehicles");
-    this.vehiclesViagemElement = document.getElementById("vehiclesViagem");
-    this.vehiclesPlataformaElement =
-      document.getElementById("vehiclesPlataforma");
-    this.vehiclesAlinhandoElement =
-      document.getElementById("vehiclesAlinhando");
-    this.vehiclesAguardandoElement =
-      document.getElementById("vehiclesAguardando");
-    this.vehiclesReservaElement = document.getElementById("vehiclesReserva");
-
-    // Elementos dos grids
-    this.viagemVehiclesElement = document.getElementById("viagemVehicles");
-    this.plataformaVehiclesElement =
-      document.getElementById("plataformaVehicles");
-    this.alinhandoVehiclesElement =
-      document.getElementById("alinhandoVehicles");
-    this.aguardandoVehiclesElement =
-      document.getElementById("aguardandoVehicles");
-    this.reservaVehiclesElement = document.getElementById("reservaVehicles");
-
-    // Elemento para veículos retornando
-    this.retornandoVehiclesElement =
-      document.getElementById("retornandoVehicles");
-  }
-
-  async init() {
-    this.updateClock();
-
-    try {
-      // Carregar dados dos veículos
-      await this.vehicleManager.loadVehicleData();
-
-      // Carregar horários para atualizar status dos veículos
-      await this.scheduleManager.loadScheduleData();
-
-      // Verificar se os dados foram carregados
-      if (
-        this.scheduleManager.scheduleData &&
-        this.scheduleManager.scheduleData.length > 0
-      ) {
-        this.vehicleManager.updateVehicleWithSchedule(
-          this.scheduleManager.scheduleData
-        );
-      } else {
-        console.warn("Nenhum dado de horário carregado, usando dados locais");
-      }
-
-      // Atualizar interface
-      this.updateStatistics();
-      this.updateVehicleDisplays();
-
-      // Atualizar relógio
-      setInterval(() => this.updateClock(), 1000);
-
-      // Atualizar dados a cada 30 segundos
-      setInterval(() => {
-        if (
-          this.scheduleManager.scheduleData &&
-          this.scheduleManager.scheduleData.length > 0
-        ) {
-          this.vehicleManager.updateVehicleWithSchedule(
-            this.scheduleManager.scheduleData
-          );
-          this.updateVehicleDisplays();
-        }
-      }, 10000); // Atualizar a cada 10 segundos para maior precisão
-    } catch (error) {
-      console.error("Erro na inicialização:", error);
-      // Continuar mesmo com erro para mostrar pelo menos os veículos
-      this.updateStatistics();
-      this.updateVehicleDisplays();
-    }
-  }
-
+  // ADICIONAR ESTE MÉTODO QUE ESTÁ FALTANDO
   updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, "0");
@@ -104,6 +25,7 @@ class VehiclesApp {
     }
   }
 
+  // ADICIONAR ESTES MÉTODOS QUE TAMBÉM ESTÃO FALTANDO
   updateStatistics() {
     const stats = this.vehicleManager.getFleetStatistics();
 
@@ -233,7 +155,204 @@ class VehiclesApp {
     }
   }
 
-  createVehicleCard(vehicle) {
+  initializeElements() {
+    // Elementos DOM
+    this.clockElement = document.getElementById("clock");
+    this.dateElement = document.getElementById("date");
+
+    // Elementos de estatísticas
+    this.totalVehiclesElement = document.getElementById("totalVehicles");
+    this.vehiclesViagemElement = document.getElementById("vehiclesViagem");
+    this.vehiclesPlataformaElement = document.getElementById("vehiclesPlataforma");
+    this.vehiclesAlinhandoElement = document.getElementById("vehiclesAlinhando");
+    this.vehiclesAguardandoElement = document.getElementById("vehiclesAguardando");
+    this.vehiclesReservaElement = document.getElementById("vehiclesReserva");
+
+    // Elementos dos grids
+    this.viagemVehiclesElement = document.getElementById("viagemVehicles");
+    this.plataformaVehiclesElement = document.getElementById("plataformaVehicles");
+    this.alinhandoVehiclesElement = document.getElementById("alinhandoVehicles");
+    this.aguardandoVehiclesElement = document.getElementById("aguardandoVehicles");
+    this.reservaVehiclesElement = document.getElementById("reservaVehicles");
+
+    // Elemento para veículos retornando
+    this.retornandoVehiclesElement = document.getElementById("retornandoVehicles");
+
+    // Elementos de busca
+    this.initializeSearchElements();
+  }
+
+  initializeSearchElements() {
+    // Criar barra de busca
+    const searchContainer = document.createElement("div");
+    searchContainer.className = "search-container";
+    searchContainer.innerHTML = `
+      <div class="search-box">
+        <input type="text" id="vehicleSearch" placeholder="Buscar por prefixo, placa ou linha..." class="search-input">
+        <button id="clearSearch" class="clear-search">×</button>
+      </div>
+      <div class="search-info" id="searchInfo"></div>
+    `;
+
+    // Inserir após as estatísticas
+    const fleetStats = document.getElementById("fleetStats");
+    fleetStats.parentNode.insertBefore(searchContainer, fleetStats.nextSibling);
+
+    // Configurar eventos de busca
+    this.setupSearchEvents();
+  }
+
+  setupSearchEvents() {
+    const searchInput = document.getElementById("vehicleSearch");
+    const clearSearch = document.getElementById("clearSearch");
+    const searchInfo = document.getElementById("searchInfo");
+
+    let searchTimeout;
+
+    searchInput.addEventListener("input", (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        this.handleSearch(e.target.value);
+      }, 300);
+    });
+
+    clearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      this.handleSearch("");
+      searchInput.focus();
+    });
+
+    // Tecla Escape para limpar busca
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        searchInput.value = "";
+        this.handleSearch("");
+      }
+    });
+  }
+
+  handleSearch(searchTerm) {
+    const searchInfo = document.getElementById("searchInfo");
+
+    if (!searchTerm || searchTerm.trim() === "") {
+      // Modo normal - mostrar todas as seções
+      this.showAllSections();
+      searchInfo.textContent = "";
+      searchInfo.className = "search-info";
+      return;
+    }
+
+    // Modo busca - mostrar apenas resultados da busca
+    this.hideAllSections();
+
+    const results = this.vehicleManager.searchVehicles(searchTerm);
+    this.displaySearchResults(results, searchTerm);
+
+    // Atualizar info da busca
+    if (results.length > 0) {
+      searchInfo.textContent = `${results.length} veículo(s) encontrado(s) para "${searchTerm}"`;
+      searchInfo.className = "search-info has-results";
+    } else {
+      searchInfo.textContent = `Nenhum veículo encontrado para "${searchTerm}"`;
+      searchInfo.className = "search-info no-results";
+    }
+  }
+
+  showAllSections() {
+    document.querySelectorAll(".section").forEach((section) => {
+      section.style.display = "block";
+    });
+  }
+
+  hideAllSections() {
+    document.querySelectorAll(".section").forEach((section) => {
+      section.style.display = "none";
+    });
+  }
+
+  displaySearchResults(results, searchTerm) {
+    // Criar container temporário para resultados
+    let resultsContainer = document.getElementById("searchResultsContainer");
+    if (!resultsContainer) {
+      resultsContainer = document.createElement("div");
+      resultsContainer.id = "searchResultsContainer";
+      resultsContainer.className = "section";
+      resultsContainer.innerHTML =
+        '<h3>🔍 RESULTADOS DA BUSCA</h3><div class="vehicles-grid" id="searchResultsGrid"></div>';
+
+      const firstSection = document.querySelector(".section");
+      firstSection.parentNode.insertBefore(resultsContainer, firstSection);
+    }
+
+    resultsContainer.style.display = "block";
+
+    const searchResultsGrid = document.getElementById("searchResultsGrid");
+    searchResultsGrid.innerHTML = "";
+
+    if (results.length === 0) {
+      searchResultsGrid.innerHTML =
+        '<div class="no-vehicles">Nenhum veículo encontrado</div>';
+      return;
+    }
+
+    results.forEach((vehicle) => {
+      const card = this.createVehicleCard(vehicle, true, searchTerm);
+      searchResultsGrid.appendChild(card);
+    });
+  }
+
+  async init() {
+    this.updateClock();
+
+    try {
+      // Carregar dados dos veículos
+      await this.vehicleManager.loadVehicleData();
+
+      // Carregar horários para atualizar status dos veículos
+      await this.scheduleManager.loadScheduleData();
+
+      // Verificar se os dados foram carregados e definir no vehicleManager
+      if (
+        this.scheduleManager.scheduleData &&
+        this.scheduleManager.scheduleData.length > 0
+      ) {
+        this.vehicleManager.setCurrentScheduleData(
+          this.scheduleManager.scheduleData
+        );
+        this.vehicleManager.updateVehicleWithSchedule();
+      } else {
+        console.warn("Nenhum dado de horário carregado, usando dados locais");
+      }
+
+      // Atualizar interface
+      this.updateStatistics();
+      this.updateVehicleDisplays();
+
+      // Atualizar relógio
+      setInterval(() => this.updateClock(), 1000);
+
+      // Atualizar dados a cada 10 segundos
+      setInterval(() => {
+        if (
+          this.scheduleManager.scheduleData &&
+          this.scheduleManager.scheduleData.length > 0
+        ) {
+          this.vehicleManager.setCurrentScheduleData(
+            this.scheduleManager.scheduleData
+          );
+          this.vehicleManager.updateVehicleWithSchedule();
+          this.updateVehicleDisplays();
+        }
+      }, 10000);
+    } catch (error) {
+      console.error("Erro na inicialização:", error);
+      this.updateStatistics();
+      this.updateVehicleDisplays();
+    }
+  }
+
+  // Modificar createVehicleCard para suportar highlight de busca
+  createVehicleCard(vehicle, isSearchResult = false, searchTerm = "") {
     const card = document.createElement("div");
     card.className = "vehicle-card";
     card.addEventListener("click", () => this.showVehicleDetails(vehicle));
@@ -247,10 +366,24 @@ class VehiclesApp {
       ? this.vehicleManager.getMinutosAtePartida(vehicle.proximaViagem)
       : null;
 
+    // Função para highlight do termo de busca
+    const highlightText = (text, term) => {
+      if (!isSearchResult || !term) return text;
+
+      const regex = new RegExp(`(${this.escapeRegExp(term)})`, "gi");
+      return text.replace(regex, '<mark class="search-highlight">$1</mark>');
+    };
+
     card.innerHTML = `
             <div class="vehicle-header">
-                <div class="vehicle-prefixo">${vehicle.prefixo}</div>
-                <div class="vehicle-placa">${vehicle.placa}</div>
+                <div class="vehicle-prefixo">${highlightText(
+                  vehicle.prefixo,
+                  searchTerm
+                )}</div>
+                <div class="vehicle-placa">${highlightText(
+                  vehicle.placa,
+                  searchTerm
+                )}</div>
             </div>
             <div class="vehicle-info">
                 <div class="vehicle-modelo">${vehicle.modelo}</div>
@@ -262,7 +395,10 @@ class VehiclesApp {
                 </div>
                 ${
                   vehicle.linhaAtual
-                    ? `<div class="linha-info">${vehicle.linhaAtual}</div>`
+                    ? `<div class="linha-info">${highlightText(
+                        vehicle.linhaAtual,
+                        searchTerm
+                      )}</div>`
                     : ""
                 }
             </div>
@@ -289,6 +425,11 @@ class VehiclesApp {
         `;
 
     return card;
+  }
+
+  // ADICIONAR MÉTODO PARA ESCAPAR CARACTERES ESPECIAIS NA BUSCA
+  escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   showVehicleDetails(vehicle) {
@@ -335,7 +476,7 @@ class VehiclesApp {
         border: 2px solid #ffcc00;
     `;
 
-    const lang = "pt"; // Ou usar this.scheduleManager.config.language
+    const lang = "pt";
 
     modalContent.innerHTML = `
         <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #353a41; padding-bottom: 10px;">
@@ -351,7 +492,7 @@ class VehiclesApp {
                 <div><strong>Tipo:</strong> ${vehicle.tipo}</div>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; background: #2d4059; padding: 10px; border-radius: 4px;">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #2d4059; padding: 10px; border-radius: 4px;">
                 <div style="text-align: center;">
                     <div style="font-size: 1.5em; color: #ffcc00;">${
                       vehicleStats.totalTrips

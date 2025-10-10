@@ -1,4 +1,3 @@
-// js/csvLoader.js - Versão corrigida
 class CSVLoader {
     constructor() {
         this.data = [];
@@ -92,7 +91,8 @@ class CSVLoader {
             textColor: item.TXT_COLOR,
             destination: item.DESTINO,
             vehicle: item.CARRO,
-            platform: item.PARADA
+            platform: item.PARADA,
+            duracao: parseInt(item.DURACAO) || 45 // Default 45 minutos se não houver
         }));
     }
 

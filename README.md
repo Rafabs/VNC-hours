@@ -1,14 +1,28 @@
-# VNC-hoursUm painel digital em tempo real para exibição de partidas de ônibus, desenvolvido com HTML, CSS e JavaScript.
+VNC-hours
+⚠️ PROJETO DIDÁTICO COM DADOS FICTÍCIOS
+Este projeto foi desenvolvido exclusivamente para fins de aprendizado e demonstração. Todos os dados, horários, linhas e destinos são fictícios e não representam informações reais de transporte público.
 
-PROJETO COM DADOS FICTÍCIOS PARA FINS DE APRENDIZADO
+Um painel digital em tempo real para exibição de partidas de ônibus, desenvolvido com HTML, CSS e JavaScript.
+
+📌 AVISO IMPORTANTE
+ESTE É UM PROJETO EDUCACIONAL
+
+Todos os dados apresentados são fictícios
+
+Horários e linhas são meramente ilustrativos
+
+Desenvolvido para fins de aprendizado em programação web
+
+Não utilize para informações reais de transporte
 
 ✨ Características
-⏰ Tempo Real: Atualização automática a cada 10 segundos
+⏰ Tempo Real
+Atualização automática a cada 10 segundos
 
-🌐 Multilíngue: Alternância automática entre Português e Inglês
+🌐 Multilíngue
+Alternância automática entre Português e Inglês
 
-🎯 Status Inteligente:
-
+🎯 Status Inteligente
 🟡 EMBARQUE IMEDIATO (0-4 minutos)
 
 🟢 CONFIRMADO (5-6 minutos)
@@ -17,11 +31,14 @@ PROJETO COM DADOS FICTÍCIOS PARA FINS DE APRENDIZADO
 
 ⚫ PARTIU (após saída)
 
-📱 Design Responsivo: Adaptável a diferentes tamanhos de tela
+📱 Design Responsivo
+Adaptável a diferentes tamanhos de tela
 
-📊 Scroll Inteligente: Mostra 10 partidas inicialmente, scroll para ver mais
+📊 Scroll Inteligente
+Mostra 10 partidas inicialmente, scroll para ver mais
 
-🗂️ Múltiplos Horários: Suporte a dias da semana, sábados e domingos/feriados
+🗂️ Múltiplos Horários
+Suporte a dias da semana, sábados e domingos/feriados
 
 🚀 Como Usar
 Estrutura de Arquivos
@@ -40,7 +57,7 @@ projeto-painel-onibus/
     ├── VNC_horario_sab.csv
     └── VNC_horario_dom_e_fer.csv
 Formato dos Arquivos CSV
-Os arquivos CSV devem seguir este formato:
+Os arquivos CSV devem seguir este formato (dados fictícios):
 
 csv
 PARADA,PARTIDA,BG_COLOR,TXT_COLOR,LINHA,DESTINO,CARRO
@@ -48,34 +65,29 @@ PARADA,PARTIDA,BG_COLOR,TXT_COLOR,LINHA,DESTINO,CARRO
 3,04:40,#806000,#FFFFFF,L003/10,VILA RICA,P 2034
 5,04:40,#203764,#FFFFFF,L002/10,METRÔ SANTANA,P 2030
 Colunas:
-PARADA: Número da plataforma
 
-PARTIDA: Horário no formato HH:MM
-
-BG_COLOR: Cor de fundo da linha (hex)
-
-TXT_COLOR: Cor do texto da linha (hex)
-
-LINHA: Identificação da linha de ônibus
-
-DESTINO: Destino final do ônibus
-
-CARRO: Identificação do veículo
-
+Coluna	Descrição
+PARADA	Número da plataforma (fictício)
+PARTIDA	Horário no formato HH:MM (fictício)
+BG_COLOR	Cor de fundo da linha (hex)
+TXT_COLOR	Cor do texto da linha (hex)
+LINHA	Identificação da linha de ônibus (fictícia)
+DESTINO	Destino final do ônibus (fictício)
+CARRO	Identificação do veículo (fictícia)
 🛠️ Instalação e Configuração
 Clone ou baixe os arquivos para seu servidor web
 
-Prepare os dados:
+Prepare os dados fictícios:
 
 Coloque os arquivos CSV na pasta data/
 
 Use os nomes corretos:
 
-VNC_horario_seg_sex.csv (segunda a sexta)
+VNC_horario_seg_sex.csv (segunda a sexta - dados fictícios)
 
-VNC_horario_sab.csv (sábados)
+VNC_horario_sab.csv (sábados - dados fictícios)
 
-VNC_horario_dom_e_fer.csv (domingos e feriados)
+VNC_horario_dom_e_fer.csv (domingos e feriados - dados fictícios)
 
 Acesse o painel:
 
@@ -92,17 +104,17 @@ Cabeçalho Inteligente
 🏢 Nome da estação centralizado
 
 Controles Ocultos
-🔘 SEM: Carrega horários de segunda a sexta
+🔘 SEM: Carrega horários de segunda a sexta (fictícios)
 
-🔘 SAB: Carrega horários de sábado
+🔘 SAB: Carrega horários de sábado (fictícios)
 
-🔘 DOM: Carrega horários de domingo/feriados
+🔘 DOM: Carrega horários de domingo/feriados (fictícios)
 
 Os botões ficam semi-transparentes no canto superior esquerdo e aparecem ao passar o mouse
 
 Sistema de Status
 javascript
-// Exemplo de temporização (horário atual: 15:00)
+// Exemplo de temporização (horário atual: 15:00) - DADOS FICTÍCIOS
 15:01 → 🟡 EMBARQUE IMEDIATO
 15:05 → 🟢 CONFIRMADO  
 15:06 → 🟢 CONFIRMADO
@@ -171,10 +183,10 @@ Navegador web moderno com JavaScript habilitado
 
 Servidor web (recomendado para carregar arquivos CSV)
 
-Arquivos CSV formatados corretamente
+Arquivos CSV formatados corretamente (com dados fictícios)
 
 🔄 Atualizações Futuras
-Integração com API em tempo real
+Integração com API em tempo real (para projetos reais)
 
 Notificações sonoras para embarque imediato
 
@@ -192,3 +204,5 @@ Console do navegador (F12) para erros
 Formatação dos arquivos CSV
 
 Estrutura de pastas do projeto
+
+⚠️ LEMBRETE: Este projeto utiliza dados fictícios para fins educacionais. Não representa informações reais de transporte público.

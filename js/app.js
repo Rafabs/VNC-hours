@@ -1,4 +1,3 @@
-// Aplicação principal
 class BusDeparturesApp {
   "";
   constructor() {
@@ -10,8 +9,6 @@ class BusDeparturesApp {
     this.initializeElements();
     this.setupEventListeners();
   }
-
-  // No arquivo app.js, dentro da classe BusDeparturesApp:
 
   // Inicializar o painel de status das linhas
   initializeLinesStatus() {

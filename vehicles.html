@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frota - VNC</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/vehicles.css">
+</head>
+<body>
+    <!-- Botão para voltar ao painel principal -->
+    <div class="file-selector" id="fileSelector">
+        <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
+    </div>
+
+    <!-- Cabeçalho -->
+    <div class="header">        
+        <div class="header-title">Frota - Vila Nova Cachoeirinha</div>
+        <div class="header-clock">
+            <div class="date" id="date">00/00/0000</div>
+            <div class="clock" id="clock">00:00:00</div>
+        </div>
+    </div>
+
+    <!-- Estatísticas Rápidas -->
+    <div class="fleet-stats" id="fleetStats">
+        <div class="stat-card">
+            <div class="stat-number" id="totalVehicles">0</div>
+            <div class="stat-label">TOTAL VEÍCULOS</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="vehiclesViagem">0</div>
+            <div class="stat-label">EM VIAGEM</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="vehiclesPlataforma">0</div>
+            <div class="stat-label">NA PLATAFORMA</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="vehiclesAlinhando">0</div>
+            <div class="stat-label">ALINHANDO</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="vehiclesAguardando">0</div>
+            <div class="stat-label">AGUARDANDO</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="vehiclesReserva">0</div>
+            <div class="stat-label">RESERVA</div>
+        </div>
+    </div>
+
+    <!-- Seção: Veículos em Viagem -->
+    <div class="section" id="viagemSection">
+        <h3>🚌 VEÍCULOS EM VIAGEM</h3>
+        <div class="vehicles-grid" id="viagemVehicles">
+            <!-- Veículos em viagem serão inseridos aqui -->
+        </div>
+    </div>
+
+    <!-- Adicionar esta seção após "Veículos em Viagem" -->
+    <div class="section retornando-section" id="retornandoSection">
+        <h3>🔄 VEÍCULOS RETORNANDO</h3>
+        <div class="vehicles-grid" id="retornandoVehicles">
+            <!-- Veículos retornando serão inseridos aqui -->
+        </div>
+    </div>
+
+    <!-- Seção: Veículos na Plataforma -->
+    <div class="section" id="plataformaSection">
+        <h3>📍 VEÍCULOS NA PLATAFORMA</h3>
+        <div class="vehicles-grid" id="plataformaVehicles">
+            <!-- Veículos na plataforma serão inseridos aqui -->
+        </div>
+    </div>
+
+    <!-- Seção: Veículos Alinhando -->
+    <div class="section" id="alinhandoSection">
+        <h3>🔄 VEÍCULOS ALINHANDO</h3>
+        <div class="vehicles-grid" id="alinhandoVehicles">
+            <!-- Veículos alinhando serão inseridos aqui -->
+        </div>
+    </div>
+
+    <!-- Seção: Veículos Aguardando -->
+    <div class="section" id="aguardandoSection">
+        <h3>⏰ VEÍCULOS AGUARDANDO</h3>
+        <div class="vehicles-grid" id="aguardandoVehicles">
+            <!-- Veículos aguardando serão inseridos aqui -->
+        </div>
+    </div>
+
+    <!-- Seção: Veículos Reserva -->
+    <div class="section" id="reservaSection">
+        <h3>🛡️ VEÍCULOS RESERVA</h3>
+        <div class="vehicles-grid" id="reservaVehicles">
+            <!-- Veículos reserva serão inseridos aqui -->
+        </div>
+    </div>
+
+    <script src="js/translations.js"></script>
+    <script src="js/csvLoader.js"></script>
+    <script src="js/schedule.js"></script>
+    <script src="js/vehicleManager.js"></script>
+    <script src="js/vehicles.js"></script>
+</body>
+</html>

@@ -159,3 +159,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 release_control.xlsx
+data/VNC_horario_seg_sex.CSV
+data/VNC_horario_sab.CSV
+data/VNC_horario_dom_e_fer.CSV

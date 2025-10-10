@@ -8,27 +8,21 @@
 body {
     background-color: #000000;
     color: #fff;
-    padding: 20px;
+    padding: 10px;
     overflow-x: hidden;
 }
 
-/* Cabeçalho estilo painel */
+/* Cabeçalho estilo painel - MOBILE FIRST */
 .header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 10px;
-    padding: 2px 10px;
+    padding: 15px;
     border-radius: 12px;
     border: 2px solid #192029;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-@keyframes headerGlow {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
 }
 
 .header-title {
@@ -72,31 +66,30 @@ body {
     text-align: center;
 }
 
-/* Botões de seleção de arquivo */
+/* Botões de seleção de arquivo MOBILE */
 .file-selector {
-    position: fixed;
-    top: 10px;
-    left: 10px;
+    position: relative;
+    top: auto;
+    left: auto;
     display: flex;
-    gap: 5px;
-    opacity: 0.1;
-    transition: opacity 0.3s;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    opacity: 0.7;
     z-index: 1000;
-}
-
-.file-selector:hover {
-    opacity: 1;
 }
 
 .file-btn {
     background-color: #000000;
     color: white;
     border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    border-radius: 6px;
     cursor: pointer;
     font-size: 12px;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
+    flex: 1;
+    max-width: 80px;
 }
 
 .file-btn:hover {
@@ -109,76 +102,67 @@ body {
     font-weight: bold;
 }
 
-.loading-message {
-    text-align: center;
-    font-size: 20px;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #2d4059;
-    border-radius: 8px;
-    display: none;
-}
-
-.status-message {
-    text-align: center;
-    font-size: 24px;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #2d4059;
-    border-radius: 8px;
-    display: none;
-}
-
-/* Container da tabela com altura limitada */
+/* Container da tabela MOBILE */
 .table-container {
     overflow-x: auto;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    max-height: 600px; /* Altura máxima para mostrar ~10 linhas */
-    overflow-y: auto; /* Scroll vertical quando necessário */
+    max-height: 500px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-/* Tabela com fundo escuro */
+/* Tabela MOBILE */
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: #0a0e1a;
+    min-width: 600px; /* Garante que a tabela não quebre em mobile */
 }
 
-/* Cabeçalho da tabela */
+/* Cabeçalho da tabela MOBILE */
 th {
     background-color: #24272c;
-    padding: 15px;
+    padding: 12px 8px;
     text-align: center;
     font-weight: bold;
     font-size: 18px;
     position: sticky;
     top: 0;
     z-index: 10;
+    white-space: nowrap;
 }
 
-/* Células da tabela - todas centralizadas por padrão */
+/* Células da tabela MOBILE */
 td {
     padding: 12px 15px;
     text-align: center;
     border-bottom: 1px solid #353a41;
+    font-size: 14px;
 }
 
-/* EXCEÇÃO: Coluna DESTINO alinhada à esquerda */
-td:nth-child(3) { /* DESTINO é a 3ª coluna */
+/* EXCEÇÃO: Coluna DESTINO */
+td:nth-child(3) {
+    text-align: left;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+th:nth-child(3) {
     text-align: left;
 }
 
-/* EXCEÇÃO: Cabeçalho DESTINO alinhado à esquerda */
-th:nth-child(3) { /* DESTINO é a 3ª coluna */
-    text-align: left;
+/* Status badges MOBILE */
+.immediate, .confirmed, .scheduled, .departed {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    white-space: nowrap;
 }
 
-tr:last-child td {
-    border-bottom: none;
-}
-
-/* Status: EMBARQUE IMEDIATO */
 .immediate {
     background-color: #ff0000;
     color: #ffffff;
@@ -188,7 +172,6 @@ tr:last-child td {
     animation: pulse 1.5s infinite;
 }
 
-/* Status: CONFIRMADO */
 .confirmed {
     background-color: #28a745;
     color: #fff;
@@ -197,7 +180,6 @@ tr:last-child td {
     border-radius: 4px;
 }
 
-/* Status: PREVISTO */
 .scheduled {
     background-color: #59562d;
     color: #fff;
@@ -205,7 +187,6 @@ tr:last-child td {
     border-radius: 4px;
 }
 
-/* Status: PARTIU (quando a partida já ocorreu) */
 .departed {
     background-color: #6c757d;
     color: #fff;
@@ -221,33 +202,17 @@ tr:last-child td {
     100% { opacity: 1; }
 }
 
-.no-data {
+/* Mensagens MOBILE */
+.loading-message, .status-message {
     text-align: center;
-    padding: 30px;
-    font-size: 20px;
-    color: #aaa;
+    font-size: 16px;
+    margin: 15px 0;
+    padding: 12px;
+    background-color: #2d4059;
+    border-radius: 8px;
 }
 
-/* Scrollbar personalizada */
-.table-container::-webkit-scrollbar {
-    width: 8px;
-}
-
-.table-container::-webkit-scrollbar-track {
-    background: #1a1a2e;
-    border-radius: 4px;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-    background: #2d4059;
-    border-radius: 4px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-    background: #3a506b;
-}
-
-/* Painel de Status das Linhas */
+/* Painel de Status das Linhas MOBILE */
 .lines-status {
     margin-top: 20px;
     background-color: #0a0e1a;
@@ -260,23 +225,24 @@ tr:last-child td {
     text-align: center;
     margin-bottom: 15px;
     color: #fff;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .lines-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 8px;
 }
 
 .line-status-item {
     display: flex;
     align-items: center;
-    padding: 8px 12px;
+    padding: 10px;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
     border: 1px solid transparent;
+    background-color: #1a1f2e;
 }
 
 .line-status-item:hover {
@@ -285,35 +251,41 @@ tr:last-child td {
 }
 
 .line-color {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     border-radius: 4px;
     margin-right: 10px;
     border: 1px solid #fff;
+    flex-shrink: 0;
 }
 
 .line-info {
     flex: 1;
+    min-width: 0;
 }
 
 .line-number {
     font-weight: bold;
     font-size: 14px;
+    margin-bottom: 2px;
 }
 
 .line-destination {
     font-size: 12px;
     opacity: 0.8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .line-status {
-    padding: 2px 8px;
+    padding: 3px 8px;
     border-radius: 12px;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: bold;
-    margin-left: 10px;
+    margin-left: 8px;
+    flex-shrink: 0;
 }
-
 /* Status das Linhas */
 .status-normal {
     background-color: #28a745;
@@ -335,7 +307,7 @@ tr:last-child td {
     color: white;
 }
 
-/* Modal de Seleção de Status */
+/* Modal MOBILE */
 .status-modal {
     display: none;
     position: fixed;
@@ -343,10 +315,11 @@ tr:last-child td {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
     z-index: 1000;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .status-modal-content {
@@ -354,14 +327,15 @@ tr:last-child td {
     padding: 20px;
     border-radius: 8px;
     border: 2px solid #353a41;
-    max-width: 400px;
-    width: 90%;
+    width: 100%;
+    max-width: 350px;
 }
 
 .status-modal h3 {
     text-align: center;
     margin-bottom: 20px;
     color: #fff;
+    font-size: 18px;
 }
 
 .status-options {
@@ -377,6 +351,7 @@ tr:last-child td {
     text-align: center;
     font-weight: bold;
     transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 .status-option:hover {
@@ -405,15 +380,201 @@ tr:last-child td {
 
 .close-modal {
     margin-top: 15px;
-    padding: 8px 16px;
+    padding: 10px;
     background-color: #2d4059;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     width: 100%;
+    font-size: 14px;
 }
 
-.close-modal:hover {
-    background-color: #3a506b;
+/* ========== MEDIA QUERIES ========== */
+
+/* Tablets */
+@media (min-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+    }
+    
+    .header-title {
+        font-size: 24px;
+        text-align: left;
+        order: 1;
+        flex: 1;
+    }
+    
+    .header-clock {
+        order: 2;
+        gap: 20px;
+    }
+    
+    .clock {
+        font-size: 28px;
+    }
+    
+    .date {
+        font-size: 28px;
+    }
+    
+    .file-selector {
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        flex-direction: column;
+        opacity: 0.1;
+    }
+    
+    .file-selector:hover {
+        opacity: 1;
+    }
+    
+    .file-btn {
+        max-width: none;
+    }
+    
+    .lines-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+    
+    td:nth-child(3) {
+        max-width: none;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    body {
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 15px 30px;
+    }
+    
+    .table-container {
+        max-height: 600px;
+    }
+    
+    th {
+        padding: 15px;
+        font-size: 16px;
+    }
+    
+    td {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+    
+    .lines-grid {
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 12px;
+    }
+}
+
+/* Telas muito pequenas (iPhone SE etc) */
+@media (max-width: 320px) {
+    body {
+        padding: 5px;
+    }
+    
+    .header {
+        padding: 10px;
+    }
+    
+    .header-title {
+        font-size: 18px;
+    }
+    
+    .clock {
+        font-size: 20px;
+        padding: 4px 8px;
+    }
+    
+    .date {
+        font-size: 16px;
+        padding: 3px 6px;
+    }
+    
+    .file-btn {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+    
+    th {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+    
+    td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+    
+    .immediate, .confirmed, .scheduled, .departed {
+        font-size: 10px;
+        padding: 3px 6px;
+    }
+}
+
+/* Orientação paisagem em mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .table-container {
+        max-height: 300px;
+    }
+    
+    .header {
+        padding: 10px 15px;
+    }
+    
+    .header-title {
+        font-size: 18px;
+    }
+    
+    .clock, .date {
+        font-size: 16px;
+    }
+}
+
+/* Scrollbar personalizada MOBILE */
+.table-container::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #1a1a2e;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #2d4059;
+    border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #3a506b;
+}
+
+/* Melhorar toque em dispositivos touch */
+@media (hover: none) and (pointer: coarse) {
+    .file-selector {
+        opacity: 0.9; /* Sempre visível em touch */
+    }
+    
+    .line-status-item:hover {
+        background-color: #1a1f2e; /* Remove hover effect em touch */
+    }
+    
+    .file-btn:hover {
+        background-color: #2d4059; /* Remove hover effect em touch */
+    }
 }

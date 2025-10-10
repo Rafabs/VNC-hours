@@ -1,4 +1,3 @@
-// Dicionário de traduções
 const translations = {
     pt: {
         title: "Painel de Partidas de Ônibus",

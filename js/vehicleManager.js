@@ -119,17 +119,20 @@ class VehicleManager {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
-    // Resetar status
+    // Resetar status APENAS para veículos que não estão em viagem
     this.vehicles.forEach((vehicle) => {
-      vehicle.status = "AGUARDANDO";
-      vehicle.linhaAtual = "";
-      vehicle.plataforma = "";
-      vehicle.proximaViagem = null;
-      vehicle.ultimaPartida = null;
-      vehicle.horarioRetorno = null;
-      vehicle.tempoAteRetorno = null;
-      vehicle.duracaoViagem = null;
-      vehicle.categoria = "aguardando";
+      // ✅ NÃO resetar veículos que estão EM VIAGEM - preservar status atual
+      if (vehicle.status !== "EM VIAGEM") {
+        vehicle.status = "AGUARDANDO";
+        vehicle.linhaAtual = "";
+        vehicle.plataforma = "";
+        vehicle.proximaViagem = null;
+        vehicle.ultimaPartida = null;
+        vehicle.horarioRetorno = null;
+        vehicle.tempoAteRetorno = null;
+        vehicle.duracaoViagem = null;
+        vehicle.categoria = "aguardando";
+      }
     });
 
     // Processar cada partida do horário ATUAL
@@ -140,6 +143,7 @@ class VehicleManager {
       const duracaoViagem = departure.duracao || 90; // Tempo TOTAL de rodagem (ida + volta)
 
       const retornoTime = departureTime + duracaoViagem;
+      const metadeViagem = departureTime + Math.floor(duracaoViagem / 2); // ✅ 50% da viagem
 
       const vehicle = this.vehicles.get(departure.vehicle);
       if (vehicle) {
@@ -158,7 +162,8 @@ class VehicleManager {
             this.currentScheduleData,
             currentTime
           );
-        } else if (currentTime > retornoTime) {
+        }
+        else if (currentTime > retornoTime) {
           // Buscar próxima viagem
           vehicle.proximaViagem = this.findNextTrip(
             vehicle.prefixo,
@@ -166,13 +171,7 @@ class VehicleManager {
             currentTime
           );
 
-          vehicle.status = "DISPONÍVEL";
-          vehicle.categoria = "disponivel";
-          vehicle.horarioRetorno = this.formatTimeFromMinutes(retornoTime);
-          vehicle.linhaAtual = ""; // Limpa linha atual pois chegou
-          vehicle.plataforma = ""; // Limpa plataforma
-
-          // Só preenche linha e plataforma se tiver próxima viagem em breve
+          // Se tem próxima viagem em breve, preparar status
           if (vehicle.proximaViagem) {
             const [proxHours, proxMinutes] = vehicle.proximaViagem
               .split(":")
@@ -180,41 +179,53 @@ class VehicleManager {
             const proxTime = proxHours * 60 + proxMinutes;
             const minutosAteProxima = proxTime - currentTime;
 
-            // Se tem viagem em até 60 minutos, preenche os dados
-            if (minutosAteProxima <= 60) {
+            // Só preenche linha e plataforma se tiver próxima viagem em breve
+            if (minutosAteProxima <= 240) {
               vehicle.linhaAtual = departure.line;
               vehicle.plataforma = departure.platform;
 
-              // Mas mantém como DISPONÍVEL - só muda status quando estiver próximo da partida
-              if (minutosAteProxima <= 4 && minutosAteProxima >= 0) {
+              // Status específicos para próxima partida
+              if (minutosAteProxima <= 5 && minutosAteProxima >= 0) {
                 vehicle.status = "NA PLATAFORMA";
                 vehicle.categoria = "plataforma";
-              } else if (minutosAteProxima <= 6 && minutosAteProxima >= 5) {
+              } else if (minutosAteProxima <= 7 && minutosAteProxima >= 6) {
                 vehicle.status = "ALINHANDO NA PLATAFORMA";
                 vehicle.categoria = "alinhando";
-              } else if (minutosAteProxima <= 60 && minutosAteProxima >= 7) {
+              } else if (minutosAteProxima <= 16 && minutosAteProxima >= 7) {
                 vehicle.status = "AGUARDANDO";
                 vehicle.categoria = "aguardando";
               }
+            } else {
+              // Próxima viagem está longe, fica como RESERVA
+              vehicle.status = "RESERVA";
+              vehicle.categoria = "reserva";
+              vehicle.linhaAtual = "";
+              vehicle.plataforma = "";
             }
+          } else {
+            // Não tem próxima viagem, fica como RESERVA
+            vehicle.status = "RESERVA";
+            vehicle.categoria = "reserva";
+            vehicle.linhaAtual = "";
+            vehicle.plataforma = "";
           }
         }
         // Status específicos para próxima partida (quando ainda não partiu)
-        else if (minutesUntil <= 4 && minutesUntil >= 0) {
+        else if (minutesUntil <= 5 && minutesUntil >= 0) {
           vehicle.status = "NA PLATAFORMA";
           vehicle.linhaAtual = departure.line;
           vehicle.plataforma = departure.platform;
           vehicle.proximaViagem = departure.time;
           vehicle.duracaoViagem = duracaoViagem;
           vehicle.categoria = "plataforma";
-        } else if (minutesUntil <= 6 && minutesUntil >= 5) {
+        } else if (minutesUntil <= 7 && minutesUntil >= 6) {
           vehicle.status = "ALINHANDO NA PLATAFORMA";
           vehicle.linhaAtual = departure.line;
           vehicle.plataforma = departure.platform;
           vehicle.proximaViagem = departure.time;
           vehicle.duracaoViagem = duracaoViagem;
           vehicle.categoria = "alinhando";
-        } else if (minutesUntil <= 60 && minutesUntil >= 7) {
+        } else if (minutesUntil <= 16 && minutesUntil >= 7) {
           vehicle.status = "AGUARDANDO";
           vehicle.linhaAtual = departure.line;
           vehicle.plataforma = departure.platform;
@@ -278,22 +289,6 @@ class VehicleManager {
       const minutes = tempoAteRetorno % 60;
       return `${hours}h${minutes > 0 ? `${minutes}min` : ""}`;
     }
-  }
-
-  // Obter veículos que estão retornando em breve
-  getVehiclesRetornando() {
-    const result = [];
-    this.vehicles.forEach((vehicle) => {
-      if (
-        vehicle.categoria === "viagem" &&
-        vehicle.tempoAteRetorno !== null &&
-        vehicle.tempoAteRetorno <= 30
-      ) {
-        result.push(vehicle);
-      }
-    });
-
-    return result.sort((a, b) => a.tempoAteRetorno - b.tempoAteRetorno);
   }
 
   // Encontrar próxima viagem do veículo
@@ -433,9 +428,16 @@ class VehicleManager {
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
     this.vehicles.forEach((vehicle) => {
-      if (vehicle.categoria === "viagem" && vehicle.tempoAteRetorno !== null) {
-        // Considerar "retornando" se falta menos de 30 minutos para o retorno
-        if (vehicle.tempoAteRetorno <= 30 && vehicle.tempoAteRetorno > 0) {
+      if (vehicle.categoria === "viagem" && vehicle.ultimaPartida) {
+        const [hours, minutes] = vehicle.ultimaPartida.split(":").map(Number);
+        const partidaTime = hours * 60 + minutes;
+        const duracaoTotal = vehicle.duracaoViagem || 90;
+        const metadeViagem = partidaTime + Math.floor(duracaoTotal / 2);
+        const tempoRestante = vehicle.tempoAteRetorno;
+
+        // ✅ CONSIDERAR "RETORNANDO" quando está na segunda metade da viagem
+        // Ex: Viagem de 64 min → Aos 32 min já está retornando
+        if (currentTime >= metadeViagem && tempoRestante > 0) {
           result.push(vehicle);
         }
       }

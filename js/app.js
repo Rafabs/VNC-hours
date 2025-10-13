@@ -4,10 +4,16 @@ class BusDeparturesApp {
     this.scheduleManager = new ScheduleManager();
     this.isLoading = false;
     this.languageInterval = null;
+    this.rotationTimeout = null;
     this.maxVisibleRows = 10; // Máximo de linhas visíveis inicialmente
     this.showAllDepartures = false; // Controla se mostra todas ou apenas as próximas
     this.initializeElements();
     this.setupEventListeners();
+    this.rotationInterval = null;
+    this.currentRotationLine = null;
+    this.isRotationMode = false;
+    this.rotationDuration = 15000; // 15 segundos mostrando a linha destacada
+    this.rotationDelay = 20000; // 20 segundos entre rotações (5 segundos de tabela geral)
   }
 
   // Inicializar o painel de status das linhas
@@ -222,6 +228,7 @@ class BusDeparturesApp {
     this.thVehicleElement = document.getElementById("thVehicle");
     this.thPlatformElement = document.getElementById("thPlatform");
     this.thObservationElement = document.getElementById("thObservation");
+    this.tableContainerElement = document.getElementById("tableContainer");
 
     // Verificar se os elementos foram encontrados
     this.validateElements();
@@ -418,6 +425,269 @@ class BusDeparturesApp {
     }
   }
 
+  startLineRotation() {
+    console.log('Iniciando sistema de rotação de linhas');
+    
+    // Debug inicial
+    setTimeout(() => {
+      this.debugRotationState();
+    }, 2000);
+    
+    // Iniciar após um delay inicial
+    setTimeout(() => {
+      this.rotationInterval = setInterval(() => {
+        console.log('--- Executando rotação ---');
+        this.debugRotationState();
+        this.executeLineRotation();
+      }, this.rotationDelay);
+    }, 5000);
+  }
+
+  // Executar uma rotação
+  executeLineRotation() {
+    // Se já está em modo rotação, pular esta execução
+    if (this.isRotationMode) {
+      console.log('⏭️  Modo rotação ativo, pulando execução');
+      return;
+    }
+    
+    let uniqueLines = this.scheduleManager.getUniqueLines();
+    
+    // Fallback se não encontrar linhas
+    if (uniqueLines.length === 0) {
+      console.log('Usando fallback para buscar linhas');
+      uniqueLines = this.getAllAvailableLines();
+    }
+    
+    if (uniqueLines.length === 0) {
+      console.log('Ainda nenhuma linha encontrada, pulando rotação');
+      return;
+    }
+    
+    console.log(`📊 Total de linhas disponíveis: ${uniqueLines.length}`);
+    
+    // Determinar próxima linha
+    let nextLine;
+    
+    if (!this.currentRotationLine) {
+      // Primeira execução: começar com a primeira linha
+      nextLine = uniqueLines[0];
+      console.log(`🎯 Iniciando rotação com linha: ${nextLine.line}`);
+    } else {
+      // Encontrar índice da linha atual
+      const currentIndex = uniqueLines.findIndex(
+        line => line.line === this.currentRotationLine.line
+      );
+      
+      console.log(`📋 Linha atual: ${this.currentRotationLine.line} (índice: ${currentIndex})`);
+      
+      if (currentIndex === -1) {
+        // Linha atual não encontrada, voltar para a primeira
+        nextLine = uniqueLines[0];
+        console.log('🔄 Linha atual não encontrada, reiniciando rotação');
+      } else {
+        // Avançar para próxima linha (circular)
+        const nextIndex = (currentIndex + 1) % uniqueLines.length;
+        nextLine = uniqueLines[nextIndex];
+        console.log(`➡️  Próxima linha: ${nextLine.line} (índice: ${nextIndex})`);
+      }
+    }
+    
+    // Executar o destaque
+    this.showLineHighlight(nextLine);
+  }
+
+  debugRotationState() {
+    const uniqueLines = this.scheduleManager.getUniqueLines();
+    console.log('=== DEBUG ROTAÇÃO ===');
+    console.log('Linha atual em rotação:', this.currentRotationLine?.line);
+    console.log('Modo rotação ativo:', this.isRotationMode);
+    console.log('Total de linhas únicas:', uniqueLines.length);
+    console.log('Próximas 3 linhas:', uniqueLines.slice(0, 3).map(l => l.line));
+    console.log('=====================');
+  }
+
+  // Mostrar destaque de uma linha específica
+  showLineHighlight(lineData) {
+    // Limpar qualquer timeout pendente
+    if (this.rotationTimeout) {
+      clearTimeout(this.rotationTimeout);
+    }
+    
+    this.isRotationMode = true;
+    this.currentRotationLine = lineData; 
+    
+    console.log(`🎨 Mostrando destaque para linha: ${lineData.line}`);
+    
+    // Adicionar indicador visual
+    this.showRotationIndicator(lineData);
+    
+    // Obter partidas da linha
+    const lineDepartures = this.scheduleManager.getLineNextDepartures(lineData.line);
+    
+    console.log(`📅 Partidas para ${lineData.line}: ${lineDepartures.length}`);
+    
+    // Atualizar tabela para mostrar apenas a linha destacada
+    this.updateScheduleForRotation(lineDepartures, lineData);
+    
+    // Configurar para voltar à tabela geral após o tempo
+    this.rotationTimeout = setTimeout(() => {
+      console.log('⏰ Tempo de rotação esgotado, voltando à tabela geral');
+      this.isRotationMode = false;
+      this.hideRotationIndicator();
+      this.updateSchedule();
+    }, this.rotationDuration);
+  }
+
+  // Mostrar indicador de rotação
+  showRotationIndicator(lineData) {
+    this.hideRotationIndicator();
+
+    const indicator = document.createElement("div");
+    indicator.className = "rotation-indicator";
+    indicator.textContent = `LINHA ${lineData.line}`;
+    indicator.id = "rotationIndicator";
+
+    document.body.appendChild(indicator);
+
+    if (this.tableContainerElement) {
+      this.tableContainerElement.classList.add("rotation-mode");
+    }
+  }
+
+  // Esconder indicador de rotação
+  hideRotationIndicator() {
+    const existingIndicator = document.getElementById("rotationIndicator");
+    if (existingIndicator) {
+      existingIndicator.remove();
+    }
+
+    if (this.tableContainerElement) {
+      this.tableContainerElement.classList.remove("rotation-mode");
+    }
+  }
+
+  // Atualizar tabela para modo rotação
+  updateScheduleForRotation(lineDepartures, lineData) {
+    if (!this.scheduleBodyElement) return;
+    
+    // Limpar tabela
+    this.scheduleBodyElement.innerHTML = '';
+    
+    if (lineDepartures.length === 0) {
+      const row = document.createElement('tr');
+      const cell = document.createElement('td');
+      cell.colSpan = 6;
+      cell.textContent = `Nenhuma partida disponível para a linha ${lineData.line}`;
+      cell.style.textAlign = 'center';
+      cell.style.padding = '20px';
+      cell.className = 'rotation-no-departures';
+      row.appendChild(cell);
+      this.scheduleBodyElement.appendChild(row);
+      return;
+    }
+    
+    // Adicionar cabeçalho especial para a linha
+    const headerRow = document.createElement('tr');
+    headerRow.className = 'rotation-header';
+    const headerCell = document.createElement('td');
+    headerCell.colSpan = 6;
+    headerCell.innerHTML = `
+      <div style="display: flex; align-items: center; justify-content: center; gap: 15px; padding: 12px; background: ${lineData.bgColor}; color: ${lineData.textColor}; border-radius: 8px; font-weight: bold; font-size: 1.3em; margin: 5px 0;">
+        <span>${lineData.line}</span>
+        <span>•</span>
+        <span>${lineData.destination}</span>
+      </div>
+    `;
+    headerRow.appendChild(headerCell);
+    this.scheduleBodyElement.appendChild(headerRow);
+    
+    // Adicionar TODAS as partidas da linha (sem limite adicional)
+    lineDepartures.forEach(departure => {
+      this.createRotationRow(departure);
+    });
+    
+    console.log(`📈 Exibindo ${lineDepartures.length} partidas para ${lineData.line}`);
+  }
+
+  // Criar linha para modo rotação
+  createRotationRow(departure) {
+    const minutesUntil = this.scheduleManager.minutesUntilDeparture(
+      departure.time
+    );
+    const status = this.scheduleManager.getDepartureStatus(departure.time);
+
+    // Não mostrar partidas que já passaram há mais de 2 minutos
+    if (minutesUntil < -2) return;
+
+    const row = document.createElement('tr');
+    row.className = 'rotation-row current-rotation-line'; // Adicione current-rotation-line
+
+    // Hora
+    const timeCell = document.createElement("td");
+    timeCell.textContent = departure.time;
+    timeCell.style.fontWeight = "bold";
+    timeCell.style.fontSize = "1.1em";
+    row.appendChild(timeCell);
+
+    // Linha (vazia pois já mostramos no cabeçalho)
+    const lineCell = document.createElement("td");
+    lineCell.textContent = departure.line;
+    lineCell.style.backgroundColor = departure.bgColor;
+    lineCell.style.color = departure.textColor;
+    lineCell.style.fontWeight = "bold";
+    lineCell.style.padding = "5px 10px";
+    lineCell.style.borderRadius = "4px";
+    row.appendChild(lineCell);
+
+    // Destino
+    const destinationCell = document.createElement("td");
+    destinationCell.textContent = departure.destination;
+    row.appendChild(destinationCell);
+
+    // Veículo
+    const vehicleCell = document.createElement("td");
+    vehicleCell.textContent = departure.vehicle;
+    vehicleCell.style.fontWeight = "bold";
+    row.appendChild(vehicleCell);
+
+    // Plataforma
+    const platformCell = document.createElement("td");
+    platformCell.textContent = departure.platform;
+    platformCell.style.fontWeight = "bold";
+    row.appendChild(platformCell);
+
+    // Observação
+    const observationCell = document.createElement("td");
+    const observationSpan = document.createElement("span");
+
+    const lang = this.scheduleManager.config.language;
+
+    switch (status) {
+      case "immediate":
+        observationSpan.textContent = translations[lang].immediate;
+        observationSpan.className = "immediate rotation-status";
+        break;
+      case "confirmed":
+        observationSpan.textContent = translations[lang].confirmed;
+        observationSpan.className = "confirmed rotation-status";
+        break;
+      case "scheduled":
+        observationSpan.textContent = translations[lang].scheduled;
+        observationSpan.className = "scheduled rotation-status";
+        break;
+      case "departed":
+        observationSpan.textContent = translations[lang].departed;
+        observationSpan.className = "departed rotation-status";
+        break;
+    }
+
+    observationCell.appendChild(observationSpan);
+    row.appendChild(observationCell);
+
+    this.scheduleBodyElement.appendChild(row);
+  }
+
   // Atualizar tabela de partidas
   updateSchedule() {
     if (this.isLoading || !this.scheduleBodyElement) return;
@@ -553,6 +823,8 @@ class BusDeparturesApp {
 
     // Mostrar loading
     this.showLoading(true);
+
+    this.startLineRotation();
 
     try {
       // Carregar dados dos CSVs

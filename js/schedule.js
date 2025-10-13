@@ -87,15 +87,20 @@ class ScheduleManager {
   getAllUpcomingDepartures() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
-
-    return this.scheduleData.filter((departure) => {
-      const [hours, minutes] = departure.time.split(":").map(Number);
+    
+    console.log(`🕐 Hora atual: ${currentTime} (${now.getHours()}:${now.getMinutes()})`);
+    
+    const filtered = this.scheduleData.filter((departure) => {
+      const [hours, minutes] = departure.time.split(':').map(Number);
       const departureTime = hours * 60 + minutes;
       const minutesUntil = this.minutesUntilDeparture(departure.time);
 
       // Incluir partidas que ainda não ocorreram OU que ocorreram há menos de 1 minuto
       return minutesUntil >= -1;
     });
+    
+    console.log(`📋 Partidas futuras: ${filtered.length} de ${this.scheduleData.length}`);
+    return filtered;
   }
 
   // Obter as próximas X partidas a partir do horário atual
@@ -327,5 +332,90 @@ class ScheduleManager {
     });
 
     return sortedDepartures;
+  }
+
+  // Obter todas as partidas de uma linha específica
+  getDeparturesByLine(line, limit = 10) {
+    const allDepartures = this.getAllUpcomingDepartures();
+
+    const lineDepartures = allDepartures.filter(
+      (departure) => departure.line === line
+    );
+
+    // Ordenar por horário mais próximo
+    const sortedDepartures = lineDepartures.sort((a, b) => {
+      const minutesA = this.minutesUntilDeparture(a.time);
+      const minutesB = this.minutesUntilDeparture(b.time);
+      return minutesA - minutesB;
+    });
+
+    return sortedDepartures.slice(0, limit);
+  }
+
+  // Obter linhas únicas do horário
+  getUniqueLines() {
+    const allDepartures = this.getAllUpcomingDepartures();
+    const uniqueLines = new Map();
+    
+    allDepartures.forEach(departure => {
+      if (!uniqueLines.has(departure.line)) {
+        uniqueLines.set(departure.line, {
+          line: departure.line,
+          destination: departure.destination,
+          bgColor: departure.bgColor,
+          textColor: departure.textColor,
+          // Adicionar contador para debug
+          count: 1
+        });
+      } else {
+        // Incrementar contador para debug
+        const existing = uniqueLines.get(departure.line);
+        existing.count++;
+      }
+    });
+    
+    console.log('Linhas únicas encontradas:', Array.from(uniqueLines.values()));
+    return Array.from(uniqueLines.values());
+  }
+
+  // Obter próximas partidas de uma linha (incluindo as que já passaram há pouco)
+  getLineNextDepartures(line, limit = 10) { 
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    
+    console.log(`🔍 Buscando partidas para linha ${line}, hora atual: ${Math.floor(currentTime/60)}:${currentTime%60}`);
+    
+    const lineDepartures = this.scheduleData.filter(departure => 
+      departure.line === line
+    );
+    
+    console.log(`📊 Total de partidas encontradas para ${line}: ${lineDepartures.length}`);
+    
+    // Filtrar partidas relevantes - critério mais amplo
+    const relevantDepartures = lineDepartures.filter(departure => {
+      const [hours, minutes] = departure.time.split(':').map(Number);
+      const departureTime = hours * 60 + minutes;
+      const minutesUntil = departureTime - currentTime;
+      
+      // Critério MAIS AMPLO para incluir mais partidas:
+      // - Partidas que ocorreram há menos de 30 minutos (passado)
+      // - Partidas que vão ocorrer nas próximas 12 horas (futuro)
+      return minutesUntil >= -30 && minutesUntil <= 720;
+    });
+    
+    console.log(`✅ Partidas relevantes para ${line}: ${relevantDepartures.length}`);
+    
+    // Ordenar por horário (mais próximas primeiro)
+    const sortedDepartures = relevantDepartures.sort((a, b) => {
+      const [aHours, aMinutes] = a.time.split(':').map(Number);
+      const [bHours, bMinutes] = b.time.split(':').map(Number);
+      return (aHours * 60 + aMinutes) - (bHours * 60 + bMinutes);
+    });
+    
+    // Retornar até o limite especificado
+    const result = sortedDepartures.slice(0, limit);
+    console.log(`🎯 Retornando ${result.length} partidas para ${line}`);
+    
+    return result;
   }
 }

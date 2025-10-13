@@ -335,7 +335,7 @@ class ScheduleManager {
   }
 
   // Obter todas as partidas de uma linha específica
-  getDeparturesByLine(line, limit = 10) {
+  getDeparturesByLine(line, limit = 9) {
     const allDepartures = this.getAllUpcomingDepartures();
 
     const lineDepartures = allDepartures.filter(
@@ -379,7 +379,7 @@ class ScheduleManager {
   }
 
   // Obter próximas partidas de uma linha (incluindo as que já passaram há pouco)
-  getLineNextDepartures(line, limit = 10) { 
+  getLineNextDepartures(line, limit = 9) { 
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
     

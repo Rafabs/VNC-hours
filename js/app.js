@@ -440,7 +440,7 @@ class BusDeparturesApp {
         this.debugRotationState();
         this.executeLineRotation();
       }, this.rotationDelay);
-    }, 5000);
+    }, 20000);
   }
 
   // Executar uma rotação
@@ -545,7 +545,6 @@ class BusDeparturesApp {
 
     const indicator = document.createElement("div");
     indicator.className = "rotation-indicator";
-    indicator.textContent = `LINHA ${lineData.line}`;
     indicator.id = "rotationIndicator";
 
     document.body.appendChild(indicator);

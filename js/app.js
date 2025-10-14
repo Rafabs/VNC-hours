@@ -186,12 +186,17 @@ class BusDeparturesApp {
     allDepartures.forEach((departure) => {
       const lineKey = departure.line;
       if (!uniqueLines.has(lineKey)) {
+        // Verificar status inicial da operação
+        const isOperationEnded =
+          this.scheduleManager.isLineOperationEnded(lineKey);
+        const initialStatus = isOperationEnded ? "ended" : "normal";
+
         uniqueLines.set(lineKey, {
           line: departure.line,
           destination: departure.destination,
           bgColor: departure.bgColor,
           textColor: departure.textColor,
-          status: "normal",
+          status: initialStatus,
         });
       }
     });
@@ -199,9 +204,18 @@ class BusDeparturesApp {
     // Manter status existentes se possível
     uniqueLines.forEach((newLineData, lineKey) => {
       if (this.linesData.has(lineKey)) {
-        // Manter status anterior
+        // Manter status anterior, exceto se a operação mudou
         const existingData = this.linesData.get(lineKey);
-        newLineData.status = existingData.status;
+        const isOperationEnded =
+          this.scheduleManager.isLineOperationEnded(lineKey);
+
+        if (isOperationEnded && existingData.status !== "ended") {
+          newLineData.status = "ended"; // Forçar encerramento se operação acabou
+        } else if (!isOperationEnded && existingData.status === "ended") {
+          newLineData.status = "normal"; // Reativar se operação voltou
+        } else {
+          newLineData.status = existingData.status;
+        }
       }
       this.linesData.set(lineKey, newLineData);
     });
@@ -431,12 +445,13 @@ class BusDeparturesApp {
     let totalDepartures;
 
     if (this.showAllDepartures) {
-      // Mostrar todas as partidas
-      departuresToShow = this.scheduleManager.getRemainingDepartures();
+      // Mostrar todas as partidas FILTRADAS
+      departuresToShow = this.scheduleManager.getFilteredRemainingDepartures();
       totalDepartures = departuresToShow.length;
     } else {
-      // Mostrar apenas as próximas X partidas
-      const allDepartures = this.scheduleManager.getRemainingDepartures();
+      // Mostrar apenas as próximas X partidas FILTRADAS
+      const allDepartures =
+        this.scheduleManager.getFilteredRemainingDepartures();
       totalDepartures = allDepartures.length;
       departuresToShow = allDepartures.slice(0, this.maxVisibleRows);
     }

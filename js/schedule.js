@@ -87,17 +87,19 @@ class ScheduleManager {
   getAllUpcomingDepartures() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
-        
+
     const filtered = this.scheduleData.filter((departure) => {
-      const [hours, minutes] = departure.time.split(':').map(Number);
+      const [hours, minutes] = departure.time.split(":").map(Number);
       const departureTime = hours * 60 + minutes;
       const minutesUntil = this.minutesUntilDeparture(departure.time);
 
       // Incluir partidas que ainda não ocorreram OU que ocorreram há menos de 1 minuto
       return minutesUntil >= -1;
     });
-    
-    console.log(`📋 Partidas futuras: ${filtered.length} de ${this.scheduleData.length}`);
+
+    console.log(
+      `📋 Partidas futuras: ${filtered.length} de ${this.scheduleData.length}`
+    );
     return filtered;
   }
 
@@ -318,4 +320,17 @@ class ScheduleManager {
     return sortedDepartures.slice(0, limit);
   }
 
+  // Obter todas as partidas restantes filtradas
+  getFilteredRemainingDepartures() {
+    const filteredDepartures = this.getFilteredDepartures();
+
+    // Ordenar por horário mais próximo
+    const sortedDepartures = filteredDepartures.sort((a, b) => {
+      const minutesA = this.minutesUntilDeparture(a.time);
+      const minutesB = this.minutesUntilDeparture(b.time);
+      return minutesA - minutesB;
+    });
+
+    return sortedDepartures;
+  }
 }

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rotas - VNC</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/routes.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="file-selector" id="fileSelector">
+    <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
+  </div>
+
+  <div class="header">
+    <div class="header-title">Rotas</div>
+    <div class="header-clock">
+      <div class="date" id="date">00/00/0000</div>
+      <div class="clock" id="clock">00:00:00</div>
+    </div>
+  </div>
+
+  <div class="routes-container" id="routesContainer">
+    <div class="loading-message">Carregando linhas...</div>
+  </div>
+
+  <script src="js/translations.js"></script>
+  <script src="js/csvLoader.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/routes.js"></script>
+</body>
+</html>

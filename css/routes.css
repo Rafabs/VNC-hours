@@ -1,39 +1,84 @@
-.routes-container {
+/* ===== Tema Dinâmico ===== */
+body[data-theme="day"] {
+  background: #f7f7f7;
+  color: #111;
+}
+/* tema noturno – contraste e brilho */
+body[data-theme="night"] .vehicle-icon {
+  background: var(--bus-color, #ff6f00);
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.15),
+    0 0 15px rgba(255,255,255,0.05);
+}
+body[data-theme="night"] .route-card {
+  background: #1e1e1e;
+  box-shadow: 0 0 20px rgba(255,255,255,0.05);
+}
+body[data-theme="night"] .bus-svg circle[fill='yellow'] {
+  filter: drop-shadow(0 0 4px yellow);
+}
+
+/* ===== Layout ===== */
+.routes-main-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   padding: 20px;
+}
+.routes-container {
+  flex: 2;
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
+.side-panels {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
-.route-card {
+/* ===== Cards ===== */
+.card, .route-card {
   background: #1e1e1e;
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
   color: #fafafa;
+  overflow: hidden;
 }
+.card h3, .route-header h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 6px;
+}
+.waiting-item, .reserve-item {
+  background: #2a2a2a;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9em;
+}
+.waiting-item .time { color: #ffc107; }
+.reserve-item .status { color: #40e0d0; }
 
+/* ===== Rotas ===== */
 .route-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
 }
-
-.route-header h3 {
-  font-size: 1.2em;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .route-direction {
   font-size: 0.9em;
   margin-bottom: 6px;
   opacity: 0.8;
 }
-
 .route-line {
   position: relative;
   height: 10px;
@@ -43,25 +88,17 @@
   overflow: visible;
 }
 
+/* ===== Veículos ===== */
 .vehicle-marker {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  min-width: 65px;
-  height: 36px;
-  border-radius: 18px;
-  background: #ff6f00;
-  border: 2px solid #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  color: #fff;
-  padding: 0 6px;
-  white-space: nowrap;
-  box-shadow: 0 0 6px rgba(0,0,0,0.4);
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: left 1s linear, transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
 .vehicle-marker:hover {
@@ -69,26 +106,72 @@
   z-index: 10;
 }
 
-.vehicle-info {
+/* Ícone principal do ônibus */
+.vehicle-icon {
+  font-size: 22px;
+  background: var(--bus-color, #ff6f00);
+  color: #fff;
+  padding: 6px;
+  border-radius: 50%;
+  box-shadow:
+    0 2px 6px rgba(0,0,0,0.4),
+    inset 0 1px 2px rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.6);
+  transition: background 0.3s;
+}
+
+/* Tooltip */
+.vehicle-tooltip {
   position: absolute;
-  top: -55px;
+  top: -70px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.85);
+  color: #fff;
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 11px;
-  white-space: nowrap;
   display: none;
+  white-space: nowrap;
 }
+.vehicle-marker:hover .vehicle-tooltip { display: block; }
 
-.vehicle-marker:hover .vehicle-info {
-  display: block;
-}
-
+/* Prefixo */
 .vehicle-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 600;
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 2px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* ===== Ônibus SVG ===== */
+.bus-svg {
+  width: 52px;
+  height: 26px;
+  transition: transform 0.4s ease;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.4));
+}
+.bus-svg.forward { transform: rotateY(0deg); }
+.bus-svg.backward { transform: rotateY(180deg); }
+
+/* ===== Efeitos ===== */
+/* Rastro de luz */
+.vehicle-marker::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -15%;
+  width: 30%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.25), transparent);
+  transform: translateY(-50%);
+  animation: trailMove 1.8s infinite linear;
+  opacity: 0.6;
+}
+@keyframes trailMove {
+  0% { left: -5%; opacity: 0; }
+  50% { left: -15%; opacity: 1; }
+  100% { left: -25%; opacity: 0; }
 }

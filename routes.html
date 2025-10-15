@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,6 +9,7 @@
   <link rel="stylesheet" href="css/routes.css" />
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
+
 <body>
   <div class="file-selector" id="fileSelector">
     <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
@@ -21,8 +23,22 @@
     </div>
   </div>
 
-  <div class="routes-container" id="routesContainer">
-    <div class="loading-message">Carregando linhas...</div>
+  <div class="routes-main-layout">
+    <div class="routes-container" id="routesContainer">
+      <div class="loading-message">Carregando linhas...</div>
+    </div>
+
+    <aside class="side-panels">
+      <div class="card waiting-card" id="waitingCard">
+        <h3>🕒 Aguardando Partida</h3>
+        <div class="waiting-list"></div>
+      </div>
+
+      <div class="card reserve-card" id="reserveCard">
+        <h3>🧭 Veículos Reserva</h3>
+        <div class="reserve-list"></div>
+      </div>
+    </aside>
   </div>
 
   <script src="js/translations.js"></script>

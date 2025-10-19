@@ -1,90 +1,197 @@
 /* ===== Tema Dinâmico ===== */
+:root {
+  --card-bg: #1e1e1e;
+  --card-grad-day: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  --accent-yellow: #ffc107;
+  --accent-turq: #40e0d0;
+  --glass: rgba(255,255,255,0.04);
+}
+
 body[data-theme="day"] {
-  background: #f7f7f7;
-  color: #111;
+  background: #3a3a3a;
+  color: #f7f1f1;
+  --card-bg: #000000;
+  --glass: rgba(100, 100, 100, 0.7);
 }
-/* tema noturno – contraste e brilho */
-body[data-theme="night"] .vehicle-icon {
-  background: var(--bus-color, #ff6f00);
-  box-shadow:
-    0 0 10px rgba(255,255,255,0.15),
-    0 0 15px rgba(255,255,255,0.05);
-}
-body[data-theme="night"] .route-card {
-  background: #1e1e1e;
-  box-shadow: 0 0 20px rgba(255,255,255,0.05);
-}
-body[data-theme="night"] .bus-svg circle[fill='yellow'] {
-  filter: drop-shadow(0 0 4px yellow);
+
+body[data-theme="night"] {
+  background: #0f1115;
+  color: #555555;
 }
 
 /* ===== Layout ===== */
 .routes-main-layout {
   display: flex;
-  flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
+  padding: 18px;
+  flex-wrap: wrap;
 }
+
 .routes-container {
   flex: 2;
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 26px;
+  min-width: 340px;
 }
+
 .side-panels {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
+  min-width: 260px;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 18px;
+  margin: 14px;
+  border-radius: 12px;
+}
+
+.header.glass {
+  backdrop-filter: blur(6px);
+  background: var(--glass);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+.header-title {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.header-clock {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--accent-turq);
+}
+
+.header-clock .date {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.header-clock .clock {
+  font-family: monospace;
+  font-weight: 700;
 }
 
 /* ===== Cards ===== */
 .card, .route-card {
-  background: #1e1e1e;
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  color: #fafafa;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.35);
+  color: inherit;
   overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+.card:hover, .route-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.4);
+}
+
 .card h3, .route-header h3 {
-  font-size: 1.1em;
-  font-weight: 600;
+  font-size: 1.05em;
+  font-weight: 700;
   margin-bottom: 10px;
-  border-bottom: 1px solid #333;
-  padding-bottom: 6px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }
+
+/* ===== Waiting & Reserve list ===== */
+.waiting-list, .reserve-list {
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
 .waiting-item, .reserve-item {
-  background: #2a2a2a;
+  background: rgba(0,0,0,0.28);
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 8px;
   align-items: center;
+  font-size: 0.92em;
+}
+
+body[data-theme="day"] .waiting-item,
+body[data-theme="day"] .reserve-item {
+  background: rgba(0,0,0,0.03);
+}
+
+.waiting-item .vehicle-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.waiting-item .time {
+  color: var(--accent-yellow);
+  font-weight: 700;
   font-size: 0.9em;
 }
-.waiting-item .time { color: #ffc107; }
-.reserve-item .status { color: #40e0d0; }
 
-/* ===== Rotas ===== */
+.reserve-item .status {
+  color: var(--accent-turq);
+  font-weight: 700;
+}
+
+/* ===== Progress Bar ===== */
+.progress {
+  width: 100%;
+  height: 8px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-left: 6px;
+  margin-right: 6px;
+  align-self: center;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 600ms ease;
+  background: linear-gradient(90deg, rgba(255,111,0,0.95), rgba(255,193,7,0.9));
+  box-shadow: 0 4px 10px rgba(255,140,0,0.12) inset;
+}
+
+/* ===== Route lines ===== */
 .route-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
+
 .route-direction {
   font-size: 0.9em;
+  opacity: 0.85;
   margin-bottom: 6px;
-  opacity: 0.8;
 }
+
 .route-line {
   position: relative;
-  height: 10px;
-  border-radius: 5px;
-  background: #444;
-  margin-bottom: 20px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+  margin-bottom: 18px;
   overflow: visible;
 }
 
@@ -94,84 +201,80 @@ body[data-theme="night"] .bus-svg circle[fill='yellow'] {
   top: 50%;
   transform: translate(-50%, -50%);
   cursor: pointer;
-  transition: left 1s linear, transform 0.2s ease;
+  transition: left 900ms linear, transform 220ms ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 6px;
+  z-index: 6;
 }
 
-.vehicle-marker:hover {
-  transform: translate(-50%, -50%) scale(1.15);
-  z-index: 10;
-}
-
-/* Ícone principal do ônibus */
-.vehicle-icon {
-  font-size: 22px;
-  background: var(--bus-color, #ff6f00);
+.vehicle-label {
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.6);
   color: #fff;
-  padding: 6px;
-  border-radius: 50%;
-  box-shadow:
-    0 2px 6px rgba(0,0,0,0.4),
-    inset 0 1px 2px rgba(255,255,255,0.2);
-  border: 1.5px solid rgba(255,255,255,0.6);
-  transition: background 0.3s;
+  white-space: nowrap;
 }
 
 /* Tooltip */
 .vehicle-tooltip {
   position: absolute;
-  top: -70px;
+  top: -84px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.85);
   color: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 11px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 12px;
   display: none;
   white-space: nowrap;
+  z-index: 20;
 }
 .vehicle-marker:hover .vehicle-tooltip { display: block; }
 
-/* Prefixo */
-.vehicle-label {
-  font-size: 11px;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 6px;
-  white-space: nowrap;
+/* ===== Imagens de Ônibus ===== */
+.bus-img {
+  width: 90px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease, filter 0.3s ease;
 }
 
-/* ===== Ônibus SVG ===== */
-.bus-svg {
-  width: 52px;
-  height: 26px;
-  transition: transform 0.4s ease;
-  filter: drop-shadow(0 0 4px rgba(0,0,0,0.4));
-}
-.bus-svg.forward { transform: rotateY(0deg); }
-.bus-svg.backward { transform: rotateY(180deg); }
+.bus-img.forward { transform: scaleX(1); }
+.bus-img.backward { transform: scaleX(-1); }
 
-/* ===== Efeitos ===== */
-/* Rastro de luz */
-.vehicle-marker::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -15%;
-  width: 30%;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0.25), transparent);
-  transform: translateY(-50%);
-  animation: trailMove 1.8s infinite linear;
-  opacity: 0.6;
+.vehicle-marker:hover .bus-img {
+  filter: brightness(1.15) drop-shadow(0 0 6px rgba(255,255,255,0.5));
+  transform: scale(1.1);
 }
-@keyframes trailMove {
-  0% { left: -5%; opacity: 0; }
-  50% { left: -15%; opacity: 1; }
-  100% { left: -25%; opacity: 0; }
+
+/* ===== Responsividade ===== */
+@media (max-width: 1100px) {
+  .routes-main-layout { flex-direction: column; }
+  .routes-container { order: 2; }
+  .side-panels { order: 1; flex-direction: row; flex-wrap: wrap; }
+  .card { flex: 1; min-width: 300px; }
+}
+
+@media (max-width: 700px) {
+  .header { flex-direction: column; align-items: flex-start; }
+  .routes-main-layout { padding: 10px; gap: 12px; }
+  .routes-container { gap: 18px; }
+  .route-card, .card { padding: 10px; }
+  .bus-img { width: 70px; }
+  .vehicle-tooltip { top: -70px; font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 10px; margin: 8px; }
+  .header-title { font-size: 1rem; }
+  .header-clock { font-size: 0.85rem; }
+  .waiting-item, .reserve-item { grid-template-columns: 1fr; gap: 6px; text-align: left; }
+  .bus-img { width: 60px; }
+  .vehicle-label { font-size: 10px; }
+  .route-line { height: 10px; }
 }

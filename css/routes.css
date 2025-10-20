@@ -278,3 +278,22 @@ body[data-theme="day"] .reserve-item {
   .vehicle-label { font-size: 10px; }
   .route-line { height: 10px; }
 }
+
+@media (max-width: 700px) {
+  .route-line {
+    height: 20px;
+  }
+  .vehicle-marker {
+    top: 40%; /* move o veículo mais para dentro da área visível */
+  }
+  .bus-img {
+    width: 70px;
+  }
+}
+
+@media (max-width: 600px) {
+  .vehicle-tooltip {
+    top: -60px;
+    font-size: 11px;
+  }
+}

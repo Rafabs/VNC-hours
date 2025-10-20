@@ -142,7 +142,7 @@ class RoutesApp {
             Math.round((1 - Math.min(windowMin, mins) / windowMin) * 100)
           )
         );
-        const vt = this.detectVehicleType(d.vehicle);
+        const vt = this.detectVehicleType(trip.vehicle, trip.model, trip.type);
         const label = `${d.line} • ${d.vehicle}`;
         const destino = d.destination || "";
         return `
@@ -296,21 +296,25 @@ class RoutesApp {
 
           marker.innerHTML = `
             <div class="pulse" style="background:${trip.bgColor}55"></div>
+
             <div class="vehicle-tooltip">
               <strong>${trip.vehicle}</strong><br>
+              ${trip.model || trip.type || ""}<br>
               ${trip.destination || ""}<br>
               ${percInt}% do trajeto — Faltam ${remainingMin} min
             </div>
 
-            <div class="vehicle-icon" style="background:linear-gradient(180deg, ${
-              trip.bgColor
-            }, ${trip.bgColor}CC); border-radius:8px;">
+            <div class="vehicle-icon"
+                style="background:linear-gradient(180deg, ${trip.bgColor}, ${
+            trip.bgColor
+          }CC);
+                        border-radius:8px;">
               <i data-lucide="${vt.icon}"></i>
             </div>
 
             <div class="vehicle-label">${trip.vehicle}</div>
 
-            ${this.renderBusImage(vt.type, ida, trip.vehicle)}
+            ${this.renderBusImage(trip.type, trip.model, ida)}
           `;
 
           // hover highlight: light up line background
@@ -331,35 +335,29 @@ class RoutesApp {
       this.routesContainer.appendChild(card);
     });
   }
-  renderBusImage(type, ida, vehicleName = "") {
+  renderBusImage(type, model, ida) {
     const dir = ida ? "IDA" : "VOLTA";
-    const name = vehicleName.toUpperCase();
+    const t = (type || "").toUpperCase();
+    const m = (model || "").toUpperCase();
 
-    // Detecta modelo real do veículo com base no nome ou tipo
-    let model = "M4-PADRON"; // padrão de fallback
+    let fileBase;
 
-    if (/BTR|BIART|SUPER|SUPERARTICULADO/i.test(name) || /super/.test(type))
-      model = "BTRII-SUPERARTICULADO";
-    else if (/ARTIC|ARTICULAD|ARTICULADO/i.test(name) || /articulado/.test(type))
-      model = "M5-ARTICULADO";
-    else if (/M5|PADRON|CONV/i.test(name) || /padron|bus/.test(type))
-      model = "M5-PADRON";
-    else if (/M4/i.test(name)) model = "M4-PADRON";
+    // Ordem de prioridade: modelo > tipo
+    if (/SUPERARTICULADO|23M/.test(m + t))
+      fileBase = "BRTII-SUPERARTICULADO";
+    else if (/ARTICULADO/.test(m + t)) fileBase = "M5-ARTICULADO";
+    else if (/MILLENNIUM\s*4/.test(m)) fileBase = "M4-PADRON";
+    else if (/MILLENNIUM\s*5/.test(m)) fileBase = "M5-PADRON";
+    else if (/PADRON/.test(m + t)) fileBase = "M5-PADRON";
+    else fileBase = "M5-PADRON"; // fallback
 
-    // Monta o caminho da imagem
-    const src = `img/vehicles/${model}-${dir}.jpg`;
-
-    // Se a imagem de VOLTA não existir, usa a IDA espelhada
-    const fallbackStyle = ida ? "" : "transform: scaleX(-1);";
-
+    const src = `img/vehicles/${fileBase}-${dir}.jpg`;
     return `
     <img src="${src}" 
-         alt="${model} ${dir}" 
-         class="bus-img ${ida ? "forward" : "backward"}"
-         style="${fallbackStyle}"
-         loading="lazy"
-         onerror="this.src='img/vehicles/${model}-IDA.jpg'; this.style.transform='scaleX(-1)';"
-    />
+         alt="${model || type}" 
+         class="bus-img ${ida ? "forward" : "backward"}" 
+         loading="lazy" 
+         title="${model || type}" />
   `;
   }
 }

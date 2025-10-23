@@ -1,0 +1,16 @@
+[
+  { "codigo": "L002/10", "nome": "METRÔ SANTANA", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L003/10", "nome": "VILA RICA", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L004/10", "nome": "UBS LADEIRA ROSA", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L005/10", "nome": "TERM. CACHOEIRINHA", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L006/10", "nome": "UBS LADEIRA ROSA", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L007/10", "nome": "LAUZANE PAULISTA", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L007/22", "nome": "LAUZANE PAULISTA (SEMI EXPRESSO)", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L007/42", "nome": "GENEVE", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L008/42", "nome": "JARDIM CENTENÁRIO", "dias_op": ["semana"] },
+  { "codigo": "L009/10", "nome": "ISOLINA MAZZEI (VIA HORTO)", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L010/10", "nome": "JARDIM CECY", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L29P/10", "nome": "TERM. PINHEIROS", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "0L05/10", "nome": "CAPÃO REDONDO", "dias_op": ["semana", "sabado", "domingo_feriado"] },
+  { "codigo": "L42/VP2", "nome": "ISOLINA MAZZEI (VIA SANTANA)", "dias_op": ["semana", "sabado", "domingo_feriado"] }
+]

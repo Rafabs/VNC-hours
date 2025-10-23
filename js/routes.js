@@ -158,7 +158,7 @@ class RoutesApp {
             Math.round((1 - Math.min(windowMin, mins) / windowMin) * 100)
           )
         );
-        const vt = this.detectVehicleType(trip.vehicle, trip.model, trip.type);
+        const vt = this.detectVehicleType(d.vehicle, d.model, d.type);
         const label = `${d.line} • ${d.vehicle}`;
         const destino = d.destination || "";
         return `
@@ -172,16 +172,12 @@ class RoutesApp {
           </div>
 
           <div style="display:flex;flex-direction:column;gap:6px;">
-            <div class="progress" aria-hidden="true">
-              <div class="progress-bar" style="width:${pct}%"></div>
-            </div>
             <div style="font-size:11px; color:var(--accent-yellow); display:flex; justify-content:flex-end;">
               <span>${mins} min</span>
             </div>
           </div>
 
           <div style="display:flex;flex-direction:column;align-items:flex-end;">
-            <div class="time">Parte em ${mins} min</div>
             <div style="font-size:11px; color:rgba(255,255,255,0.45)">${d.time}</div>
           </div>
         </div>

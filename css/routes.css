@@ -90,10 +90,10 @@ body[data-theme="night"] {
   padding: 14px;
   box-shadow: 0 6px 18px rgba(2,6,23,0.35);
   color: inherit;
-  overflow: hidden;
+  overflow: visible; /* ✅ PERMITE EXIBIR ÔNIBUS FORA DA LINHA */
   border: 1px solid rgba(255,255,255,0.03);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 .card:hover, .route-card:hover {
   transform: translateY(-2px);
@@ -260,40 +260,92 @@ body[data-theme="day"] .reserve-item {
   .card { flex: 1; min-width: 300px; }
 }
 
-@media (max-width: 700px) {
+/* Tablets e celulares grandes */
+@media (max-width: 900px) {
   .header { flex-direction: column; align-items: flex-start; }
   .routes-main-layout { padding: 10px; gap: 12px; }
   .routes-container { gap: 18px; }
   .route-card, .card { padding: 10px; }
-  .bus-img { width: 70px; }
-  .vehicle-tooltip { top: -70px; font-size: 11px; }
+  .route-line {
+    height: 45px; /* mais espaço para os ônibus */
+  }
+  .vehicle-marker {
+    top: 70%; /* sobe os veículos um pouco */
+  }
+  .bus-img {
+    width: 80px;
+    max-width: 24vw;
+  }
 }
 
-@media (max-width: 480px) {
+/* Smartphones médios */
+@media (max-width: 600px) {
   .header { padding: 10px; margin: 8px; }
   .header-title { font-size: 1rem; }
   .header-clock { font-size: 0.85rem; }
-  .waiting-item, .reserve-item { grid-template-columns: 1fr; gap: 6px; text-align: left; }
-  .bus-img { width: 60px; }
-  .vehicle-label { font-size: 10px; }
-  .route-line { height: 10px; }
+  .waiting-item, .reserve-item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    text-align: left;
+  }
+/* ===== Responsividade ajustada para exibir os veículos ===== */
+
+/* Padrão (desktop) */
+.route-line {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+  margin-bottom: 48px; /* espaço para os veículos abaixo */
+  overflow: visible;
 }
 
-@media (max-width: 700px) {
+/* Veículos sempre visíveis */
+.vehicle-marker {
+  top: 130%; /* move os ônibus abaixo da linha */
+  transform: translate(-50%, -50%);
+}
+.bus-img {
+  width: 90px;
+  height: auto;
+}
+
+/* Tablets */
+@media (max-width: 900px) {
   .route-line {
-    height: 20px;
+    margin-bottom: 60px; /* mais espaço para ônibus */
   }
   .vehicle-marker {
-    top: 40%; /* move o veículo mais para dentro da área visível */
+    top: 140%;
+  }
+  .bus-img {
+    width: 80px;
+  }
+}
+
+/* Smartphones médios */
+@media (max-width: 600px) {
+  .route-line {
+    margin-bottom: 70px;
+  }
+  .vehicle-marker {
+    top: 150%;
   }
   .bus-img {
     width: 70px;
   }
 }
 
-@media (max-width: 600px) {
-  .vehicle-tooltip {
-    top: -60px;
-    font-size: 11px;
+/* Smartphones pequenos */
+@media (max-width: 420px) {
+  .route-line {
+    margin-bottom: 80px;
   }
+  .vehicle-marker {
+    top: 160%;
+  }
+  .bus-img {
+    width: 60px;
+  }
+}
 }

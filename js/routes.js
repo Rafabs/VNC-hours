@@ -11,12 +11,32 @@ class RoutesApp {
   }
 
   async init() {
+    // Carrega dados de horários
     const scheduleData = await this.scheduleManager.loadScheduleData();
-    // Pre-process: ensure color fields exist
+
+    // 🔹 Carrega dados da frota (novo)
+    const fleetData = await fetch("./data/vehicles.json").then((r) =>
+      r.json()
+    );
+    this.fleetMap = {};
+    fleetData.forEach((v) => {
+      this.fleetMap[v.PREFIXO.toUpperCase()] = {
+        modelo: v.MODELO,
+        tipo: v.TIPO,
+      };
+    });
+
+    // 🔹 Enriquecimento dos dados de viagem
     scheduleData.forEach((d, i) => {
       d.bgColor = d.bgColor || this.pickColorForLine(d.line, i);
       d.textColor = d.textColor || "#fff";
       d.duracao = d.duracao || 60;
+
+      const prefixo = (d.vehicle || "").toUpperCase().trim();
+      if (this.fleetMap[prefixo]) {
+        d.model = this.fleetMap[prefixo].modelo;
+        d.type = this.fleetMap[prefixo].tipo;
+      }
     });
 
     this.renderWaiting(scheduleData);
@@ -84,23 +104,19 @@ class RoutesApp {
   // Atualização contínua (render em loop)
   startRealtimeUpdate(data) {
     const update = () => {
-      // Refresh lists and routes
       this.renderWaiting(data);
       this.renderReserve(data);
       this.routesContainer.innerHTML = "";
       this.renderRoutes(data);
 
-      // replace lucide icons for newly added elements (if lucide presente)
       if (this.lucide && typeof this.lucide.replace === "function") {
-        try {
-          this.lucide.replace();
-        } catch (e) {}
+        try { this.lucide.replace(); } catch (e) {}
       }
-
-      // loop
-      requestAnimationFrame(update);
     };
-    requestAnimationFrame(update);
+
+    // Atualiza uma vez por segundo (estável e suficiente)
+    update();
+    setInterval(update, 1000);
   }
 
   renderWaiting(data) {
@@ -343,8 +359,7 @@ class RoutesApp {
     let fileBase;
 
     // Ordem de prioridade: modelo > tipo
-    if (/SUPERARTICULADO|23M/.test(m + t))
-      fileBase = "BRTII-SUPERARTICULADO";
+    if (/SUPERARTICULADO|23M/.test(m + t)) fileBase = "BRTII-SUPERARTICULADO";
     else if (/ARTICULADO/.test(m + t)) fileBase = "M5-ARTICULADO";
     else if (/MILLENNIUM\s*4/.test(m)) fileBase = "M4-PADRON";
     else if (/MILLENNIUM\s*5/.test(m)) fileBase = "M5-PADRON";

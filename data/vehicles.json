@@ -1270,7 +1270,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2086",
+    "PREFIXO": "-A 2086",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1280,7 +1280,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2087",
+    "PREFIXO": "-A 2087",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1290,7 +1290,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2088",
+    "PREFIXO": "-A 2088",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1300,7 +1300,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2089",
+    "PREFIXO": "-A 2089",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1310,7 +1310,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2090",
+    "PREFIXO": "-A 2090",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1320,7 +1320,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2091",
+    "PREFIXO": "-A 2091",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1330,7 +1330,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2092",
+    "PREFIXO": "-A 2092",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1340,7 +1340,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2093",
+    "PREFIXO": "-A 2093",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1350,7 +1350,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2094",
+    "PREFIXO": "-A 2094",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1360,7 +1360,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2095",
+    "PREFIXO": "-A 2095",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",
     "PORTAS_LE": 0,
@@ -1370,7 +1370,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1978",
+    "PREFIXO": "-A 1978",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1380,7 +1380,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1979",
+    "PREFIXO": "-A 1979",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1390,7 +1390,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1980",
+    "PREFIXO": "-A 1980",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1400,7 +1400,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1981",
+    "PREFIXO": "-A 1981",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1410,7 +1410,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1982",
+    "PREFIXO": "-A 1982",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1420,7 +1420,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1983",
+    "PREFIXO": "-A 1983",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1430,7 +1430,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1984",
+    "PREFIXO": "-A 1984",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1440,7 +1440,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1985",
+    "PREFIXO": "-A 1985",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1450,7 +1450,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1986",
+    "PREFIXO": "-A 1986",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1460,7 +1460,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1987",
+    "PREFIXO": "-A 1987",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1470,7 +1470,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1988",
+    "PREFIXO": "-A 1988",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1480,7 +1480,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1989",
+    "PREFIXO": "-A 1989",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1490,7 +1490,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1990",
+    "PREFIXO": "-A 1990",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1500,7 +1500,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1991",
+    "PREFIXO": "-A 1991",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1510,7 +1510,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1992",
+    "PREFIXO": "-A 1992",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1520,7 +1520,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1993",
+    "PREFIXO": "-A 1993",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1530,7 +1530,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1994",
+    "PREFIXO": "-A 1994",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1540,7 +1540,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1995",
+    "PREFIXO": "-A 1995",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1550,7 +1550,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1996",
+    "PREFIXO": "-A 1996",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1560,7 +1560,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1997",
+    "PREFIXO": "-A 1997",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1570,7 +1570,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1998",
+    "PREFIXO": "-A 1998",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1580,7 +1580,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 1999",
+    "PREFIXO": "-A 1999",
     "MODELO": "MILLENNIUM BRT 23M",
     "TIPO": "SUPERARTICULADO",
     "PORTAS_LE": 3,
@@ -1590,7 +1590,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2096",
+    "PREFIXO": "-A 2096",
     "MODELO": "F2400",
     "TIPO": "MICRO",
     "PORTAS_LE": 0,
@@ -1600,7 +1600,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2097",
+    "PREFIXO": "-A 2097",
     "MODELO": "F2400",
     "TIPO": "MICRO",
     "PORTAS_LE": 0,
@@ -1610,7 +1610,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2098",
+    "PREFIXO": "-A 2098",
     "MODELO": "F2400",
     "TIPO": "MICRO",
     "PORTAS_LE": 0,
@@ -1620,7 +1620,7 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
-    "PREFIXO": "A 2099",
+    "PREFIXO": "-A 2099",
     "MODELO": "F2400",
     "TIPO": "MICRO",
     "PORTAS_LE": 0,

@@ -290,6 +290,39 @@ body[data-theme="day"] .reserve-item {
   }
 /* ===== Responsividade ajustada para exibir os veículos ===== */
 
+.reserve-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent-blue);
+  transition: all 0.2s ease;
+}
+
+.reserve-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(2px);
+}
+
+.reserve-item .status {
+  font-size: 0.8em;
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.vehicle-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: white;
+}
+
 /* Padrão (desktop) */
 .route-line {
   position: relative;

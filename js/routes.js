@@ -14,15 +14,16 @@ class RoutesApp {
     // Carrega dados de horários
     const scheduleData = await this.scheduleManager.loadScheduleData();
 
-    // 🔹 Carrega dados da frota (novo)
-    const fleetData = await fetch("./data/vehicles.json").then((r) =>
-      r.json()
-    );
+    // 🔹 Carrega dados da frota
+    const fleetData = await fetch("./data/vehicles.json").then((r) => r.json());
     this.fleetMap = {};
     fleetData.forEach((v) => {
       this.fleetMap[v.PREFIXO.toUpperCase()] = {
         modelo: v.MODELO,
         tipo: v.TIPO,
+        status: v.STATUS_OP,
+        garagem: v.GARAGEM, // ← Agora carrega a informação da garagem
+        bgColor: this.pickColorForLine(v.PREFIXO),
       };
     });
 
@@ -36,6 +37,7 @@ class RoutesApp {
       if (this.fleetMap[prefixo]) {
         d.model = this.fleetMap[prefixo].modelo;
         d.type = this.fleetMap[prefixo].tipo;
+        d.garagem = this.fleetMap[prefixo].garagem; // ← Também adiciona garagem aos escalados
       }
     });
 
@@ -47,7 +49,6 @@ class RoutesApp {
     this.updateClock();
     setInterval(() => this.updateClock(), 1000);
   }
-
   updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, "0");
@@ -110,7 +111,9 @@ class RoutesApp {
       this.renderRoutes(data);
 
       if (this.lucide && typeof this.lucide.replace === "function") {
-        try { this.lucide.replace(); } catch (e) {}
+        try {
+          this.lucide.replace();
+        } catch (e) {}
       }
     };
 
@@ -189,46 +192,154 @@ class RoutesApp {
   renderReserve(data) {
     if (!this.reserveList) return;
     const now = new Date();
-    const reserve = data
-      .filter((d) =>
-        /(^R$)|\bRES\b|\bRESERVA\b|\bSTANDBY\b|reserve/i.test(d.vehicle)
-      )
-      .slice(0, 20);
 
-    if (reserve.length === 0) {
+    // 🔹 Obter todos os veículos escalados para hoje
+    const scheduledVehicles = new Set();
+    data.forEach((d) => {
+      if (d.vehicle && d.vehicle.trim()) {
+        scheduledVehicles.add(d.vehicle.toUpperCase().trim());
+      }
+    });
+
+    // 🔹 Filtrar veículos da frota que NÃO estão escalados e são da VILA NOVA CACHOEIRINHA
+    const reserveVehicles = [];
+    const processedPrefixos = new Set(); // Para evitar duplicatas
+
+    Object.keys(this.fleetMap).forEach((prefixo) => {
+      const vehicleInfo = this.fleetMap[prefixo];
+
+      // Pular se já processamos este prefixo
+      if (processedPrefixos.has(prefixo)) return;
+
+      // Verifica se o veículo é da VILA NOVA CACHOEIRINHA e está EM OPERAÇÃO
+      if (
+        vehicleInfo.garagem === "VILA NOVA CACHOEIRINHA" &&
+        vehicleInfo.status === "EM OPERAÇÃO" &&
+        !scheduledVehicles.has(prefixo)
+      ) {
+        reserveVehicles.push({
+          vehicle: prefixo,
+          model: vehicleInfo.modelo,
+          type: vehicleInfo.tipo,
+          garagem: vehicleInfo.garagem,
+          status: "DISPONÍVEL",
+          bgColor: vehicleInfo.bgColor || this.getVehicleColor(prefixo),
+        });
+
+        processedPrefixos.add(prefixo); // Marcar como processado
+      }
+    });
+
+    // 🔹 Também incluir veículos marcados como reserva no schedule (apenas da VNC e EM OPERAÇÃO)
+    const explicitReserve = data.filter((d) => {
+      const prefixo = (d.vehicle || "").toUpperCase().trim();
+      const vehicleInfo = this.fleetMap[prefixo];
+
+      return (
+        vehicleInfo &&
+        vehicleInfo.garagem === "VILA NOVA CACHOEIRINHA" &&
+        vehicleInfo.status === "EM OPERAÇÃO" &&
+        (/(^R$)|\bRES\b|\bRESERVA\b|\bSTANDBY\b|reserve/i.test(d.vehicle) ||
+          !scheduledVehicles.has(prefixo))
+      );
+    });
+
+    // Combinar e remover duplicatas
+    const allReserveMap = new Map();
+
+    // Primeiro adicionar os veículos de reserva explícitos
+    explicitReserve.forEach((vehicle) => {
+      const key = vehicle.vehicle.toUpperCase().trim();
+      if (!allReserveMap.has(key)) {
+        allReserveMap.set(key, vehicle);
+      }
+    });
+
+    // Depois adicionar os veículos não escalados (se não existirem ainda)
+    reserveVehicles.forEach((vehicle) => {
+      const key = vehicle.vehicle.toUpperCase().trim();
+      if (!allReserveMap.has(key)) {
+        allReserveMap.set(key, vehicle);
+      }
+    });
+
+    const allReserve = Array.from(allReserveMap.values()).slice(0, 20);
+
+    // Ordenar por prefixo para melhor visualização
+    allReserve.sort((a, b) => {
+      return a.vehicle.localeCompare(b.vehicle);
+    });
+
+    if (allReserve.length === 0) {
       this.reserveList.innerHTML = "<em>Nenhum veículo reserva</em>";
       return;
     }
 
-    this.reserveList.innerHTML = reserve
+    this.reserveList.innerHTML = allReserve
       .map((d) => {
-        const mins = this.scheduleManager.minutesUntilDeparture(d.time);
+        const mins = d.time
+          ? this.scheduleManager.minutesUntilDeparture(d.time)
+          : -1;
         const vt = this.detectVehicleType(d.vehicle);
         const label = `${d.vehicle} ${d.line ? "• " + d.line : ""}`;
-        return `
-        <div class="reserve-item">
-          <div style="display:flex;gap:8px;align-items:center;">
-            <i data-lucide="${
-              vt.icon
-            }" class="vehicle-icon" style="--bus-color:${d.bgColor}"></i>
-            <div style="display:flex;flex-direction:column;">
-              <strong style="font-size:0.95em">${label}</strong>
-              <small style="opacity:.8">${d.destination || ""}</small>
-            </div>
-          </div>
+        const statusText =
+          d.status || (mins >= 0 ? `Parte em ${mins} min` : "Disponível");
 
-          <div style="text-align:right;">
-            <div class="status">${
-              mins >= 0 ? `Parte em ${mins} min` : "Em espera"
-            }</div>
-            <div style="font-size:11px; color:rgba(255,255,255,0.45)">${
-              d.time || ""
-            }</div>
+        return `
+      <div class="reserve-item">
+        <div style="display:flex;gap:8px;align-items:center;">
+          <i data-lucide="${vt.icon}" class="vehicle-icon" style="--bus-color:${
+          d.bgColor || "#666"
+        }"></i>
+          <div style="display:flex;flex-direction:column;">
+            <strong style="font-size:0.95em">${label}</strong>
+            <small style="opacity:.8">${
+              d.destination || d.model || "Veículo reserva"
+            }</small>
           </div>
         </div>
-      `;
+
+        <div style="text-align:right;">
+          <div class="status">${statusText}</div>
+          <div style="font-size:11px; color:rgba(255,255,255,0.45)">${
+            d.time || "V.N. CACHOEIRINHA"
+          }</div>
+        </div>
+      </div>
+    `;
       })
       .join("");
+  }
+
+  // Adicione este método na classe RoutesApp
+  getVehicleColor(vehicle, index = 0) {
+    if (!vehicle) return "#666";
+
+    // Para veículos já com bgColor
+    if (this.fleetMap[vehicle] && this.fleetMap[vehicle].bgColor) {
+      return this.fleetMap[vehicle].bgColor;
+    }
+
+    // Gerar cor consistente baseada no prefixo do veículo
+    const palette = [
+      "#666666",
+      "#888888",
+      "#555555",
+      "#777777",
+      "#999999",
+      "#6B7280",
+      "#4B5563",
+      "#374151",
+      "#6D7280",
+      "#4B5563",
+    ];
+
+    let hash = 0;
+    for (let i = 0; i < vehicle.length; i++) {
+      hash = (hash << 5) - hash + vehicle.charCodeAt(i);
+    }
+    const pick = Math.abs(hash) % palette.length;
+    return palette[pick];
   }
 
   renderRoutes(data) {

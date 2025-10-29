@@ -83,6 +83,57 @@ class BusDeparturesApp {
     }
   }
 
+  // No arquivo app.js, adicione este método à classe BusDeparturesApp
+  updateScheduleInfo() {
+    const scheduleInfo = this.scheduleManager.csvLoader.getScheduleInfo();
+    const infoElement =
+      document.getElementById("scheduleInfo") ||
+      this.createScheduleInfoElement();
+
+    let infoText = "";
+    if (scheduleInfo.tipo === "escala_diaria") {
+      infoText = `📅 Escala do dia: ${this.formatarDataBr(
+        scheduleInfo.data
+      )} | ${scheduleInfo.horarios} horários`;
+    } else {
+      const nomeModelo = this.getNomeModelo(scheduleInfo.arquivo);
+      infoText = `📋 Modelo padrão: ${nomeModelo} | ${scheduleInfo.horarios} horários`;
+    }
+
+    infoElement.textContent = infoText;
+  }
+
+  createScheduleInfoElement() {
+    const infoElement = document.createElement("div");
+    infoElement.id = "scheduleInfo";
+    infoElement.style.cssText = `
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(0,0,0,0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        z-index: 1000;
+    `;
+    document.body.appendChild(infoElement);
+    return infoElement;
+  }
+
+  formatarDataBr(dataISO) {
+    const [ano, mes, dia] = dataISO.split("-");
+    return `${dia}/${mes}/${ano}`;
+  }
+
+  getNomeModelo(arquivo) {
+    const modelos = {
+      seg_sex: "Segunda a Sexta",
+      sab: "Sábado",
+      dom_fer: "Domingo/Feriado",
+    };
+    return modelos[arquivo] || arquivo;
+  }
   // Atualizar display do painel de linhas
   updateLinesDisplay() {
     const lang = this.scheduleManager.config.language;
@@ -560,7 +611,7 @@ class BusDeparturesApp {
     }
   }
 
-  // Inicializar aplicação
+  // No método init() do app.js, adicione após o updateSchedule():
   async init() {
     this.updateClock();
     this.updateLanguage();
@@ -577,6 +628,9 @@ class BusDeparturesApp {
     try {
       // Carregar dados dos CSVs
       await this.scheduleManager.loadScheduleData();
+
+      // Atualizar informações da escala
+      this.updateScheduleInfo();
 
       // Inicializar linhas a partir dos horários
       this.initializeLinesFromSchedule();

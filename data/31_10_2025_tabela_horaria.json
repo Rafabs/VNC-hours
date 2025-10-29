@@ -6,10 +6,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02540",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1990",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -18,10 +16,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -30,10 +26,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2030",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2038",
+    "DURACAO": 89
   },
   {
     "PARADA": "06",
@@ -42,10 +36,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2070",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2043",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -54,10 +46,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "08",
@@ -66,10 +56,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -78,10 +66,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "02",
@@ -90,10 +76,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "07",
@@ -102,10 +86,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "08",
@@ -114,10 +96,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L29P/10",
     "DESTINO": "TERMINAL PINHEIROS",
-    "CARRO": "A 1990",
-    "DURACAO": 176,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2303",
+    "DURACAO": 176
   },
   {
     "PARADA": "02",
@@ -126,10 +106,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02541",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1991",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -138,10 +116,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -150,10 +126,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2071",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2039",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -162,10 +136,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -174,10 +146,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "06",
@@ -186,10 +156,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "03",
@@ -198,10 +166,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -210,10 +176,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02542",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1992",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -222,10 +186,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2307",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2305",
+    "DURACAO": 52
   },
   {
     "PARADA": "08",
@@ -234,10 +196,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2031",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2084",
+    "DURACAO": 89
   },
   {
     "PARADA": "06",
@@ -246,10 +206,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2072",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2032",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -258,10 +216,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -270,10 +226,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "04",
@@ -282,10 +236,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "06",
@@ -294,10 +246,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "02",
@@ -306,10 +256,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02543",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1993",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -318,10 +266,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "03",
@@ -330,10 +276,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -342,10 +286,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -354,10 +296,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "03",
@@ -366,10 +306,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -378,10 +316,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2075",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2033",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -390,10 +326,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "06",
@@ -402,10 +336,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "07",
@@ -414,10 +346,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "02",
@@ -426,10 +356,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2301",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1994",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -438,10 +366,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2307",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2305",
+    "DURACAO": 52
   },
   {
     "PARADA": "08",
@@ -450,10 +376,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -462,10 +386,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2033",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2070",
+    "DURACAO": 89
   },
   {
     "PARADA": "01",
@@ -474,10 +396,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "06",
@@ -486,10 +406,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2076",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2034",
+    "DURACAO": 174
   },
   {
     "PARADA": "02",
@@ -498,10 +416,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "04",
@@ -510,10 +426,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "08",
@@ -522,10 +436,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "07",
@@ -534,10 +446,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -546,10 +456,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -558,10 +466,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2302",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1995",
+    "DURACAO": 160
   },
   {
     "PARADA": "04",
@@ -570,10 +476,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "01",
@@ -582,10 +486,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -594,10 +496,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "08",
@@ -606,10 +506,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -618,10 +516,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2077",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2035",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -630,10 +526,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -642,10 +536,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -654,10 +546,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "05",
@@ -666,10 +556,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2309",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2308",
+    "DURACAO": 52
   },
   {
     "PARADA": "02",
@@ -678,10 +566,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02540",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1990",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -690,10 +576,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2030",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2038",
+    "DURACAO": 89
   },
   {
     "PARADA": "08",
@@ -702,10 +586,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "01",
@@ -714,10 +596,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "06",
@@ -726,10 +606,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2078",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1996",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -738,10 +616,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "02",
@@ -750,10 +626,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "05",
@@ -762,10 +636,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2310",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2085",
+    "DURACAO": 52
   },
   {
     "PARADA": "07",
@@ -774,10 +646,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "03",
@@ -786,10 +656,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -798,10 +666,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "08",
@@ -810,10 +676,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02541",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1991",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -822,10 +686,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2308",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2075",
+    "DURACAO": 52
   },
   {
     "PARADA": "06",
@@ -834,10 +696,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "04",
@@ -846,10 +706,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "01",
@@ -858,10 +716,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "06",
@@ -870,10 +726,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2079",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1997",
+    "DURACAO": 174
   },
   {
     "PARADA": "03",
@@ -882,10 +736,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -894,10 +746,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2307",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2305",
+    "DURACAO": 52
   },
   {
     "PARADA": "08",
@@ -906,10 +756,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L29P/10",
     "DESTINO": "TERMINAL PINHEIROS",
-    "CARRO": "A 1990",
-    "DURACAO": 176,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2303",
+    "DURACAO": 176
   },
   {
     "PARADA": "02",
@@ -918,10 +766,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02542",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1992",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -930,10 +776,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -942,10 +786,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "07",
@@ -954,10 +796,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -966,10 +806,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2031",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2084",
+    "DURACAO": 89
   },
   {
     "PARADA": "01",
@@ -978,10 +816,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -990,10 +826,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -1002,10 +836,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2070",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2043",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -1014,10 +846,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "08",
@@ -1026,10 +856,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "02",
@@ -1038,10 +866,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02543",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1993",
+    "DURACAO": 160
   },
   {
     "PARADA": "07",
@@ -1050,10 +876,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "06",
@@ -1062,10 +886,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "01",
@@ -1074,10 +896,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "04",
@@ -1086,10 +906,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "08",
@@ -1098,10 +916,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2071",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2039",
+    "DURACAO": 174
   },
   {
     "PARADA": "03",
@@ -1110,10 +926,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -1122,10 +936,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2309",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2308",
+    "DURACAO": 52
   },
   {
     "PARADA": "04",
@@ -1134,10 +946,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "02",
@@ -1146,10 +956,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02544",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2036",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -1158,10 +966,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "07",
@@ -1170,10 +976,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -1182,10 +986,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -1194,10 +996,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "02",
@@ -1206,10 +1006,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2308",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2075",
+    "DURACAO": 52
   },
   {
     "PARADA": "03",
@@ -1218,10 +1016,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -1230,10 +1026,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "08",
@@ -1242,10 +1036,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2072",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2032",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -1254,10 +1046,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "05",
@@ -1266,10 +1056,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2032",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2079",
+    "DURACAO": 89
   },
   {
     "PARADA": "02",
@@ -1278,10 +1066,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2300",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2037",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -1290,10 +1076,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "06",
@@ -1302,10 +1086,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2073",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1998",
+    "DURACAO": 174
   },
   {
     "PARADA": "07",
@@ -1314,10 +1096,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "04",
@@ -1326,10 +1106,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "02",
@@ -1338,10 +1116,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2301",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1994",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -1350,10 +1126,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "06",
@@ -1362,22 +1136,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
-  },
-  {
-    "PARADA": "06",
-    "PARTIDA": "10:02",
-    "BG_COLOR": "#C00000",
-    "TXT_COLOR": "#FFFFFF",
-    "LINHA": "L009/10",
-    "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2073",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "03",
@@ -1386,10 +1146,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -1398,10 +1156,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "07",
@@ -1410,10 +1166,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "02",
@@ -1422,10 +1176,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2302",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1995",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -1434,10 +1186,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -1446,10 +1196,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "03",
@@ -1458,10 +1206,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "07",
@@ -1470,10 +1216,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -1482,10 +1226,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2033",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2070",
+    "DURACAO": 89
   },
   {
     "PARADA": "06",
@@ -1494,10 +1236,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2074",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1999",
+    "DURACAO": 174
   },
   {
     "PARADA": "02",
@@ -1506,10 +1246,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02540",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1990",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -1518,10 +1256,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -1530,10 +1266,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "08",
@@ -1542,10 +1276,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "07",
@@ -1554,10 +1286,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "04",
@@ -1566,10 +1296,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "02",
@@ -1578,10 +1306,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02541",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1991",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -1590,10 +1316,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "06",
@@ -1602,10 +1326,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2075",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2033",
+    "DURACAO": 174
   },
   {
     "PARADA": "08",
@@ -1614,10 +1336,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "04",
@@ -1626,10 +1346,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "03",
@@ -1638,10 +1356,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -1650,10 +1366,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -1662,10 +1376,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "02",
@@ -1674,10 +1386,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02542",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1992",
+    "DURACAO": 160
   },
   {
     "PARADA": "04",
@@ -1686,10 +1396,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "03",
@@ -1698,10 +1406,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -1710,10 +1416,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2030",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2038",
+    "DURACAO": 89
   },
   {
     "PARADA": "06",
@@ -1722,10 +1426,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2076",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2034",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -1734,10 +1436,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "08",
@@ -1746,10 +1446,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L29P/10",
     "DESTINO": "TERMINAL PINHEIROS",
-    "CARRO": "A 1990",
-    "DURACAO": 176,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2303",
+    "DURACAO": 176
   },
   {
     "PARADA": "02",
@@ -1758,10 +1456,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02543",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1993",
+    "DURACAO": 160
   },
   {
     "PARADA": "07",
@@ -1770,10 +1466,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "04",
@@ -1782,10 +1476,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -1794,10 +1486,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -1806,10 +1496,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -1818,10 +1506,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02544",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2036",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -1830,10 +1516,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "08",
@@ -1842,10 +1526,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2077",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2035",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -1854,10 +1536,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "03",
@@ -1866,10 +1546,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "07",
@@ -1878,10 +1556,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "02",
@@ -1890,10 +1566,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2300",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2037",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -1902,10 +1576,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -1914,10 +1586,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "08",
@@ -1926,10 +1596,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "02",
@@ -1938,10 +1606,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -1950,10 +1616,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2078",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1996",
+    "DURACAO": 174
   },
   {
     "PARADA": "02",
@@ -1962,10 +1626,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2301",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1994",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -1974,10 +1636,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "07",
@@ -1986,10 +1646,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -1998,10 +1656,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2031",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2084",
+    "DURACAO": 89
   },
   {
     "PARADA": "04",
@@ -2010,10 +1666,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -2022,10 +1676,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -2034,10 +1686,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -2046,10 +1696,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "02",
@@ -2058,10 +1706,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2302",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1995",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -2070,10 +1716,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -2082,10 +1726,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2079",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1997",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -2094,10 +1736,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -2106,10 +1746,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "03",
@@ -2118,10 +1756,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "02",
@@ -2130,10 +1766,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02540",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1990",
+    "DURACAO": 160
   },
   {
     "PARADA": "07",
@@ -2142,10 +1776,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "03",
@@ -2154,10 +1786,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -2166,10 +1796,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "04",
@@ -2178,10 +1806,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "06",
@@ -2190,10 +1816,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2070",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2043",
+    "DURACAO": 174
   },
   {
     "PARADA": "02",
@@ -2202,10 +1826,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02541",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1991",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -2214,10 +1836,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -2226,10 +1846,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "07",
@@ -2238,10 +1856,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -2250,10 +1866,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "05",
@@ -2262,10 +1876,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2032",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2079",
+    "DURACAO": 89
   },
   {
     "PARADA": "03",
@@ -2274,10 +1886,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -2286,10 +1896,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02542",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1992",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -2298,10 +1906,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2071",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2039",
+    "DURACAO": 174
   },
   {
     "PARADA": "07",
@@ -2310,10 +1916,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "04",
@@ -2322,10 +1926,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "08",
@@ -2334,10 +1936,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "04",
@@ -2346,10 +1946,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "02",
@@ -2358,10 +1956,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02543",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1993",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -2370,10 +1966,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -2382,10 +1976,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "07",
@@ -2394,10 +1986,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "04",
@@ -2406,10 +1996,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "06",
@@ -2418,10 +2006,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2072",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2032",
+    "DURACAO": 174
   },
   {
     "PARADA": "02",
@@ -2430,10 +2016,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02544",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2036",
+    "DURACAO": 160
   },
   {
     "PARADA": "08",
@@ -2442,10 +2026,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L29P/10",
     "DESTINO": "TERMINAL PINHEIROS",
-    "CARRO": "A 1990",
-    "DURACAO": 176,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2303",
+    "DURACAO": 176
   },
   {
     "PARADA": "01",
@@ -2454,10 +2036,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "08",
@@ -2466,10 +2046,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "0L05/10",
     "DESTINO": "VIAMOBILIDADE (CAPÃO REDONDO)",
-    "CARRO": "48-02545",
-    "DURACAO": 960,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2310",
+    "DURACAO": 960
   },
   {
     "PARADA": "06",
@@ -2478,10 +2056,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "01",
@@ -2490,10 +2066,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "04",
@@ -2502,10 +2076,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "03",
@@ -2514,10 +2086,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -2526,10 +2096,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2073",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1998",
+    "DURACAO": 174
   },
   {
     "PARADA": "07",
@@ -2538,10 +2106,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -2550,10 +2116,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "02",
@@ -2562,10 +2126,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2300",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2037",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -2574,10 +2136,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2033",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2070",
+    "DURACAO": 89
   },
   {
     "PARADA": "03",
@@ -2586,10 +2146,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "04",
@@ -2598,10 +2156,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -2610,10 +2166,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "07",
@@ -2622,10 +2176,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "06",
@@ -2634,10 +2186,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2074",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1999",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -2646,10 +2196,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "08",
@@ -2658,10 +2206,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "02",
@@ -2670,10 +2216,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2301",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1994",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -2682,10 +2226,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2310",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2085",
+    "DURACAO": 52
   },
   {
     "PARADA": "01",
@@ -2694,10 +2236,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -2706,10 +2246,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "02",
@@ -2718,10 +2256,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2032",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2079",
+    "DURACAO": 89
   },
   {
     "PARADA": "07",
@@ -2730,10 +2266,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "03",
@@ -2742,10 +2276,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -2754,10 +2286,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2075",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2033",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -2766,10 +2296,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "05",
@@ -2778,22 +2306,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2307",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
-  },
-  {
-    "PARADA": "02",
-    "PARTIDA": "16:35",
-    "BG_COLOR": "#FFD966",
-    "TXT_COLOR": "#000000",
-    "LINHA": "L42-VP2",
-    "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2302",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2305",
+    "DURACAO": 52
   },
   {
     "PARADA": "08",
@@ -2802,10 +2316,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2030",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2038",
+    "DURACAO": 89
   },
   {
     "PARADA": "03",
@@ -2814,10 +2326,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -2826,10 +2336,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02540",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1990",
+    "DURACAO": 160
   },
   {
     "PARADA": "04",
@@ -2838,10 +2346,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -2850,10 +2356,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -2862,10 +2366,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -2874,10 +2376,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -2886,10 +2386,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2076",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2034",
+    "DURACAO": 174
   },
   {
     "PARADA": "05",
@@ -2898,10 +2396,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2308",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2075",
+    "DURACAO": 52
   },
   {
     "PARADA": "08",
@@ -2910,10 +2406,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "04",
@@ -2922,10 +2416,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "07",
@@ -2934,10 +2426,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "03",
@@ -2946,10 +2436,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -2958,10 +2446,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "02",
@@ -2970,10 +2456,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02541",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1991",
+    "DURACAO": 160
   },
   {
     "PARADA": "08",
@@ -2982,10 +2466,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "04",
@@ -2994,10 +2476,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "05",
@@ -3006,10 +2486,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2309",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2308",
+    "DURACAO": 52
   },
   {
     "PARADA": "06",
@@ -3018,10 +2496,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2077",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2035",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -3030,10 +2506,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "07",
@@ -3042,10 +2516,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -3054,10 +2526,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2031",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2084",
+    "DURACAO": 89
   },
   {
     "PARADA": "02",
@@ -3066,10 +2536,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02542",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1992",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -3078,10 +2546,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -3090,10 +2556,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -3102,10 +2566,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "05",
@@ -3114,10 +2576,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2310",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2085",
+    "DURACAO": 52
   },
   {
     "PARADA": "03",
@@ -3126,10 +2586,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "07",
@@ -3138,10 +2596,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "06",
@@ -3150,10 +2606,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2078",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1996",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -3162,10 +2616,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "02",
@@ -3174,10 +2626,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "04",
@@ -3186,10 +2636,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "01",
@@ -3198,10 +2646,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -3210,10 +2656,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "02",
@@ -3222,10 +2666,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02543",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1993",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -3234,10 +2676,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2074",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1999",
+    "DURACAO": 174
   },
   {
     "PARADA": "07",
@@ -3246,10 +2686,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -3258,10 +2696,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2307",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2305",
+    "DURACAO": 52
   },
   {
     "PARADA": "03",
@@ -3270,10 +2706,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "04",
@@ -3282,10 +2716,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2079",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1997",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -3294,10 +2726,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -3306,10 +2736,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "02",
@@ -3318,10 +2746,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02544",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2036",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -3330,10 +2756,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2032",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2079",
+    "DURACAO": 89
   },
   {
     "PARADA": "03",
@@ -3342,10 +2766,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "07",
@@ -3354,10 +2776,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -3366,10 +2786,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2308",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2075",
+    "DURACAO": 52
   },
   {
     "PARADA": "01",
@@ -3378,10 +2796,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "08",
@@ -3390,10 +2806,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -3402,10 +2816,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2070",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2043",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -3414,10 +2826,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "08",
@@ -3426,10 +2836,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L29P/10",
     "DESTINO": "TERMINAL PINHEIROS",
-    "CARRO": "A 1990",
-    "DURACAO": 176,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2303",
+    "DURACAO": 176
   },
   {
     "PARADA": "04",
@@ -3438,10 +2846,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "01",
@@ -3450,10 +2856,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -3462,10 +2866,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "02",
@@ -3474,10 +2876,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2300",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2037",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -3486,10 +2886,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2309",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2308",
+    "DURACAO": 52
   },
   {
     "PARADA": "08",
@@ -3498,10 +2896,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -3510,10 +2906,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2071",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2039",
+    "DURACAO": 174
   },
   {
     "PARADA": "01",
@@ -3522,10 +2916,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2085",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2042",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -3534,10 +2926,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "07",
@@ -3546,10 +2936,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "05",
@@ -3558,10 +2946,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2033",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2070",
+    "DURACAO": 89
   },
   {
     "PARADA": "04",
@@ -3570,10 +2956,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "08",
@@ -3582,10 +2966,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -3594,10 +2976,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2301",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1994",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -3606,10 +2986,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2072",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2032",
+    "DURACAO": 174
   },
   {
     "PARADA": "08",
@@ -3618,10 +2996,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "07",
@@ -3630,10 +3006,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -3642,10 +3016,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2083",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2307",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -3654,10 +3026,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2047",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2309",
+    "DURACAO": 26
   },
   {
     "PARADA": "04",
@@ -3666,10 +3036,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "01",
@@ -3678,22 +3046,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
-  },
-  {
-    "PARADA": "02",
-    "PARTIDA": "19:35",
-    "BG_COLOR": "#FFD966",
-    "TXT_COLOR": "#000000",
-    "LINHA": "L42-VP2",
-    "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2302",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "04",
@@ -3702,10 +3056,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -3714,10 +3066,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -3726,10 +3076,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02540",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1990",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -3738,10 +3086,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -3750,10 +3096,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2030",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2038",
+    "DURACAO": 89
   },
   {
     "PARADA": "06",
@@ -3762,10 +3106,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2073",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1998",
+    "DURACAO": 174
   },
   {
     "PARADA": "08",
@@ -3774,10 +3116,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "03",
@@ -3786,10 +3126,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "01",
@@ -3798,10 +3136,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2045",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2304",
+    "DURACAO": 54
   },
   {
     "PARADA": "07",
@@ -3810,10 +3146,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "02",
@@ -3822,10 +3156,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02541",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1991",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -3834,10 +3166,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "03",
@@ -3846,10 +3176,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "04",
@@ -3858,10 +3186,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2043",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2083",
+    "DURACAO": 60
   },
   {
     "PARADA": "01",
@@ -3870,10 +3196,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2303",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2306",
+    "DURACAO": 26
   },
   {
     "PARADA": "06",
@@ -3882,10 +3206,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2074",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1999",
+    "DURACAO": 174
   },
   {
     "PARADA": "02",
@@ -3894,10 +3216,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02542",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1992",
+    "DURACAO": 160
   },
   {
     "PARADA": "03",
@@ -3906,10 +3226,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2034",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2030",
+    "DURACAO": 45
   },
   {
     "PARADA": "05",
@@ -3918,10 +3236,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2031",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2084",
+    "DURACAO": 89
   },
   {
     "PARADA": "01",
@@ -3930,10 +3246,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "A 2084",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2074",
+    "DURACAO": 54
   },
   {
     "PARADA": "03",
@@ -3942,10 +3256,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2037",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2047",
+    "DURACAO": 100
   },
   {
     "PARADA": "07",
@@ -3954,10 +3266,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2311",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2300",
+    "DURACAO": 80
   },
   {
     "PARADA": "02",
@@ -3966,10 +3276,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02543",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1993",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -3978,10 +3286,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/22",
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
-    "CARRO": "P 2304",
-    "DURACAO": 26,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2078",
+    "DURACAO": 26
   },
   {
     "PARADA": "08",
@@ -3990,10 +3296,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "06",
@@ -4002,10 +3306,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2075",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2033",
+    "DURACAO": 174
   },
   {
     "PARADA": "04",
@@ -4014,10 +3316,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2306",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2073",
+    "DURACAO": 42
   },
   {
     "PARADA": "07",
@@ -4026,10 +3326,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2312",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2058",
+    "DURACAO": 80
   },
   {
     "PARADA": "03",
@@ -4038,10 +3336,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2038",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2044",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -4050,10 +3346,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
-    "CARRO": "P 2046",
-    "DURACAO": 54,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2041",
+    "DURACAO": 54
   },
   {
     "PARADA": "02",
@@ -4062,10 +3356,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "48-02544",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2036",
+    "DURACAO": 160
   },
   {
     "PARADA": "05",
@@ -4074,10 +3366,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2032",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2079",
+    "DURACAO": 89
   },
   {
     "PARADA": "03",
@@ -4086,10 +3376,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -4098,10 +3386,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L008/42",
     "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "P 2310",
-    "DURACAO": 52,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2085",
+    "DURACAO": 52
   },
   {
     "PARADA": "07",
@@ -4110,10 +3396,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2314",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2071",
+    "DURACAO": 80
   },
   {
     "PARADA": "01",
@@ -4122,10 +3406,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2035",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2077",
+    "DURACAO": 45
   },
   {
     "PARADA": "04",
@@ -4134,10 +3416,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2039",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2040",
+    "DURACAO": 100
   },
   {
     "PARADA": "01",
@@ -4146,10 +3426,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L006/10",
     "DESTINO": "UBS LADEIRA ROSA (EXPRESSO)",
-    "CARRO": "P 2044",
-    "DURACAO": 60,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2301",
+    "DURACAO": 60
   },
   {
     "PARADA": "06",
@@ -4158,10 +3436,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L009/10",
     "DESTINO": "ISOLINA MAZZEI (VIA HORTO)",
-    "CARRO": "A 2076",
-    "DURACAO": 174,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2034",
+    "DURACAO": 174
   },
   {
     "PARADA": "07",
@@ -4170,10 +3446,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L010/10",
     "DESTINO": "JARDIM CECY",
-    "CARRO": "P 2313",
-    "DURACAO": 80,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2045",
+    "DURACAO": 80
   },
   {
     "PARADA": "02",
@@ -4182,10 +3456,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2300",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2037",
+    "DURACAO": 160
   },
   {
     "PARADA": "06",
@@ -4194,10 +3466,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2305",
-    "DURACAO": 42,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2076",
+    "DURACAO": 42
   },
   {
     "PARADA": "04",
@@ -4206,10 +3476,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L004/10",
     "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2046",
+    "DURACAO": 100
   },
   {
     "PARADA": "05",
@@ -4218,10 +3486,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L002/10",
     "DESTINO": "METRÔ SANTANA",
-    "CARRO": "P 2033",
-    "DURACAO": 89,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2070",
+    "DURACAO": 89
   },
   {
     "PARADA": "03",
@@ -4230,10 +3496,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2041",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "A 2072",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -4242,10 +3506,8 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2301",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1994",
+    "DURACAO": 160
   },
   {
     "PARADA": "01",
@@ -4254,10 +3516,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
-    "CARRO": "P 2036",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2302",
+    "DURACAO": 45
   },
   {
     "PARADA": "03",
@@ -4266,10 +3526,8 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L005/10",
     "DESTINO": "TERM. CACHOEIRINHA",
-    "CARRO": "P 2042",
-    "DURACAO": 45,
-    "": "",
-    "__1": ""
+    "CARRO": "P 2031",
+    "DURACAO": 45
   },
   {
     "PARADA": "02",
@@ -4278,9 +3536,7 @@
     "TXT_COLOR": "#000000",
     "LINHA": "L42-VP2",
     "DESTINO": "ISOLINA MAZZEI (VIA SANTANA)",
-    "CARRO": "P 2302",
-    "DURACAO": 160,
-    "": "",
-    "__1": ""
+    "CARRO": "A 1995",
+    "DURACAO": 160
   }
 ]

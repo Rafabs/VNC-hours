@@ -1,0 +1,532 @@
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 20px; 
+    background-color: #f5f5f5; 
+}
+
+.container { 
+    max-width: 1600px; 
+    margin: 0 auto; 
+    background: white; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+}
+
+h1 { 
+    color: #2c3e50; 
+    border-bottom: 2px solid #3498db; 
+    padding-bottom: 10px; 
+}
+
+.filters { 
+    background: #ecf0f1; 
+    padding: 15px; 
+    border-radius: 5px; 
+    margin-bottom: 20px; 
+}
+
+.filters label { 
+    margin-right: 15px; 
+    font-weight: bold; 
+}
+
+.filters input, .filters select { 
+    padding: 8px; 
+    border: 1px solid #bdc3c7; 
+    border-radius: 4px; 
+}
+
+.linha-card { 
+    border: 1px solid #ddd; 
+    padding: 15px; 
+    margin: 10px 0; 
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.linha-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.semana { border-left: 5px solid #3498db; }
+.sabado { border-left: 5px solid #f39c12; }
+.domingo { border-left: 5px solid #27ae60; }
+
+button { 
+    padding: 10px 20px; 
+    margin: 5px; 
+    cursor: pointer; 
+    border: none; 
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.btn-primary { background: #3498db; color: white; }
+.btn-primary:hover { background: #2980b9; }
+
+.btn-success { background: #27ae60; color: white; }
+.btn-success:hover { background: #219a52; }
+
+.btn-info { background: #17a2b8; color: white; }
+.btn-info:hover { background: #138496; }
+
+.btn-warning { background: #f39c12; color: white; }
+.btn-warning:hover { background: #e67e22; }
+
+.btn-automatico {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    font-weight: bold;
+}
+
+.btn-automatico:hover {
+    background: linear-gradient(45deg, #218838, #1ea085);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+input, select { 
+    padding: 8px; 
+    margin: 5px; 
+    border: 1px solid #bdc3c7; 
+    border-radius: 4px;
+}
+
+.assignment-row { 
+    display: flex; 
+    align-items: center; 
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.vehicle-info {
+    background: #f8f9fa;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+.stats {
+    background: #2c3e50;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+
+.horario-item {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.horario-info {
+    flex: 1;
+}
+
+.horario-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.color-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+.tab-container {
+    margin: 20px 0;
+}
+
+.tab-buttons {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.tab-button.active {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.auto-assign-section {
+    background: #e8f5e8;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+}
+
+.filename-preview {
+    background: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-family: monospace;
+    border: 1px dashed #ccc;
+}
+
+.veiculo-disponivel {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 2px 0;
+    font-size: 0.9em;
+}
+
+.veiculo-selecionado {
+    background: #d4edda;
+    border-color: #c3e6cb;
+}
+.veiculo-schedule {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 4px solid #3498db;
+}
+
+.veiculo-schedule .veiculo-header {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.veiculo-schedule .horarios-list {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.horario-badge {
+    background: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+}
+
+.horarios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.horario-atribuicao {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.horario-atribuicao:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+.horario-info {
+    flex: 1;
+}
+
+.horario-select {
+    min-width: 200px;
+}
+
+.veiculo-select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.veiculo-assigned {
+    background: #d4edda;
+    color: #155724;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.veiculo-assigned:hover {
+    background: #c3e6cb;
+}
+
+.veiculo-resumo {
+    background: white;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 4px;
+    border-left: 3px solid #3498db;
+    font-size: 0.9em;
+}
+
+.info-box {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 0.9em;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.modal-actions {
+    margin-top: 20px;
+    text-align: right;
+}
+
+/* Grupos de horários */
+.grupo-horarios {
+    background: #f8f9fa;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border-left: 3px solid #3498db;
+}
+
+.grupo-horarios label {
+    cursor: pointer;
+    display: block;
+}
+
+.grupo-horarios input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+/* Botão de lote */
+.lote-button {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin: 5px 0;
+}
+
+.lote-button:hover {
+    background: #138496;
+}
+
+/* Sugestão no select */
+.sugestao-option {
+    background-color: #e8f5e8 !important;
+    color: #155724 !important;
+    font-weight: bold;
+}
+
+.sugestao-option:hover {
+    background-color: #d4edda !important;
+}
+
+/* Botão de remover */
+.btn-remover {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 2px 6px;
+    margin-left: 8px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.btn-remover:hover {
+    background: #c82333;
+}
+
+.veiculo-assigned {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #d4edda;
+    color: #155724;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+/* Indicador de confiança */
+.confianca-badge {
+    background: #ffc107;
+    color: #856404;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.7em;
+    margin-left: 5px;
+}
+
+/* Tooltip para sugestões */
+.sugestao-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.sugestao-tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.8em;
+}
+
+.sugestao-tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.grupo-padrao {
+    background: #f8f9fa;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #28a745;
+    transition: all 0.3s ease;
+}
+
+.grupo-padrao:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.grupo-padrao label {
+    cursor: pointer;
+    display: block;
+}
+
+.grupo-padrao input[type="radio"] {
+    margin-right: 10px;
+}
+
+/* Adicione ao arquivo tabela_horaria.css */
+.stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.linha-status {
+    transition: all 0.3s ease;
+}
+
+.linha-status:hover {
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.veiculo-disponivel {
+    transition: all 0.3s ease;
+}
+
+.veiculo-disponivel:hover {
+    background: #e9ecef !important;
+    transform: scale(1.02);
+}
+/* Adicionar ao tabela_horaria.css */
+.linha-excluida-item {
+    transition: all 0.3s ease;
+}
+
+.linha-excluida-item:hover {
+    background: #f1b0b7 !important;
+    transform: translateX(5px);
+}
+
+.btn-excluir-linha {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: all 0.3s ease;
+}
+
+.btn-excluir-linha:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}

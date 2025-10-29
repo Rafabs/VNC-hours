@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Escalas de Veículos - Tabela Horária</title>
+    <link rel="stylesheet" href="css/tabela_horaria.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>🚌 Sistema de Escalas de Veículos - Tabela Horária</h1>
+
+        <div class="filters">
+            <h3>📅 Configurar Escala</h3>
+            <label>Data da Escala: <input type="date" id="dataEscala" required
+                    onchange="atualizarPreviewNomeArquivo()"></label>
+            <label>Tipo de Dia:
+                <select id="tipoDia" onchange="atualizarPreviewNomeArquivo()">
+                    <option value="semana">Dia de Semana (Seg-Sex)</option>
+                    <option value="sabado">Sábado</option>
+                    <option value="domingo_feriado">Domingo/Feriado</option>
+                </select>
+            </label>
+            <label>Filtrar por Garagem:
+                <select id="filtroGaragem">
+                    <option value="">Todas as Garagens</option>
+                    <option value="VILA NOVA CACHOEIRINHA">Vila Nova Cachoeirinha</option>
+                </select>
+            </label>
+
+            <div class="filename-preview">
+                <strong>Arquivo será salvo como:</strong><br>
+                <span id="previewNomeArquivo">selecione_uma_data</span><span style="color: #666;">.json</span>
+            </div>
+
+            <button class="btn-primary" onclick="carregarEscalaPredefinida()">🔄 Carregar Tabela Horária</button>
+            <button class="btn-warning" onclick="limparEscala()">🗑️ Limpar Escala</button>
+            <button class="btn-success" onclick="atribuicaoAutomatica()">🎲 Atribuição Automática</button>
+        </div>
+
+        <div class="auto-assign-section">
+            <h3>⚡ Atribuição de Veículos</h3>
+            <p>Baseado na tabela horária para <strong id="tipoDiaAtual">Dia de Semana</strong></p>
+            <button class="btn-info" onclick="verificarDisponibilidade()">🔍 Verificar Disponibilidade</button>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button" onclick="abrirTab('tab-escala')">✏️ Atribuir Veículos</button>
+            </div>
+
+            <div id="tab-horarios" class="tab-content active">
+                <h3>🕒 Tabela Horária para <span id="tituloTipoDia">Dia de Semana</span></h3>
+                <div id="listaHorariosPredefinidos"></div>
+            </div>
+
+            <div id="tab-escala" class="tab-content">
+                <h3>✏️ Atribuição de Veículos</h3>
+                <div id="linhasContainer"></div>
+            </div>
+
+            <div id="tab-relatorio" class="tab-content">
+                <h3>📊 Relatório da Escala</h3>
+                <div id="relatorioContainer"></div>
+            </div>
+        </div>
+        <div class="filename-preview">
+            <strong>Arquivo será salvo como:</strong><br>
+            <span id="previewNomeArquivo">selecione_uma_data</span><span style="color: #666;">.json</span>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <button class="btn-success" onclick="salvarEscala()">💾 Salvar Escala</button>
+            <button class="btn-info" onclick="exportarJSON()">📤 Exportar JSON</button>
+        </div>
+    </div>
+
+    <script src="js/tabela_horaria.js"></script>
+</body>
+
+</html>

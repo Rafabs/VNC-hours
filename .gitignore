@@ -163,3 +163,9 @@ data/VNC_horario_seg_sex.CSV
 data/VNC_horario_sab.CSV
 data/VNC_horario_dom_e_fer.CSV
 data/validações.xlsx
+data/VNC_horario_dom_e_fer_model.csv
+data/VNC_horario_dom_e_fer_model.json
+data/VNC_horario_sab_model.csv
+data/VNC_horario_sab_model.json
+data/VNC_horario_seg_sex_model.csv
+data/VNC_horario_seg_sex_model.json

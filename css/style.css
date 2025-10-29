@@ -578,3 +578,28 @@ th:nth-child(3) {
         background-color: #2d4059; /* Remove hover effect em touch */
     }
 }
+/* Informação da escala */
+#scheduleInfo {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Indicador visual para escala diária vs modelo */
+.escala-diaria-indicator {
+    background: linear-gradient(45deg, #28a745, #20c997) !important;
+}
+
+.modelo-padrao-indicator {
+    background: linear-gradient(45deg, #6c757d, #495057) !important;
+}

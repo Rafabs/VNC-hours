@@ -92,12 +92,12 @@ class BusDeparturesApp {
 
     let infoText = "";
     if (scheduleInfo.tipo === "escala_diaria") {
-      console(`📅 Escala do dia: ${this.formatarDataBr(
+      infoText = `📅 Escala do dia: ${this.formatarDataBr(
         scheduleInfo.data
-      )} | ${scheduleInfo.horarios} horários`);
+      )} | ${scheduleInfo.horarios} horários`;
     } else {
       const nomeModelo = this.getNomeModelo(scheduleInfo.arquivo);
-      console(`📋 Modelo padrão: ${nomeModelo} | ${scheduleInfo.horarios} horários`);
+      infoText = `📋 Modelo padrão: ${nomeModelo} | ${scheduleInfo.horarios} horários`;
     }
 
     infoElement.textContent = infoText;

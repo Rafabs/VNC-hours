@@ -313,16 +313,6 @@ body[data-theme="day"] .reserve-item {
   font-weight: 600;
 }
 
-.vehicle-icon {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  color: white;
-}
-
 /* Padrão (desktop) */
 .route-line {
   position: relative;

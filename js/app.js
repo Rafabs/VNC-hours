@@ -12,6 +12,175 @@ class BusDeparturesApp {
     this.rotationInterval = null;
     this.currentRotationLine = null;
     this.isRotationMode = false;
+
+    this.refreshInterval = 30000; // 30 segundos
+    this.lastRefreshTime = null;
+    this.isRefreshing = false;
+
+    // Elemento de status do refresh
+    this.refreshStatusElement = null;
+  }
+
+  // Adicione este método para inicializar o sistema de refresh
+  initializeRefreshSystem() {
+    this.createRefreshStatusElement();
+    this.startAutoRefresh();
+  }
+
+  // Criar elemento de status do refresh
+  createRefreshStatusElement() {
+    this.refreshStatusElement = document.createElement("div");
+    this.refreshStatusElement.id = "refreshStatus";
+    this.refreshStatusElement.style.cssText = `
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        `;
+    document.body.appendChild(this.refreshStatusElement);
+    this.updateRefreshStatus();
+  }
+
+  // Atualizar status do refresh
+  updateRefreshStatus() {
+    if (!this.refreshStatusElement) return;
+
+    const now = new Date();
+    const nextRefresh = new Date(now.getTime() + this.refreshInterval);
+    const timeUntilRefresh = Math.max(0, nextRefresh - now);
+
+    const secondsUntil = Math.floor(timeUntilRefresh / 1000);
+    const minutes = Math.floor(secondsUntil / 60);
+    const seconds = secondsUntil % 60;
+
+    this.refreshStatusElement.innerHTML = `
+            🔄 Atualizando em: ${minutes}:${seconds.toString().padStart(2, "0")}
+            ${
+              this.lastRefreshTime
+                ? `<br>📅 Última: ${this.lastRefreshTime.toLocaleTimeString()}`
+                : ""
+            }
+        `;
+  }
+
+  // Iniciar auto-refresh
+  startAutoRefresh() {
+    // Atualizar a cada segundo o contador
+    setInterval(() => {
+      this.updateRefreshStatus();
+    }, 1000);
+
+    // Refresh completo a cada intervalo
+    setInterval(() => {
+      this.performFullRefresh();
+    }, this.refreshInterval);
+  }
+
+  // Refresh completo do sistema
+  async performFullRefresh() {
+    if (this.isRefreshing) return;
+
+    this.isRefreshing = true;
+    console.log("🔄 Iniciando refresh completo do sistema...");
+
+    try {
+      // 1. Atualizar dados da escala
+      await this.refreshScheduleData();
+
+      // 2. Atualizar status das linhas
+      this.updateLinesAutoStatus();
+
+      // 3. Atualizar interface
+      this.updateSchedule();
+      this.updateScheduleInfo();
+
+      // 4. Atualizar horário da última atualização
+      this.lastRefreshTime = new Date();
+
+      console.log("✅ Refresh completo concluído");
+    } catch (error) {
+      console.error("❌ Erro no refresh:", error);
+    } finally {
+      this.isRefreshing = false;
+    }
+  }
+
+  // Refresh dos dados da escala
+  async refreshScheduleData() {
+    try {
+      const currentFile = this.scheduleManager.csvLoader.getCurrentFile();
+      await this.scheduleManager.loadSelectedFile(currentFile);
+
+      // Re-inicializar dados das linhas
+      this.initializeLinesFromSchedule();
+    } catch (error) {
+      console.error("Erro ao atualizar dados da escala:", error);
+    }
+  }
+
+  // Modificar o método init() para incluir o sistema de refresh
+  async init() {
+    this.updateClock();
+    this.updateLanguage();
+
+    // Iniciar alternância automática de idioma
+    this.startAutoLanguageToggle();
+
+    // Inicializar painel de status das linhas
+    this.initializeLinesStatus();
+
+    // Inicializar sistema de refresh
+    this.initializeRefreshSystem();
+
+    // Mostrar loading
+    this.showLoading(true);
+
+    try {
+      // Carregar dados dos CSVs
+      await this.scheduleManager.loadScheduleData();
+
+      // Atualizar informações da escala
+      this.updateScheduleInfo();
+
+      // Inicializar linhas a partir dos horários
+      this.initializeLinesFromSchedule();
+
+      // Atualizar botões com o arquivo atual
+      const currentFile = this.scheduleManager.csvLoader.getCurrentFile();
+      this.updateFileButtons(currentFile);
+
+      this.updateSchedule();
+
+      // Atualizar relógio a cada segundo
+      setInterval(() => this.updateClock(), 1000);
+
+      // Atualizar tabela a cada 10 segundos (mais frequente)
+      setInterval(() => {
+        this.updateSchedule();
+      }, 10000); // Reduzido para 10 segundos
+
+      // Atualizar status das linhas a cada 15 segundos
+      setInterval(() => {
+        this.updateLinesAutoStatus();
+        this.updateLinesDisplay();
+      }, 15000);
+    } catch (error) {
+      console.error("Erro na inicialização:", error);
+      if (this.statusMessageElement) {
+        this.statusMessageElement.textContent =
+          translations[this.scheduleManager.config.language].operationEnded;
+        this.statusMessageElement.style.display = "block";
+      }
+    } finally {
+      this.showLoading(false);
+    }
   }
 
   // Inicializar o painel de status das linhas
@@ -91,33 +260,66 @@ class BusDeparturesApp {
       this.createScheduleInfoElement();
 
     let infoText = "";
+    let icon = "";
+
     if (scheduleInfo.tipo === "escala_diaria") {
-      infoText = `📅 Escala do dia: ${this.formatarDataBr(
-        scheduleInfo.data
-      )} | ${scheduleInfo.horarios} horários`;
+      icon = "📅";
+      infoText = `Escala do dia: ${this.formatarDataBr(scheduleInfo.data)} | ${
+        scheduleInfo.horarios
+      } partidas`;
     } else {
+      icon = "📋";
       const nomeModelo = this.getNomeModelo(scheduleInfo.arquivo);
-      infoText = `📋 Modelo padrão: ${nomeModelo} | ${scheduleInfo.horarios} horários`;
+      infoText = `Modelo padrão: ${nomeModelo} | ${scheduleInfo.horarios} horários`;
+    }
+
+    // Versão mobile mais compacta
+    if (window.innerWidth < 768) {
+      if (scheduleInfo.tipo === "escala_diaria") {
+        infoText = `${icon} Escala: ${this.formatarDataBr(
+          scheduleInfo.data
+        )} (${scheduleInfo.horarios} horários)`;
+      } else {
+        const nomeModelo = this.getNomeModelo(scheduleInfo.arquivo);
+        const nomeAbreviado =
+          nomeModelo.length > 12
+            ? nomeModelo.substring(0, 10) + "..."
+            : nomeModelo;
+        infoText = `${icon} ${nomeAbreviado} (${scheduleInfo.horarios} horários)`;
+      }
     }
 
     infoElement.textContent = infoText;
+    infoElement.className =
+      scheduleInfo.tipo === "escala_diaria"
+        ? "escala-diaria-indicator"
+        : "modelo-padrao-indicator";
+
+    // Garante que está no header em mobile
+    if (window.innerWidth < 768) {
+      const header = document.querySelector(".header");
+      if (header && !infoElement.parentElement === header) {
+        header.appendChild(infoElement);
+      }
+    }
   }
 
   createScheduleInfoElement() {
     const infoElement = document.createElement("div");
     infoElement.id = "scheduleInfo";
-    infoElement.style.cssText = `
-        position: fixed;
-        top: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.8);
-        color: white;
-        padding: 5px 10px;
-        border-radius: 4px;
-        font-size: 12px;
-        z-index: 1000;
-    `;
-    document.body.appendChild(infoElement);
+
+    // Em mobile, adiciona diretamente no header
+    if (window.innerWidth < 768) {
+      const header = document.querySelector(".header");
+      if (header) {
+        header.appendChild(infoElement);
+      } else {
+        document.body.appendChild(infoElement);
+      }
+    } else {
+      document.body.appendChild(infoElement);
+    }
+
     return infoElement;
   }
 
@@ -193,7 +395,7 @@ class BusDeparturesApp {
     return div;
   }
 
-  // Verificar e atualizar status automático das linhas
+  // Atualizar status automático das linhas com mais inteligência
   updateLinesAutoStatus() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -201,6 +403,7 @@ class BusDeparturesApp {
 
     // Agrupar partidas por linha
     const linesLastDeparture = new Map();
+    const linesStats = new Map();
 
     allDepartures.forEach((departure) => {
       const [hours, minutes] = departure.time.split(":").map(Number);
@@ -213,19 +416,58 @@ class BusDeparturesApp {
       ) {
         linesLastDeparture.set(lineKey, departureTime);
       }
+
+      // Coletar estatísticas por linha
+      if (!linesStats.has(lineKey)) {
+        linesStats.set(lineKey, {
+          total: 0,
+          futuras: 0,
+          emViagem: 0,
+        });
+      }
+
+      const stats = linesStats.get(lineKey);
+      stats.total++;
+
+      const minutesUntil = this.scheduleManager.minutesUntilDeparture(
+        departure.time
+      );
+      if (minutesUntil >= 0) {
+        stats.futuras++;
+      }
+
+      if (this.scheduleManager.isVeiculoEmViagem(departure)) {
+        stats.emViagem++;
+      }
     });
 
-    // Verificar se alguma linha deve ser automaticamente encerrada
-    linesLastDeparture.forEach((lastDepartureTime, lineKey) => {
-      // Se a última partida foi há mais de 30 minutos, encerrar automaticamente
-      if (currentTime > lastDepartureTime + 30) {
-        const lineData = this.linesData.get(lineKey);
-        if (lineData && lineData.status !== "ended") {
-          this.updateLineStatus(lineData, "ended");
-          console.log(`Linha ${lineKey} encerrada automaticamente`);
+    // Atualizar status das linhas baseado nas estatísticas
+    this.linesData.forEach((lineData, lineKey) => {
+      const lastDepartureTime = linesLastDeparture.get(lineKey);
+      const stats = linesStats.get(lineKey);
+
+      // Se não há partidas futuras e a última partida foi há mais de 30 minutos
+      if ((!stats || stats.futuras === 0) && lastDepartureTime) {
+        if (currentTime > lastDepartureTime + 30) {
+          if (lineData.status !== "ended") {
+            this.updateLineStatus(lineData, "ended");
+            console.log(`🔄 Linha ${lineKey} encerrada automaticamente`);
+          }
+        }
+      } else if (stats && stats.futuras > 0) {
+        // Se há partidas futuras e estava encerrada, reativar
+        if (lineData.status === "ended") {
+          this.updateLineStatus(lineData, "normal");
+          console.log(`🔄 Linha ${lineKey} reativada automaticamente`);
         }
       }
     });
+  }
+
+  // Método para forçar refresh manual (útil para debugging)
+  forceRefresh() {
+    console.log("🔄 Refresh manual solicitado");
+    this.performFullRefresh();
   }
 
   // Inicializar dados das linhas a partir dos horários carregados

@@ -3,6 +3,7 @@ let veiculosDisponiveis = [];
 let horariosPredefinidos = [];
 let escalaAtual = [];
 let horariosCarregados = false;
+let veiculosIndisponiveis = JSON.parse(localStorage.getItem('veiculosIndisponiveis')) || {};
 
 // Carregar dados dos arquivos JSON
 async function carregarDados() {
@@ -66,17 +67,23 @@ function agruparHorariosPorLinhaEVeiculo(horarios) {
 
 // Formatar data para o padrão dd_mm_yyyy - CORRIGIDA (problema de fuso horário)
 function formatarDataParaArquivo(dataISO) {
-    // Corrigir problema de fuso horário - garantir que use a data local
-    const data = new Date(dataISO + 'T00:00:00'); // Forçar meia-noite no fuso local
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    const ano = data.getFullYear();
+    // Corrigir problema de fuso horário - usar abordagem mais robusta
+    const data = new Date(dataISO);
+    
+    // Ajustar para o fuso horário local
+    const offset = data.getTimezoneOffset();
+    const dataCorrigida = new Date(data.getTime() - (offset * 60 * 1000));
+    
+    const dia = String(dataCorrigida.getDate()).padStart(2, '0');
+    const mes = String(dataCorrigida.getMonth() + 1).padStart(2, '0');
+    const ano = dataCorrigida.getFullYear();
+    
     return `${dia}_${mes}_${ano}`;
 }
 
 // Função alternativa mais robusta
 function formatarDataParaArquivoCorrigida(dataISO) {
-    // Dividir a data ISO manualmente para evitar problemas de fuso
+    // Dividir manualmente para evitar problemas de fuso
     const [ano, mes, dia] = dataISO.split('-');
     return `${dia}_${mes}_${ano}`;
 }
@@ -87,7 +94,6 @@ function atualizarPreviewNomeArquivo() {
     const tipoDia = document.getElementById('tipoDia').value;
     
     if (data) {
-        // Usar a versão corrigida
         const dataFormatada = formatarDataParaArquivoCorrigida(data);
         const nomeArquivo = `${dataFormatada}_tabela_horaria`;
         document.getElementById('previewNomeArquivo').textContent = nomeArquivo;
@@ -247,175 +253,145 @@ function diagnosticarCarroX() {
     alert(mensagem);
 }
 
-// Adicione um botão para testar no HTML temporariamente:
-// <button onclick="diagnosticarCarroX()">🔍 Diagnosticar CARRO X</button>
-
-// Verificar disponibilidade de veículos
-function verificarDisponibilidade() {
+// Função para gerenciar veículos indisponíveis
+function gerenciarVeiculosIndisponiveis() {
     const data = document.getElementById('dataEscala').value;
     const tipoDia = document.getElementById('tipoDia').value;
-    const filtroGaragem = document.getElementById('filtroGaragem').value;
     
     if (!data) {
         alert('Selecione uma data primeiro!');
         return;
     }
+
+    const chaveIndisponivel = `${data}_${tipoDia}`;
+    const veiculosHoje = veiculosIndisponiveis[chaveIndisponivel] || [];
     
-    if (!horariosCarregados) {
-        alert('Carregue a tabela horária primeiro!');
-        return;
-    }
-    
-    // Filtrar veículos disponíveis
-    const veiculosFiltrados = veiculosDisponiveis.filter(veiculo => 
-        veiculo.STATUS_OP === 'EM OPERAÇÃO' && 
-        (!filtroGaragem || veiculo.GARAGEM === filtroGaragem)
-    );
-    
-    // Contar horários sem veículo atribuído (apenas os que não têm prefixo real)
-    const horariosSemVeiculo = horariosPredefinidos.filter(h => 
-        !h.CARRO || 
-        h.CARRO.startsWith('CARRO ') || 
-        !h.CARRO.trim()
-    );
-    const horariosComVeiculo = horariosPredefinidos.filter(h => 
-        h.CARRO && 
-        !h.CARRO.startsWith('CARRO ') && 
-        h.CARRO.trim()
-    );
-    
-    // Agrupar por linha
-    const linhasComHorarios = {};
-    horariosPredefinidos.forEach(horario => {
-        if (!linhasComHorarios[horario.LINHA]) {
-            linhasComHorarios[horario.LINHA] = {
-                bg_color: horario.BG_COLOR,
-                txt_color: horario.TXT_COLOR,
-                total: 0,
-                com_veiculo: 0,
-                sem_veiculo: 0
-            };
-        }
-        linhasComHorarios[horario.LINHA].total++;
-        if (horario.CARRO && !horario.CARRO.startsWith('CARRO ') && horario.CARRO.trim()) {
-            linhasComHorarios[horario.LINHA].com_veiculo++;
-        } else {
-            linhasComHorarios[horario.LINHA].sem_veiculo++;
-        }
-    });
-    
-    // Criar relatório
-    let html = `
-        <div class="info-box">
-            <h3>📊 Relatório de Disponibilidade</h3>
-            <p><strong>Data:</strong> ${formatarData(data)}</p>
-            <p><strong>Tipo de Dia:</strong> ${obterNomeTipoDia(tipoDia)}</p>
-            <p><strong>Garagem:</strong> ${filtroGaragem || 'Todas'}</p>
-        </div>
-        
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin: 20px 0;">
-            <div class="stat-card" style="background: #e8f5e8; padding: 15px; border-radius: 8px; text-align: center;">
-                <h3 style="margin: 0; color: #27ae60;">${veiculosFiltrados.length}</h3>
-                <p style="margin: 5px 0; font-weight: bold;">Veículos Disponíveis</p>
-            </div>
-            <div class="stat-card" style="background: #e3f2fd; padding: 15px; border-radius: 8px; text-align: center;">
-                <h3 style="margin: 0; color: #2196f3;">${horariosPredefinidos.length}</h3>
-                <p style="margin: 5px 0; font-weight: bold;">Total de Horários</p>
-            </div>
-            <div class="stat-card" style="background: #fff3cd; padding: 15px; border-radius: 8px; text-align: center;">
-                <h3 style="margin: 0; color: #856404;">${horariosSemVeiculo.length}</h3>
-                <p style="margin: 5px 0; font-weight: bold;">Horários sem Veículo</p>
-            </div>
-            <div class="stat-card" style="background: #d4edda; padding: 15px; border-radius: 8px; text-align: center;">
-                <h3 style="margin: 0; color: #155724;">${horariosComVeiculo.length}</h3>
-                <p style="margin: 5px 0; font-weight: bold;">Horários com Veículo</p>
-            </div>
-        </div>
-    `;
-    
-    // Adicionar progresso geral
-    const percentualCompleto = ((horariosComVeiculo.length / horariosPredefinidos.length) * 100).toFixed(1);
-    html += `
-        <div style="margin: 20px 0;">
-            <h4>📈 Progresso Geral da Atribuição</h4>
-            <div style="background: #f8f9fa; border-radius: 10px; padding: 10px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                    <span>${percentualCompleto}% completo</span>
-                    <span>${horariosComVeiculo.length}/${horariosPredefinidos.length}</span>
-                </div>
-                <div style="background: #e9ecef; border-radius: 5px; height: 20px;">
-                    <div style="background: #28a745; height: 100%; border-radius: 5px; width: ${percentualCompleto}%; transition: width 0.3s;"></div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Listar linhas com status
-    html += `<h4>🚏 Status por Linha</h4>`;
-    html += `<div style="max-height: 400px; overflow-y: auto;">`;
-    
-    Object.keys(linhasComHorarios).sort().forEach(linhaCodigo => {
-        const linhaData = linhasComHorarios[linhaCodigo];
-        const percentualLinha = ((linhaData.com_veiculo / linhaData.total) * 100).toFixed(1);
-        const statusColor = percentualLinha == 100 ? '#28a745' : percentualLinha > 50 ? '#ffc107' : '#dc3545';
-        const statusIcon = percentualLinha == 100 ? '✅' : percentualLinha > 50 ? '🟡' : '🔴';
-        
-        html += `
-            <div class="linha-status" style="border-left: 4px solid ${statusColor}; padding: 10px; margin: 8px 0; background: white; border-radius: 4px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <strong>${linhaCodigo}</strong> ${statusIcon}
-                        <br><small>${linhaData.com_veiculo}/${linhaData.total} horários atribuídos</small>
-                    </div>
-                    <div style="text-align: right;">
-                        <strong style="color: ${statusColor};">${percentualLinha}%</strong>
-                    </div>
-                </div>
-                <div style="background: #e9ecef; border-radius: 3px; height: 6px; margin-top: 5px;">
-                    <div style="background: ${statusColor}; height: 100%; border-radius: 3px; width: ${percentualLinha}%;"></div>
-                </div>
-            </div>
-        `;
-    });
-    
-    html += `</div>`;
-    
-    // Mostrar veículos disponíveis
-    html += `
-        <div style="margin-top: 20px;">
-            <h4>🚌 Veículos Disponíveis (${veiculosFiltrados.length})</h4>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; max-height: 200px; overflow-y: auto;">
-                ${veiculosFiltrados.map(veiculo => {
-                    const disponivel = verificarDisponibilidadeVeiculo(horario, veiculo.PREFIXO);
-                    const motivoIndisponivel = !disponivel ? getMotivoIndisponibilidade(horario, veiculo.PREFIXO) : '';
-                    
-                    return `
-                        <option value="${veiculo.PREFIXO}" 
-                                ${horario.CARRO === veiculo.PREFIXO ? 'selected' : ''}
-                                ${!disponivel ? 'disabled style="color: #ccc; background: #f8f8f8;"' : ''}>
-                            ${veiculo.PREFIXO} - ${veiculo.TIPO} - ${veiculo.GARAGEM}
-                            ${!disponivel ? ` (🚫 ${motivoIndisponivel})` : ''}
-                        </option>
-                    `;
-                }).join('')}
-            </div>
-        </div>
-    `;
-    
-    // Mostrar em modal
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
-        <div class="modal-content" style="max-width: 800px;">
-            ${html}
+        <div class="modal-content" style="max-width: 600px;">
+            <h3>🚫 Veículos Indisponíveis - ${formatarData(data)}</h3>
+            <p><strong>Tipo de Dia:</strong> ${obterNomeTipoDia(tipoDia)}</p>
+            
+            <div class="info-box">
+                💡 <strong>Instruções:</strong> Veículos marcados como indisponíveis NÃO serão atribuídos automaticamente e não aparecerão nas opções de seleção manual.
+            </div>
+            
+            <div style="margin: 15px 0;">
+                <label><strong>Adicionar Veículo:</strong></label>
+                <div style="display: flex; gap: 10px; margin-top: 5px;">
+                    <input type="text" id="novoVeiculoIndisponivel" placeholder="Ex: A1990, P2034" 
+                           style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                    <button class="btn-warning" onclick="adicionarVeiculoIndisponivel()">
+                        ➕ Adicionar
+                    </button>
+                </div>
+            </div>
+            
+            <div style="max-height: 300px; overflow-y: auto; margin: 15px 0;">
+                <h4>Veículos Indisponíveis (${veiculosHoje.length}):</h4>
+                ${veiculosHoje.length === 0 ? 
+                    '<p style="text-align: center; color: #6c757d; padding: 20px;">Nenhum veículo indisponível</p>' :
+                    veiculosHoje.map(veiculo => `
+                        <div class="veiculo-indisponivel-item">
+                            <span>🚌 ${veiculo}</span>
+                            <button class="btn-remover" onclick="removerVeiculoIndisponivel('${veiculo}')" 
+                                    title="Remover da lista">🗑️</button>
+                        </div>
+                    `).join('')
+                }
+            </div>
+            
             <div class="modal-actions">
                 <button class="btn-info" onclick="fecharModal()">Fechar</button>
-                <button class="btn-success" onclick="focarHorariosSemVeiculo()">🎯 Focar em Horários sem Veículo</button>
             </div>
         </div>
     `;
     
     document.body.appendChild(modal);
+}
+
+// Adicionar veículo à lista de indisponíveis
+function adicionarVeiculoIndisponivel() {
+    const input = document.getElementById('novoVeiculoIndisponivel');
+    const veiculo = input.value.trim().toUpperCase();
+    
+    if (!veiculo) {
+        alert('Digite o prefixo do veículo!');
+        return;
+    }
+
+    const data = document.getElementById('dataEscala').value;
+    const tipoDia = document.getElementById('tipoDia').value;
+    const chaveIndisponivel = `${data}_${tipoDia}`;
+    
+    if (!veiculosIndisponiveis[chaveIndisponivel]) {
+        veiculosIndisponiveis[chaveIndisponivel] = [];
+    }
+    
+    if (veiculosIndisponiveis[chaveIndisponivel].includes(veiculo)) {
+        alert('Este veículo já está na lista de indisponíveis!');
+        return;
+    }
+    
+    veiculosIndisponiveis[chaveIndisponivel].push(veiculo);
+    localStorage.setItem('veiculosIndisponiveis', JSON.stringify(veiculosIndisponiveis));
+    
+    // Recarregar o modal para mostrar a lista atualizada
+    fecharModal();
+    gerenciarVeiculosIndisponiveis();
+    
+    console.log(`✅ Veículo ${veiculo} adicionado à lista de indisponíveis`);
+}
+
+// Remover veículo da lista de indisponíveis
+function removerVeiculoIndisponivel(veiculo) {
+    const data = document.getElementById('dataEscala').value;
+    const tipoDia = document.getElementById('tipoDia').value;
+    const chaveIndisponivel = `${data}_${tipoDia}`;
+    
+    if (veiculosIndisponiveis[chaveIndisponivel]) {
+        veiculosIndisponiveis[chaveIndisponivel] = veiculosIndisponiveis[chaveIndisponivel].filter(v => v !== veiculo);
+        localStorage.setItem('veiculosIndisponiveis', JSON.stringify(veiculosIndisponiveis));
+        
+        // Recarregar o modal
+        fecharModal();
+        gerenciarVeiculosIndisponiveis();
+        
+        console.log(`✅ Veículo ${veiculo} removido da lista de indisponíveis`);
+    }
+}
+
+// Verificar se um veículo está indisponível
+function isVeiculoIndisponivel(veiculoPrefix) {
+    const data = document.getElementById('dataEscala').value;
+    const tipoDia = document.getElementById('tipoDia').value;
+    const chaveIndisponivel = `${data}_${tipoDia}`;
+    
+    return veiculosIndisponiveis[chaveIndisponivel] && 
+           veiculosIndisponiveis[chaveIndisponivel].includes(veiculoPrefix.toUpperCase());
+}
+
+// Verificar disponibilidade de veículos
+function verificarDisponibilidadeVeiculo(horarioAtual, veiculoPrefix) {
+    // Verificar se está na lista de indisponíveis
+    if (isVeiculoIndisponivel(veiculoPrefix)) {
+        return false;
+    }
+    
+    // Verificar conflito na mesma linha (CARRO X)
+    const conflitoCarroX = verificarConflitoCarroX(horarioAtual.LINHA, veiculoPrefix);
+    if (conflitoCarroX.encontrado) {
+        return false;
+    }
+    
+    // Verificar conflito de horário entre linhas
+    const conflitoHorario = verificarConflitoHorarioEntreLinhas(veiculoPrefix, horarioAtual);
+    if (conflitoHorario.conflito) {
+        return false;
+    }
+    
+    return true;
 }
 
 // Obter motivo da indisponibilidade do veículo
@@ -2053,7 +2029,7 @@ function mostrarInfoDuracao(codigoLinha) {
     document.body.appendChild(modal);
 }
 
-// Salvar escala atual
+// Atualize a função salvarEscala:
 function salvarEscala() {
     const data = document.getElementById('dataEscala').value;
     const tipoDia = document.getElementById('tipoDia').value;
@@ -2063,12 +2039,15 @@ function salvarEscala() {
         return;
     }
 
+    // Usar data corrigida
+    const dataFormatada = formatarDataParaArquivoCorrigida(data);
+    
     // Coletar apenas horários que têm veículos atribuídos
     const horariosComVeiculos = horariosPredefinidos.filter(horario => horario.CARRO);
     
     escalaAtual = {
         data: data,
-        dataFormatada: formatarData(data),
+        dataFormatada: dataFormatada,
         tipoDia: tipoDia,
         tipoDiaFormatado: obterNomeTipoDia(tipoDia),
         timestamp: new Date().toISOString(),
@@ -2119,7 +2098,8 @@ function exportarJSON() {
         return;
     }
 
-    const dataFormatada = formatarDataParaArquivo(data);
+    // Usar a data corrigida
+    const dataFormatada = formatarDataParaArquivoCorrigida(data);
     const nomeArquivo = `${dataFormatada}_tabela_horaria.json`;
 
     const dataStr = JSON.stringify(escalaAtual.horarios, null, 2);
@@ -2135,7 +2115,7 @@ function exportarJSON() {
         horarios: escalaAtual.horarios.length
     });
 
-    alert(`✅ Arquivo exportado com sucesso!\n\n📁 Nome: ${nomeArquivo}\n🕒 Horários: ${escalaAtual.horarios.length}`);
+    alert(`✅ Arquivo exportado com sucesso!\n\n📁 Nome: ${nomeArquivo}\n📅 Data: ${formatarData(data)}\n🕒 Horários: ${escalaAtual.horarios.length}`);
 }
 
 // Funções de abas
@@ -2151,6 +2131,53 @@ function abrirTab(tabName) {
     // Mostrar a tab selecionada
     document.getElementById(tabName).classList.add('active');
     event.currentTarget.classList.add('active');
+}
+
+// Atualize a função mostrarInfoExportacao:
+function mostrarInfoExportacao() {
+    const data = document.getElementById('dataEscala').value;
+    if (!data) {
+        alert('Selecione uma data primeiro!');
+        return;
+    }
+
+    const dataFormatada = formatarDataParaArquivoCorrigida(data);
+    const veiculosAtribuidos = horariosPredefinidos.filter(h => 
+        h.CARRO && !h.CARRO.startsWith('CARRO ')
+    ).map(h => h.CARRO.trim());
+    
+    const veiculosUnicos = [...new Set(veiculosAtribuidos)];
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content">
+            <h3>📋 Informações de Exportação - ${formatarData(data)}</h3>
+            
+            <div class="info-box">
+                <strong>📅 Data selecionada:</strong> ${formatarData(data)}<br>
+                <strong>📁 Formato do arquivo:</strong> [PREFIXO]_${dataFormatada}_programacao.png<br>
+                <strong>📂 Pasta de destino:</strong> /data/card/<br>
+                <strong>🚌 Veículos a exportar:</strong> ${veiculosUnicos.length}
+            </div>
+            
+            <div style="max-height: 300px; overflow-y: auto; margin: 15px 0;">
+                <h4>Lista de cartões que serão gerados:</h4>
+                ${veiculosUnicos.map(veiculo => `
+                    <div style="background: #f8f9fa; padding: 8px; margin: 5px 0; border-radius: 4px;">
+                        <strong>${veiculo}</strong> → ${veiculo}_${dataFormatada}_programacao.png
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-info" onclick="fecharModal()">Fechar</button>
+                <button class="btn-success" onclick="gerarCartoesVeiculos()">🖨️ Gerar Cartões</button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 // Limpar escala atual
@@ -2241,57 +2268,77 @@ function executarAtribuicaoAutomatica() {
     
     const filtroGaragem = document.getElementById('filtroGaragem').value;
     
-    // Filtrar veículos disponíveis
-    const veiculosDisponiveisArray = veiculosDisponiveis.filter(veiculo => 
-        veiculo.STATUS_OP === 'EM OPERAÇÃO' && 
-        (!filtroGaragem || veiculo.GARAGEM === filtroGaragem)
-    );
+    // Filtrar veículos disponíveis (excluindo indisponíveis)
+    const veiculosDisponiveisArray = veiculosDisponiveis.filter(veiculo => {
+        const disponivel = veiculo.STATUS_OP === 'EM OPERAÇÃO' && 
+                          (!filtroGaragem || veiculo.GARAGEM === filtroGaragem) &&
+                          !isVeiculoIndisponivel(veiculo.PREFIXO);
+        return disponivel;
+    });
     
     if (veiculosDisponiveisArray.length === 0) {
-        alert('Nenhum veículo disponível!');
+        alert('Nenhum veículo disponível! Verifique a lista de indisponíveis.');
         return;
     }
     
-    // Criar cópia dos veículos para usar como "pool"
-    let veiculosPool = [...veiculosDisponiveisArray];
+    // EMBARALHAR A LISTA DE VEÍCULOS para maior aleatoriedade
+    const veiculosEmbaralhados = embaralharArray([...veiculosDisponiveisArray]);
+    
+    // Criar cópia dos veículos para usar como "pool" - já embaralhada
+    let veiculosPool = [...veiculosEmbaralhados];
     let totalAtribuidos = 0;
     let tentativas = 0;
-    const maxTentativas = 1000; // Prevenir loop infinito
+    const maxTentativas = 1000;
     
-    // Primeiro, processar todos os CARRO X
+    // Coletar todos os horários que precisam de veículo
+    const horariosSemVeiculo = horariosPredefinidos.filter(horario => 
+        !horario.CARRO || horario.CARRO.startsWith('CARRO ') || !horario.CARRO.trim()
+    );
+    
+    // EMBARALHAR OS HORÁRIOS também para maior aleatoriedade
+    const horariosEmbaralhados = embaralharArray([...horariosSemVeiculo]);
+    
+    console.log(`🎲 Atribuição Aleatória: ${horariosEmbaralhados.length} horários, ${veiculosPool.length} veículos`);
+    
+    // Primeiro, processar todos os CARRO X de forma aleatória
     const carrosXProcessados = new Set();
+    const carrosXParaProcessar = [];
     
-    horariosPredefinidos.forEach(horario => {
-        if (tentativas >= maxTentativas) return;
-        
-        // Se já tem veículo, pular
-        if (horario.CARRO && !horario.CARRO.startsWith('CARRO ') && horario.CARRO.trim()) {
-            return;
-        }
-        
-        // Se é CARRO X e ainda não foi processado
+    // Coletar todos os CARRO X únicos
+    horariosEmbaralhados.forEach(horario => {
         if (horario.CARRO && horario.CARRO.startsWith('CARRO ') && !carrosXProcessados.has(horario.CARRO)) {
             carrosXProcessados.add(horario.CARRO);
-            
-            // Encontrar veículo disponível para todo o grupo
-            const veiculoEncontrado = encontrarVeiculoParaCarroX(horario.LINHA, horario.CARRO, veiculosPool);
-            
-            if (veiculoEncontrado) {
-                // Atribuir a todos os horários do CARRO X
-                atribuirVeiculoParaCarroX(horario.LINHA, horario.CARRO, veiculoEncontrado.PREFIXO);
-                totalAtribuidos++;
-                
-                // Remover veículo do pool
-                veiculosPool = veiculosPool.filter(v => v.PREFIXO !== veiculoEncontrado.PREFIXO);
-            }
-            
-            tentativas++;
+            carrosXParaProcessar.push({
+                linha: horario.LINHA,
+                carroPadrao: horario.CARRO
+            });
         }
     });
     
-    // Depois, processar horários individuais
-    horariosPredefinidos.forEach(horario => {
-        if (tentativas >= maxTentativas) return;
+    // EMBARALHAR a ordem dos CARRO X
+    const carrosXEmbaralhados = embaralharArray(carrosXParaProcessar);
+    
+    carrosXEmbaralhados.forEach(({linha, carroPadrao}) => {
+        if (tentativas >= maxTentativas || veiculosPool.length === 0) return;
+        
+        // Encontrar veículo disponível para todo o grupo (tentando veículos aleatórios)
+        const veiculoEncontrado = encontrarVeiculoAleatorioParaCarroX(linha, carroPadrao, veiculosPool);
+        
+        if (veiculoEncontrado) {
+            // Atribuir a todos os horários do CARRO X
+            atribuirVeiculoParaCarroX(linha, carroPadrao, veiculoEncontrado.PREFIXO);
+            totalAtribuidos++;
+            
+            // Remover veículo do pool
+            veiculosPool = veiculosPool.filter(v => v.PREFIXO !== veiculoEncontrado.PREFIXO);
+        }
+        
+        tentativas++;
+    });
+    
+    // Depois, processar horários individuais de forma ALEATÓRIA
+    horariosEmbaralhados.forEach(horario => {
+        if (tentativas >= maxTentativas || veiculosPool.length === 0) return;
         
         // Se já tem veículo ou é CARRO X (já processado), pular
         if (horario.CARRO && 
@@ -2300,8 +2347,8 @@ function executarAtribuicaoAutomatica() {
             return;
         }
         
-        // Encontrar veículo disponível para este horário
-        const veiculoEncontrado = encontrarVeiculoParaHorario(horario, veiculosPool);
+        // Encontrar veículo disponível para este horário (busca aleatória)
+        const veiculoEncontrado = encontrarVeiculoAleatorioParaHorario(horario, veiculosPool);
         
         if (veiculoEncontrado) {
             // Atribuição individual
@@ -2320,8 +2367,81 @@ function executarAtribuicaoAutomatica() {
     
     // Mostrar resultado
     setTimeout(() => {
-        alert(`🎲 Atribuição Automática Concluída!\n\n✅ ${totalAtribuidos} horários atribuídos\n🚌 ${veiculosDisponiveisArray.length - veiculosPool.length} veículos utilizados\n📊 Eficiência: ${((totalAtribuidos / horariosPredefinidos.length) * 100).toFixed(1)}%`);
+        const estatisticas = {
+            totalHorarios: horariosSemVeiculo.length,
+            atribuidos: totalAtribuidos,
+            veiculosUsados: veiculosDisponiveisArray.length - veiculosPool.length,
+            eficiencia: ((totalAtribuidos / horariosSemVeiculo.length) * 100).toFixed(1)
+        };
+        
+        alert(`🎲 Atribuição Aleatória Concluída!\n\n` +
+              `✅ ${estatisticas.atribuidos} horários atribuídos\n` +
+              `🚌 ${estatisticas.veiculosUsados} veículos utilizados\n` +
+              `📊 Eficiência: ${estatisticas.eficiencia}%\n` +
+              `🎯 Aleatoriedade: Máxima`);
     }, 500);
+}
+
+// Função para embaralhar array (Fisher-Yates shuffle)
+function embaralharArray(array) {
+    const novoArray = [...array];
+    for (let i = novoArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [novoArray[i], novoArray[j]] = [novoArray[j], novoArray[i]];
+    }
+    return novoArray;
+}
+
+
+// Encontrar veículo aleatório para CARRO X
+function encontrarVeiculoAleatorioParaCarroX(codigoLinha, carroPadrao, veiculosPool) {
+    // Embaralhar a lista de veículos para tentativa aleatória
+    const veiculosEmbaralhados = embaralharArray([...veiculosPool]);
+    
+    // Encontrar todos os horários do CARRO X
+    const horariosDoCarroX = horariosPredefinidos.filter(h => 
+        h.LINHA === codigoLinha && 
+        h.CARRO === carroPadrao
+    );
+    
+    // Tentar veículos em ordem aleatória
+    for (const veiculo of veiculosEmbaralhados) {
+        let veiculoValido = true;
+        
+        // Verificar conflitos para todos os horários do grupo
+        for (const horario of horariosDoCarroX) {
+            const conflitoHorario = verificarConflitoHorarioEntreLinhas(veiculo.PREFIXO, horario);
+            const conflitoCarroX = verificarConflitoCarroX(codigoLinha, veiculo.PREFIXO);
+            
+            if (conflitoHorario.conflito || conflitoCarroX.encontrado) {
+                veiculoValido = false;
+                break;
+            }
+        }
+        
+        if (veiculoValido) {
+            return veiculo;
+        }
+    }
+    
+    return null;
+}
+
+// Encontrar veículo aleatório para horário individual
+function encontrarVeiculoAleatorioParaHorario(horario, veiculosPool) {
+    // Embaralhar a lista para tentativa aleatória
+    const veiculosEmbaralhados = embaralharArray([...veiculosPool]);
+    
+    for (const veiculo of veiculosEmbaralhados) {
+        const conflitoHorario = verificarConflitoHorarioEntreLinhas(veiculo.PREFIXO, horario);
+        const conflitoCarroX = verificarConflitoCarroX(horario.LINHA, veiculo.PREFIXO);
+        
+        if (!conflitoHorario.conflito && !conflitoCarroX.encontrado) {
+            return veiculo;
+        }
+    }
+    
+    return null;
 }
 
 // Encontrar veículo disponível para um CARRO X
@@ -2371,8 +2491,18 @@ function encontrarVeiculoParaHorario(horario, veiculosPool) {
 
 // Funções auxiliares
 function formatarData(dataISO) {
-    const data = new Date(dataISO);
-    return data.toLocaleDateString('pt-BR');
+    // Corrigir problema de fuso horário - dividir manualmente
+    const [ano, mes, dia] = dataISO.split('-');
+    return `${dia}/${mes}/${ano}`;
+}
+
+function formatarDataCompleta(dataISO) {
+    const [ano, mes, dia] = dataISO.split('-');
+    const meses = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    return `${dia} de ${meses[parseInt(mes) - 1]} de ${ano}`;
 }
 
 function obterNomeTipoDia(tipo) {
@@ -2382,6 +2512,289 @@ function obterNomeTipoDia(tipo) {
         'domingo_feriado': 'Domingo/Feriado'
     };
     return tipos[tipo] || tipo;
+}
+
+// Atualize a função gerarCartoesVeiculos:
+function gerarCartoesVeiculos() {
+    const data = document.getElementById('dataEscala').value;
+    const tipoDia = document.getElementById('tipoDia').value;
+    
+    if (!data) {
+        alert('Selecione uma data primeiro!');
+        return;
+    }
+
+    // Coletar todos os veículos atribuídos e seus horários
+    const veiculosComHorarios = {};
+    
+    horariosPredefinidos.forEach(horario => {
+        if (horario.CARRO && !horario.CARRO.startsWith('CARRO ')) {
+            const veiculo = horario.CARRO.trim();
+            
+            if (!veiculosComHorarios[veiculo]) {
+                veiculosComHorarios[veiculo] = [];
+            }
+            
+            veiculosComHorarios[veiculo].push({
+                partida: horario.PARTIDA,
+                linha: horario.LINHA,
+                destino: horario.DESTINO,
+                parada: horario.PARADA,
+                duracao: horario.DURACAO,
+                bgColor: horario.BG_COLOR,
+                textColor: horario.TXT_COLOR
+            });
+        }
+    });
+
+    if (Object.keys(veiculosComHorarios).length === 0) {
+        alert('Nenhum veículo atribuído para gerar cartões!');
+        return;
+    }
+
+    // Ordenar veículos por prefixo
+    const veiculosOrdenados = Object.keys(veiculosComHorarios).sort();
+    
+    // Criar modal para visualização dos cartões
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 90%; max-height: 90vh;">
+            <h3>🖨️ Cartões de Viagem - ${formatarData(data)}</h3>
+            <p><strong>Veículos com horários atribuídos:</strong> ${veiculosOrdenados.length}</p>
+            
+            <div style="margin: 15px 0; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-success" onclick="exportarTodosCartoes()">
+                    💾 Exportar Todos os Cartões
+                </button>
+                <button class="btn-info" onclick="visualizarCartaoIndividual()">
+                    👁️ Visualizar Cartão Individual
+                </button>
+                <button class="btn-warning" onclick="fecharModal()">
+                    ❌ Fechar
+                </button>
+            </div>
+            
+            <div class="cartoes-container" style="
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+                max-height: 70vh;
+                overflow-y: auto;
+                padding: 10px;
+            ">
+                ${veiculosOrdenados.map(veiculo => {
+                    const horarios = veiculosComHorarios[veiculo];
+                    return gerarHTMLCartao(veiculo, horarios, data, tipoDia);
+                }).join('')}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+}
+
+// Atualize a função gerarHTMLCartao:
+function gerarHTMLCartao(veiculo, horarios, data, tipoDia) {
+    // Ordenar horários por partida
+    horarios.sort((a, b) => a.partida.localeCompare(b.partida));
+    
+    // Encontrar informações do veículo
+    const infoVeiculo = veiculosDisponiveis.find(v => v.PREFIXO === veiculo) || {
+        PREFIXO: veiculo,
+        TIPO: 'Não identificado',
+        MODELO: 'Não identificado',
+        GARAGEM: 'Vila Nova Cachoeirinha'
+    };
+
+    return `
+        <div class="cartao-veiculo" id="cartao-${veiculo}" data-veiculo="${veiculo}">
+            <div class="cartao-header">
+                <div class="cartao-titulo">
+                    <h4>🚌 ${veiculo}</h4>
+                    <small>${infoVeiculo.TIPO} • ${infoVeiculo.MODELO}</small>
+                </div>
+                <div class="cartao-info">
+                    <div class="cartao-data">${formatarData(data)}</div>
+                    <div class="cartao-garagem">${infoVeiculo.GARAGEM}</div>
+                </div>
+            </div>
+            
+            <div class="cartao-horarios">
+                <div class="cartao-subtitulo">📋 PROGRAMAÇÃO DE VIAGENS</div>
+                ${horarios.map((horario, index) => `
+                    <div class="cartao-viagem ${index % 2 === 0 ? 'par' : 'impar'}">
+                        <div class="viagem-horario">${horario.partida}</div>
+                        <div class="viagem-linha" style="background: ${horario.bgColor}; color: ${horario.textColor};">
+                            ${horario.linha}
+                        </div>
+                        <div class="viagem-destino">${horario.destino}</div>
+                        <div class="viagem-info">
+                            Parada ${horario.parada} • ${horario.duracao}min
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <div class="cartao-footer">
+                <div class="cartao-total">Total: ${horarios.length} viagens</div>
+                <button class="btn-exportar-cartao" onclick="exportarCartaoIndividual('${veiculo}')" 
+                        style="font-size: 0.8em; padding: 3px 8px;">
+                    📥 Exportar
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// Exportar cartão individual
+async function exportarCartaoIndividual(veiculo) {
+    const cartaoElement = document.getElementById(`cartao-${veiculo}`);
+    if (!cartaoElement) {
+        alert('Cartão não encontrado!');
+        return;
+    }
+
+    try {
+        const data = document.getElementById('dataEscala').value;
+        const dataFormatada = formatarDataParaArquivoCorrigida(data);
+        const nomeArquivo = `${veiculo}_${dataFormatada}_programacao.png`;
+        
+        // Usar html2canvas para converter o cartão em imagem
+        const canvas = await html2canvas(cartaoElement, {
+            scale: 2, // Melhor qualidade
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            allowTaint: true
+        });
+        
+        // Converter canvas para blob
+        canvas.toBlob(async (blob) => {
+            try {
+                // Salvar no servidor (simulado)
+                await salvarCartaoNoServidor(blob, nomeArquivo);
+                
+                // Também oferecer download local
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = nomeArquivo;
+                link.click();
+                
+                console.log(`✅ Cartão exportado: ${nomeArquivo}`);
+                
+            } catch (error) {
+                console.error('❌ Erro ao salvar no servidor:', error);
+                // Fallback: apenas download local
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = nomeArquivo;
+                link.click();
+            }
+        }, 'image/png');
+        
+    } catch (error) {
+        console.error('❌ Erro ao exportar cartão:', error);
+        alert('Erro ao exportar cartão. Verifique o console.');
+    }
+}
+
+// Exportar todos os cartões
+async function exportarTodosCartoes() {
+    const data = document.getElementById('dataEscala').value;
+    const veiculos = document.querySelectorAll('.cartao-veiculo');
+    const dataFormatada = formatarDataParaArquivoCorrigida(data);    
+    
+    if (veiculos.length === 0) {
+        alert('Nenhum cartão para exportar!');
+        return;
+    }
+
+    // Mostrar loading
+    const loadingModal = document.createElement('div');
+    loadingModal.className = 'modal-overlay';
+    loadingModal.innerHTML = `
+        <div class="modal-content" style="text-align: center;">
+            <h3>📤 Exportando Cartões...</h3>
+            <p>Exportando ${veiculos.length} cartões</p>
+            <div class="loading-spinner"></div>
+            <p id="export-status">Preparando...</p>
+        </div>
+    `;
+    document.body.appendChild(loadingModal);
+
+    try {
+        for (let i = 0; i < veiculos.length; i++) {
+            const cartao = veiculos[i];
+            const veiculo = cartao.getAttribute('data-veiculo');
+            
+            // Atualizar status
+            document.getElementById('export-status').textContent = 
+                `Exportando ${i+1}/${veiculos.length}: ${veiculo}`;
+            
+            // Pequeno delay para evitar sobrecarga
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Exportar cartão individual
+            await exportarCartaoIndividual(veiculo);
+        }
+        
+        fecharModal();
+        alert(`✅ Todos os ${veiculos.length} cartões foram exportados com sucesso!`);
+        
+    } catch (error) {
+        console.error('❌ Erro na exportação em lote:', error);
+        alert('Erro ao exportar cartões. Verifique o console.');
+    } finally {
+        fecharModal();
+    }
+}
+
+// Visualizar cartão individual em tela cheia
+function visualizarCartaoIndividual() {
+    const veiculo = prompt('Digite o prefixo do veículo:');
+    if (!veiculo) return;
+
+    const dataFormatada = formatarDataParaArquivoCorrigida(data);
+    
+    // Buscar horários do veículo
+    const horariosVeiculo = horariosPredefinidos.filter(h => 
+        h.CARRO && h.CARRO.trim() === veiculo
+    );
+
+    if (horariosVeiculo.length === 0) {
+        alert(`Nenhum horário encontrado para o veículo ${veiculo}`);
+        return;
+    }
+
+    const data = document.getElementById('dataEscala').value;
+    const tipoDia = document.getElementById('tipoDia').value;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            ${gerarHTMLCartao(veiculo, horariosVeiculo.map(h => ({
+                partida: h.PARTIDA,
+                linha: h.LINHA,
+                destino: h.DESTINO,
+                parada: h.PARADA,
+                duracao: h.DURACAO,
+                bgColor: h.BG_COLOR,
+                textColor: h.TXT_COLOR
+            })), data, tipoDia)}
+            
+            <div style="margin-top: 20px;">
+                <button class="btn-success" onclick="exportarCartaoIndividual('${veiculo}')">
+                    📥 Exportar Cartão
+                </button>
+                <button class="btn-info" onclick="fecharModal()">
+                    ❌ Fechar
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
 }
 
 // Inicializar

@@ -68,6 +68,84 @@ class ScheduleManager {
     ];
   }
 
+  // Refresh inteligente dos dados
+  async refreshScheduleData(fileSelection = null) {
+    try {
+      const dadosAntigos = this.scheduleData.length;
+      await this.loadScheduleData(fileSelection);
+      const dadosNovos = this.scheduleData.length;
+
+      console.log(
+        `🔄 Dados atualizados: ${dadosAntigos} → ${dadosNovos} registros`
+      );
+
+      // Verificar se houve mudanças significativas
+      if (dadosAntigos !== dadosNovos) {
+        console.log("📈 Mudança detectada nos dados da escala");
+        return true; // Houve mudanças
+      }
+
+      return false; // Sem mudanças significativas
+    } catch (error) {
+      console.error("Erro no refresh dos dados:", error);
+      return false;
+    }
+  }
+
+  // Verificar se há novas partidas disponíveis
+  hasNewDepartures() {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+
+    const novasPartidas = this.scheduleData.filter((departure) => {
+      const [hours, minutes] = departure.time.split(":").map(Number);
+      const departureTime = hours * 60 + minutes;
+      const minutesUntil = departureTime - currentTime;
+
+      // Considerar "nova" partidas que entraram na janela de 30 minutos
+      return minutesUntil >= 0 && minutesUntil <= 30;
+    });
+
+    return novasPartidas.length > 0;
+  }
+
+  // Obter estatísticas atualizadas
+  getScheduleStats() {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+
+    const stats = {
+      total: this.scheduleData.length,
+      futuras: 0,
+      imediatas: 0,
+      confirmadas: 0,
+      agendadas: 0,
+    };
+
+    this.scheduleData.forEach((departure) => {
+      const minutesUntil = this.minutesUntilDeparture(departure.time);
+      const status = this.getDepartureStatus(departure.time);
+
+      if (minutesUntil >= 0) {
+        stats.futuras++;
+
+        switch (status) {
+          case "immediate":
+            stats.imediatas++;
+            break;
+          case "confirmed":
+            stats.confirmadas++;
+            break;
+          case "scheduled":
+            stats.agendadas++;
+            break;
+        }
+      }
+    });
+
+    return stats;
+  }
+
   // Calcular minutos até a partida
   minutesUntilDeparture(departureTime) {
     const now = new Date();
@@ -273,8 +351,8 @@ class ScheduleManager {
     const lastDepartureTime = lastHours * 60 + lastMinutes;
     const duracao = lastDeparture.duracao || 45;
 
-    // Considerar operação encerrada 30 minutos após o retorno da última viagem
-    const operationEndTime = lastDepartureTime + duracao + 30;
+    // Considerar operação encerrada 1 minuto após o retorno da última viagem
+    const operationEndTime = lastDepartureTime + duracao + 1;
 
     return currentTime > operationEndTime;
   }

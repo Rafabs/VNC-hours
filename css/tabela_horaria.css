@@ -530,3 +530,231 @@ input, select {
     background: #c82333;
     transform: scale(1.05);
 }
+
+/* Cartões de veículos */
+.cartao-veiculo {
+    background: white;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-family: 'Arial', sans-serif;
+    break-inside: avoid;
+}
+
+.cartao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+}
+
+.cartao-titulo h4 {
+    margin: 0 0 5px 0;
+    color: #2c3e50;
+    font-size: 1.2em;
+}
+
+.cartao-titulo small {
+    color: #7f8c8d;
+    font-size: 0.8em;
+}
+
+.cartao-info {
+    text-align: right;
+}
+
+.cartao-data {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 0.9em;
+}
+
+.cartao-garagem {
+    color: #7f8c8d;
+    font-size: 0.8em;
+}
+
+.cartao-subtitulo {
+    background: #34495e;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.cartao-horarios {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.cartao-viagem {
+    display: grid;
+    grid-template-columns: 50px 80px 1fr;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 5px;
+    border-radius: 6px;
+    align-items: center;
+    font-size: 0.85em;
+}
+
+.cartao-viagem.par {
+    background: #f8f9fa;
+}
+
+.cartao-viagem.impar {
+    background: #ffffff;
+}
+
+.viagem-horario {
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+}
+
+.viagem-linha {
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.8em;
+}
+
+.viagem-destino {
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.viagem-info {
+    grid-column: 1 / -1;
+    color: #7f8c8d;
+    font-size: 0.75em;
+    text-align: center;
+    margin-top: 3px;
+}
+
+.cartao-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+
+.cartao-total {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 0.9em;
+}
+
+.btn-exportar-cartao {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-exportar-cartao:hover {
+    background: #218838;
+}
+
+/* Loading spinner */
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Botão para gerar cartões */
+.btn-cartoes {
+    background: linear-gradient(45deg, #9b59b6, #8e44ad);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-cartoes:hover {
+    background: linear-gradient(45deg, #8e44ad, #7d3c98);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+/* Adicione ao CSS */
+.info-exportacao {
+    background: #e3f2fd;
+    border: 1px solid #2196f3;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+}
+
+.info-exportacao strong {
+    color: #1976d2;
+}
+
+.lista-cartoes {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Adicione ao tabela_horaria.css */
+
+.veiculo-indisponivel-item {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.veiculo-indisponivel-item:hover {
+    background: #f1b0b7;
+    transform: translateX(5px);
+}
+
+.btn-indisponivel {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+.btn-indisponivel:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}

@@ -12,7 +12,7 @@
   {
     "PARADA": "03",
     "PARTIDA": "04:40",
-    "BG_COLOR": "#806000",
+    "BG_COLOR": "#806000",o
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L003/10",
     "DESTINO": "VILA RICA",
@@ -2038,16 +2038,6 @@
     "DESTINO": "LAUZANE PAULISTA (SEMI EXPRESSO)",
     "CARRO": "A 2070",
     "DURACAO": 26
-  },
-  {
-    "PARADA": "08",
-    "PARTIDA": "15:20",
-    "BG_COLOR": "#7030A0",
-    "TXT_COLOR": "#FFFFFF",
-    "LINHA": "0L05/10",
-    "DESTINO": "VIAMOBILIDADE (CAPÃO REDONDO)",
-    "CARRO": "P 2309",
-    "DURACAO": 960
   },
   {
     "PARADA": "06",

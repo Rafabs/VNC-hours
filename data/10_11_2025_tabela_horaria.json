@@ -1350,16 +1350,6 @@
     "DURACAO": 45
   },
   {
-    "PARADA": "03",
-    "PARTIDA": "11:20",
-    "BG_COLOR": "#00B0F0",
-    "TXT_COLOR": "#FFFFFF",
-    "LINHA": "L004/10",
-    "DESTINO": "UBS LADEIRA ROSA (CIRCULAR)",
-    "CARRO": "P 2040",
-    "DURACAO": 100
-  },
-  {
     "PARADA": "07",
     "PARTIDA": "11:20",
     "BG_COLOR": "#5B9BD5",

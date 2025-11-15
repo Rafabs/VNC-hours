@@ -1390,16 +1390,6 @@
     "DURACAO": 54
   },
   {
-    "PARADA": "02",
-    "PARTIDA": "15:30",
-    "BG_COLOR": "#7030A0",
-    "TXT_COLOR": "#FFFFFF",
-    "LINHA": "0L05/10",
-    "DESTINO": "VIA MOBILIDADE (PÁTIO CAPÃO REDONDO)",
-    "CARRO": "A 2084",
-    "DURACAO": 54
-  },
-  {
     "PARADA": "04",
     "PARTIDA": "15:30",
     "BG_COLOR": "#00B0F0",

@@ -861,16 +861,6 @@
   },
   {
     "PARADA": "01",
-    "PARTIDA": "15:20",
-    "BG_COLOR": "#7030A0",
-    "TXT_COLOR": "#FFFFFF",
-    "LINHA": "0L05/10",
-    "DESTINO": "VIAMOBILIDADE (CAPÃO REDONDO)",
-    "CARRO": "A 2072",
-    "DURACAO": 960
-  },
-  {
-    "PARADA": "01",
     "PARTIDA": "15:33",
     "BG_COLOR": "#FF0000",
     "TXT_COLOR": "#FFFFFF",

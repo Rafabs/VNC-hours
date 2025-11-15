@@ -1187,7 +1187,7 @@
     "LINHA": "L007/10",
     "DESTINO": "LAUZANE PAULISTA",
     "CARRO": "A 2074",
-    "DURACAO": 54
+    "DURACAO": 960
   },
   {
     "PARADA": "02",
@@ -1197,7 +1197,7 @@
     "LINHA": "0L05/10",
     "DESTINO": "VIA MOBILIDADE (P�TIO CAP�O REDONDO)",
     "CARRO": "48-02545",
-    "DURACAO": 54
+    "DURACAO": 960
   },
   {
     "PARADA": "04",

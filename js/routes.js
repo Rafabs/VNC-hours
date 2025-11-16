@@ -140,7 +140,7 @@ class RoutesApp {
         const tb = b.time.split(":").map(Number);
         return ta[0] * 60 + ta[1] - (tb[0] * 60 + tb[1]);
       })
-      .slice(0, 12);
+      .slice(0, 20);
 
     if (!this.waitingList) return;
 
@@ -263,7 +263,7 @@ class RoutesApp {
       }
     });
 
-    const allReserve = Array.from(allReserveMap.values()).slice(0, 20);
+    const allReserve = Array.from(allReserveMap.values()).slice(0, 63);
 
     // Ordenar por prefixo para melhor visualização
     allReserve.sort((a, b) => {

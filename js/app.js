@@ -264,7 +264,7 @@ class BusDeparturesApp {
 
     if (scheduleInfo.tipo === "escala_diaria") {
       icon = "📅";
-      infoText = `Escala do dia: ${this.formatarDataBr(scheduleInfo.data)} | ${
+      infoText = `v1.0 - Escala do dia: ${this.formatarDataBr(scheduleInfo.data)} | ${
         scheduleInfo.horarios
       } partidas`;
     } else {

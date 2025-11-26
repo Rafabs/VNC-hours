@@ -354,7 +354,6 @@ class RoutesApp {
     });
 
     Object.entries(grouped).forEach(([line, trips]) => {
-      // sort by time
       trips.sort((a, b) => {
         const ta = a.time.split(":").map(Number);
         const tb = b.time.split(":").map(Number);
@@ -366,32 +365,30 @@ class RoutesApp {
       card.className = "route-card";
 
       card.innerHTML = `
-        <div class="route-header">
-          <div style="display:flex;gap:12px;align-items:center;">
-            <div style="width:12px;height:12px;border-radius:3px;background:${
-              first.bgColor
-            };box-shadow:0 4px 10px ${first.bgColor}22;"></div>
-            <h3 style="color:var(--); margin:0;">${line} — <span style="opacity:.9; font-weight:600">${
+      <div class="route-header">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div style="width:12px;height:12px;border-radius:3px;background:${
+            first.bgColor
+          };box-shadow:0 4px 10px ${first.bgColor}22;"></div>
+          <h3 style="margin:0;">${line} — <span style="opacity:.9; font-weight:600">${
         first.destination || "—"
       }</span></h3>
-          </div>
-          <span style="font-size:0.95em;opacity:.9">${
-            trips.length
-          } viagens</span>
         </div>
+        <span style="font-size:0.95em;opacity:.9">${trips.length} viagens</span>
+      </div>
 
-        <div class="route-direction">➡️ IDA</div>
-        <div class="route-line route-line-ida" style="background: linear-gradient(90deg, ${
-          first.bgColor
-        }33, ${first.bgColor}11)"></div>
-        <div class="route-direction">⬅️ VOLTA</div>
-        <div class="route-line route-line-volta" style="background: linear-gradient(90deg, ${
-          first.bgColor
-        }22, ${first.bgColor}08)"></div>
-      `;
+      <div class="route-direction">➡️ IDA</div>
+      <div class="route-line route-line-ida"></div>
+      <div class="route-direction">⬅️ VOLTA</div>
+      <div class="route-line route-line-volta"></div>
+    `;
 
       const lineIda = card.querySelector(".route-line-ida");
       const lineVolta = card.querySelector(".route-line-volta");
+
+      // Estilo das linhas
+      lineIda.style.background = `linear-gradient(90deg, ${first.bgColor}33, ${first.bgColor}11)`;
+      lineVolta.style.background = `linear-gradient(90deg, ${first.bgColor}22, ${first.bgColor}08)`;
 
       trips.forEach((trip) => {
         const [h, m] = trip.time.split(":").map(Number);
@@ -403,8 +400,17 @@ class RoutesApp {
         if (nowTotal >= start && nowTotal <= end) {
           const progress = (nowTotal - start) / duracao;
           const ida = progress < 0.5;
-          // position percentage (0..100)
-          const pos = Math.min(Math.max(progress * 100, 0), 100);
+
+          // CORREÇÃO: Para VOLTA, inverter o progresso
+          let pos;
+          if (ida) {
+            // IDA: 0% → 100% (esquerda para direita)
+            pos = Math.min(Math.max(progress * 2 * 100, 0), 100);
+          } else {
+            // VOLTA: 100% → 0% (direita para esquerda)
+            const voltaProgress = (progress - 0.5) * 2;
+            pos = Math.min(Math.max(100 - voltaProgress * 100, 0), 100);
+          }
 
           const marker = document.createElement("div");
           marker.className = "vehicle-marker";
@@ -418,45 +424,84 @@ class RoutesApp {
           );
 
           marker.innerHTML = `
-            <div class="pulse" style="background:${trip.bgColor}55"></div>
-
-            <div class="vehicle-tooltip">
-              <strong>${trip.vehicle}</strong><br>
-              ${trip.model || trip.type || ""}<br>
-              ${trip.destination || ""}<br>
-              ${percInt}% do trajeto — Faltam ${remainingMin} min
-            </div>
-
-            <div class="vehicle-icon"
-                style="background:linear-gradient(180deg, ${trip.bgColor}, ${
+          <div class="pulse" style="background:${trip.bgColor}55"></div>
+          <div class="vehicle-tooltip">
+            <strong>${trip.vehicle}</strong><br>
+            ${trip.model || trip.type || ""}<br>
+            ${trip.destination || ""}<br>
+            ${percInt}% do trajeto — Faltam ${remainingMin} min
+          </div>
+          <div class="vehicle-icon"
+              style="background:linear-gradient(180deg, ${trip.bgColor}, ${
             trip.bgColor
           }CC);
-                        border-radius:8px;">
-              <i data-lucide="${vt.icon}"></i>
-            </div>
+                      border-radius:8px;">
+            <i data-lucide="${vt.icon}"></i>
+          </div>
+          <div class="vehicle-label">${trip.vehicle}</div>
+          ${this.renderBusImage(trip.type, trip.model, ida)}
+        `;
 
-            <div class="vehicle-label">${trip.vehicle}</div>
-
-            ${this.renderBusImage(trip.type, trip.model, ida)}
-          `;
-
-          // hover highlight: light up line background
-          marker.addEventListener("mouseenter", () => {
-            (ida
-              ? lineIda
-              : lineVolta
-            ).style.boxShadow = `0 6px 28px ${trip.bgColor}33 inset`;
-          });
-          marker.addEventListener("mouseleave", () => {
-            (ida ? lineIda : lineVolta).style.boxShadow = "";
+          // Adicionar evento de clique para abrir modal
+          marker.addEventListener("click", () => {
+            this.showVehicleModal(trip);
           });
 
-          (ida ? lineIda : lineVolta).appendChild(marker);
+          const targetLine = ida ? lineIda : lineVolta;
+          targetLine.appendChild(marker);
         }
       });
 
       this.routesContainer.appendChild(card);
     });
+  }
+
+  // Adicione este método para mostrar modal
+  showVehicleModal(vehicle) {
+    const modal = document.getElementById("vehicleModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+
+    modalTitle.textContent = `Veículo ${vehicle.vehicle}`;
+    modalBody.innerHTML = `
+    <div class="vehicle-details">
+      <div class="detail-item">
+        <strong>Linha:</strong> ${vehicle.line}
+      </div>
+      <div class="detail-item">
+        <strong>Destino:</strong> ${vehicle.destination || "—"}
+      </div>
+      <div class="detail-item">
+        <strong>Modelo:</strong> ${vehicle.model || "—"}
+      </div>
+      <div class="detail-item">
+        <strong>Tipo:</strong> ${vehicle.type || "—"}
+      </div>
+      <div class="detail-item">
+        <strong>Partida:</strong> ${vehicle.time}
+      </div>
+      <div class="detail-item">
+        <strong>Duração:</strong> ${vehicle.duracao || 60} min
+      </div>
+      <div class="detail-item">
+        <strong>Garagem:</strong> ${vehicle.garagem || "—"}
+      </div>
+    </div>
+  `;
+
+    modal.classList.add("active");
+
+    // Fechar modal
+    document.getElementById("closeModal").onclick = () => {
+      modal.classList.remove("active");
+    };
+
+    // Fechar ao clicar fora
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("active");
+      }
+    };
   }
   renderBusImage(type, model, ida) {
     const dir = ida ? "IDA" : "VOLTA";

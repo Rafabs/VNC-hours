@@ -1846,7 +1846,7 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2300",
+    "CARRO": "P 2032",
     "DURACAO": 42
   },
   {
@@ -2206,7 +2206,7 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2300",
+    "CARRO": "P 2032",
     "DURACAO": 42
   },
   {
@@ -2526,7 +2526,7 @@
     "TXT_COLOR": "#FFFFFF",
     "LINHA": "L007/42",
     "DESTINO": "GENEVE",
-    "CARRO": "P 2300",
+    "CARRO": "P 2032",
     "DURACAO": 42
   },
   {

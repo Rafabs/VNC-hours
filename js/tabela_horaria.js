@@ -2797,6 +2797,80 @@ function visualizarCartaoIndividual() {
     document.body.appendChild(modal);
 }
 
+// Sistema de modo escuro
+function initializeDarkMode() {
+    // Verificar preferência do sistema
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Verificar se o usuário já fez uma escolha manual
+    const userPreference = localStorage.getItem('darkMode');
+    
+    let isDarkMode;
+    
+    if (userPreference !== null) {
+        // Usar preferência salva do usuário
+        isDarkMode = userPreference === 'true';
+    } else {
+        // Usar preferência do sistema
+        isDarkMode = prefersDarkScheme.matches;
+    }
+    
+    // Aplicar modo
+    applyDarkMode(isDarkMode);
+    
+    // Atualizar ícone do botão
+    updateThemeToggleIcon(isDarkMode);
+    
+    // Ouvir mudanças na preferência do sistema (apenas se o usuário não tiver escolhido manualmente)
+    if (userPreference === null) {
+        prefersDarkScheme.addEventListener('change', (e) => {
+            applyDarkMode(e.matches);
+            updateThemeToggleIcon(e.matches);
+        });
+    }
+}
+
+// Alternar modo escuro
+function toggleDarkMode() {
+    const body = document.body;
+    const isDarkMode = body.classList.contains('dark-mode');
+    const newDarkMode = !isDarkMode;
+    
+    // Aplicar novo modo
+    applyDarkMode(newDarkMode);
+    
+    // Atualizar ícone
+    updateThemeToggleIcon(newDarkMode);
+    
+    // Salvar preferência do usuário
+    localStorage.setItem('darkMode', newDarkMode.toString());
+    
+    console.log(`🌓 Modo ${newDarkMode ? 'escuro' : 'claro'} ativado`);
+}
+
+// Aplicar modo escuro
+function applyDarkMode(isDarkMode) {
+    const body = document.body;
+    
+    if (isDarkMode) {
+        body.classList.add('dark-mode');
+    } else {
+        body.classList.remove('dark-mode');
+    }
+}
+
+// Atualizar ícone do botão
+function updateThemeToggleIcon(isDarkMode) {
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+        themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+        themeToggle.title = isDarkMode ? 'Alternar para modo claro' : 'Alternar para modo escuro';
+    }
+}
+
+// Inicializar modo escuro
+initializeDarkMode();
+
 // Inicializar
 carregarDados();
 

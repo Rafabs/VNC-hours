@@ -233,4 +233,106 @@ class CSVLoader {
       };
     }
   }
+
+// Novo método para listar arquivos de escala disponíveis
+async listAvailableScheduleFiles() {
+  try {
+    // Esta é uma implementação básica - você precisará adaptar para seu servidor
+    const response = await fetch('./data/');
+    if (!response.ok) {
+      // Fallback: gerar próximos 7 dias
+      return this.generateNextDays(7);
+    }
+    
+    // Aqui você precisaria parsear a resposta do servidor para listar arquivos
+    // Por enquanto, vamos gerar os próximos 7 dias
+    return this.generateNextDays(7);
+  } catch (error) {
+    console.error("Erro ao listar arquivos:", error);
+    return this.generateNextDays(3); // Fallback para 3 dias
+  }
+}
+
+// Gerar datas dos próximos dias
+generateNextDays(daysCount) {
+  const files = [];
+  const hoje = new Date();
+  
+  // Adicionar o dia atual
+  files.push({
+    date: this.getDataAtual(),
+    fileName: `${this.formatarDataParaArquivo(this.getDataAtual())}_tabela_horaria.json`,
+    display: "Hoje"
+  });
+  
+  // Gerar próximos dias
+  for (let i = 1; i <= daysCount; i++) {
+    const data = new Date(hoje);
+    data.setDate(hoje.getDate() + i);
+    
+    const ano = data.getFullYear();
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const dia = String(data.getDate()).padStart(2, "0");
+    const dataStr = `${ano}-${mes}-${dia}`;
+    
+    files.push({
+      date: dataStr,
+      fileName: `${this.formatarDataParaArquivo(dataStr)}_tabela_horaria.json`,
+      display: i === 1 ? "Amanhã" : `${dia}/${mes}`
+    });
+  }
+  
+  return files;
+}
+
+// Novo método para carregar arquivo de uma data específica
+async loadScheduleForDate(dateString) {
+  try {
+    const fileName = `${this.formatarDataParaArquivo(dateString)}_tabela_horaria.json`;
+    const filePath = `./data/${fileName}`;
+    
+    console.log(`📅 Tentando carregar escala para ${dateString}: ${filePath}`);
+    
+    const response = await fetch(filePath);
+    if (!response.ok) {
+      // Se não encontrar arquivo específico, usar modelo padrão baseado no dia da semana
+      const date = new Date(dateString);
+      const dayOfWeek = date.getDay(); // 0=Domingo, 1=Segunda, etc.
+      
+      let scheduleType;
+      if (dayOfWeek === 0 || this.isHoliday(date)) {
+        scheduleType = "dom_fer";
+      } else if (dayOfWeek === 6) {
+        scheduleType = "sab";
+      } else {
+        scheduleType = "seg_sex";
+      }
+      
+      return await this.loadCSVData(scheduleType);
+    }
+    
+    const jsonData = await response.json();
+    const formattedData = this.formatData(jsonData);
+    
+    console.log(`✅ Escala carregada para ${dateString}: ${formattedData.length} horários`);
+    return formattedData;
+  } catch (error) {
+    console.error(`❌ Erro ao carregar escala para ${dateString}:`, error);
+    
+    // Fallback para modelo padrão baseado no dia da semana
+    const date = new Date(dateString);
+    const dayOfWeek = date.getDay();
+    
+    let scheduleType;
+    if (dayOfWeek === 0 || this.isHoliday(date)) {
+      scheduleType = "dom_fer";
+    } else if (dayOfWeek === 6) {
+      scheduleType = "sab";
+    } else {
+      scheduleType = "seg_sex";
+    }
+    
+    return await this.loadCSVData(scheduleType);
+  }
+}  
 }

@@ -374,6 +374,81 @@ class ScheduleManager {
     };
   }
 
+  // Obter horários de um veículo para múltiplos dias
+  async getVehicleScheduleForMultipleDays(vehiclePrefix, days = 7) {
+    try {
+      const hoje = new Date();
+      const schedules = [];
+
+      // Buscar horários para cada dia
+      for (let i = 0; i < days; i++) {
+        const data = new Date(hoje);
+        data.setDate(hoje.getDate() + i);
+
+        const ano = data.getFullYear();
+        const mes = String(data.getMonth() + 1).padStart(2, "0");
+        const dia = String(data.getDate()).padStart(2, "0");
+        const dataStr = `${ano}-${mes}-${dia}`;
+
+        // Carregar dados do dia
+        const daySchedule = await this.csvLoader.loadScheduleForDate(dataStr);
+
+        // Filtrar apenas os horários do veículo específico
+        const vehicleSchedule = daySchedule
+          .filter((departure) => departure.vehicle === vehiclePrefix)
+          .map((departure) => ({
+            ...departure,
+            date: dataStr,
+            dateDisplay:
+              i === 0 ? "Hoje" : i === 1 ? "Amanhã" : `${dia}/${mes}`,
+          }));
+
+        if (vehicleSchedule.length > 0) {
+          schedules.push({
+            date: dataStr,
+            dateDisplay:
+              i === 0 ? "Hoje" : i === 1 ? "Amanhã" : `${dia}/${mes}`,
+            dayOfWeek: data.getDay(),
+            schedules: vehicleSchedule,
+          });
+        }
+      }
+
+      return schedules;
+    } catch (error) {
+      console.error("Erro ao obter horários para múltiplos dias:", error);
+      return [];
+    }
+  }
+
+  // Modifique também o método getVehicleSchedule existente para usar o novo formato:
+  getVehicleSchedule(vehiclePrefix, scheduleData) {
+    const filtered = scheduleData.filter(
+      (departure) => departure.vehicle === vehiclePrefix
+    );
+
+    return filtered
+      .map((departure) => ({
+        ...departure,
+        date: this.getCurrentDate(),
+        dateDisplay: "Hoje",
+      }))
+      .sort((a, b) => {
+        const [aHours, aMinutes] = a.time.split(":").map(Number);
+        const [bHours, bMinutes] = b.time.split(":").map(Number);
+        return aHours * 60 + aMinutes - (bHours * 60 + bMinutes);
+      });
+  }
+
+  // Adicione este método auxiliar:
+  getCurrentDate() {
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+    return `${ano}-${mes}-${dia}`;
+  }
+
   // Obter partidas filtradas por operação (exclui linhas encerradas)
   getFilteredDepartures() {
     const allDepartures = this.getAllUpcomingDepartures();

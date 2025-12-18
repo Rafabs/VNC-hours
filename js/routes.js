@@ -431,12 +431,6 @@ class RoutesApp {
             ${trip.destination || ""}<br>
             ${percInt}% do trajeto — Faltam ${remainingMin} min
           </div>
-          <div class="vehicle-icon"
-              style="background:linear-gradient(180deg, ${trip.bgColor}, ${
-            trip.bgColor
-          }CC);
-                      border-radius:8px;">
-            <i data-lucide="${vt.icon}"></i>
           </div>
           <div class="vehicle-label">${trip.vehicle}</div>
           ${this.renderBusImage(trip.type, trip.model, ida)}

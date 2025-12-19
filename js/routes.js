@@ -119,7 +119,7 @@ class RoutesApp {
 
     // Atualiza uma vez por segundo (estável e suficiente)
     update();
-    setInterval(update, 1000);
+    setInterval(update, 10000);
   }
 
   renderWaiting(data) {

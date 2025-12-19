@@ -165,25 +165,22 @@ class RoutesApp {
         const label = `${d.line} • ${d.vehicle}`;
         const destino = d.destination || "";
         return `
-        <div class="waiting-item" title="${destino}">
-          <div class="vehicle-meta">
-            <i data-lucide="${vt.icon}" class="vehicle-icon" style="--bus-color:${d.bgColor}"></i>
-            <div style="display:flex;flex-direction:column;">
-              <strong style="font-size:0.95em">${label}</strong>
-              <small style="opacity:.8">${destino}</small>
+          <div class="waiting-item" title="${destino}">
+            <div class="vehicle-meta">
+              <div class="vehicle-info">
+                <strong class="vehicle-label">${label}</strong>
+                <small class="vehicle-dest">${destino}</small>
+              </div>
             </div>
-          </div>
 
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <div style="font-size:11px; color:var(--accent-yellow); display:flex; justify-content:flex-end;">
+            <div class="vehicle-time">
               <span>${mins} min</span>
             </div>
-          </div>
 
-          <div style="display:flex;flex-direction:column;align-items:flex-end;">
-            <div style="font-size:11px; color:rgba(255,255,255,0.45)">${d.time}</div>
+            <div class="vehicle-extra">
+              <span class="vehicle-clock">${d.time}</span>
+            </div>
           </div>
-        </div>
       `;
       })
       .join("");

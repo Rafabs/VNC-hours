@@ -252,7 +252,7 @@ body {
   margin-bottom: 12px;
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: 16px;
+  gap: 6px;
   align-items: center;
   font-size: 0.95rem;
   transition: var(--transition);
@@ -285,18 +285,6 @@ body {
   display: flex;
   gap: 12px;
   align-items: center;
-}
-
-.vehicle-icon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  color: var(--accent-yellow);
-  flex-shrink: 0;
 }
 
 .vehicle-meta > div {
@@ -1388,7 +1376,7 @@ body {
   }
   
   .reserve-vehicle {
-    height: 130px;
+    height: 160px;
     padding: 2px;
   }
   

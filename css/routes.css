@@ -1739,3 +1739,500 @@ body {
     max-height: 600px; /* Ou a altura que desejar para o painel */
     padding-right: 10px; /* Espaço para a scrollbar não cobrir o card */
 }
+
+/* ===== AJUSTES ESPECÍFICOS PARA MOBILE ===== */
+
+/* Ajuste principal para mobile */
+@media (max-width: 768px) {
+  .yard-main-layout {
+    grid-template-columns: 1fr !important; /* Força 1 coluna em mobile */
+    gap: 16px;
+    padding: 16px;
+    overflow-x: hidden;
+  }
+  
+  .yard-card {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  /* Remove grid-column para evitar sobreposição */
+  .yard-card:nth-child(3) {
+    grid-column: 1 !important;
+  }
+}
+
+/* Smartphones Pequenos (< 576px) */
+@media (max-width: 576px) {
+  .yard-main-layout {
+    padding: 12px;
+    gap: 12px;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  
+  .yard-card {
+    min-width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 12px;
+  }
+  
+  /* Ajuste das grids internas para caber na tela */
+  .waiting-5-grid,
+  .waiting-10-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+  
+  .yard-grid {
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  /* Ajuste do container de cards laterais */
+  .side-panels {
+    padding: 10px;
+    gap: 16px;
+    height: auto;
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+  /* Ajuste dos cards dentro do side-panels */
+  .side-panels .card {
+    min-width: 100% !important;
+    margin-bottom: 16px;
+  }
+}
+
+/* Smartphones Muito Pequenos (< 480px) */
+@media (max-width: 480px) {
+  .waiting-5-grid,
+  .waiting-10-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .yard-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .lane {
+    min-height: 100px;
+  }
+  
+  /* Ajuste do header do card para mobile */
+  .yard-card-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  
+  .yard-stats {
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .count-badge {
+    font-size: 0.9rem;
+    padding: 6px 16px;
+  }
+  
+  /* Ajuste do grid de reserva */
+  .reserve-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px;
+    padding: 8px;
+  }
+  
+  .reserve-vehicle {
+    height: 140px;
+  }
+}
+
+/* Orientação Landscape Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .yard-main-layout {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+  
+  .yard-card {
+    min-height: 300px;
+  }
+  
+  .waiting-5-grid,
+  .waiting-10-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    grid-auto-rows: 120px;
+  }
+  
+  .lane {
+    min-height: 120px;
+  }
+}
+
+/* Ajuste para evitar overflow horizontal */
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+  
+  .routes-main-layout,
+  .yard-main-layout,
+  .side-panels {
+    width: 100%;
+    overflow-x: hidden;
+  }
+  
+  /* Scroll horizontal suave para grids muito largas */
+  .yard-content-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+  }
+  
+  /* Indicador visual de scroll */
+  .yard-content-scroll::-webkit-scrollbar {
+    height: 4px;
+  }
+}
+
+/* Ajuste de texto para não quebrar layout */
+@media (max-width: 576px) {
+  .vehicle-prefix,
+  .reserve-prefix {
+    font-size: 1.2rem;
+    word-break: break-word;
+  }
+  
+  .vehicle-line,
+  .reserve-model {
+    font-size: 0.8rem;
+  }
+  
+  /* Ajuste dos botões de filtro */
+  .reserve-filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .filter-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+/* Ajuste para tablets em modo retrato */
+@media (max-width: 992px) and (min-width: 769px) {
+  .yard-main-layout {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .waiting-5-grid,
+  .waiting-10-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* Garantir que não haja margens excessivas */
+@media (max-width: 768px) {
+  .card, .route-card, .yard-card {
+    margin: 0 0 16px 0;
+    padding: 16px;
+  }
+  
+  .card:last-child,
+  .yard-card:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Ajuste para visualização de tooltips em mobile */
+@media (max-width: 768px) {
+  .vehicle-tooltip {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    max-width: 90vw;
+    z-index: 9999;
+  }
+  
+  .vehicle-marker:hover .vehicle-tooltip {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* ===== AJUSTES ESPECÍFICOS PARA MOBILE - ROTAS ===== */
+
+/* Tablets Pequenos (768px - 992px) */
+@media (max-width: 768px) {
+  .routes-container {
+    min-width: 100% !important;
+    overflow-x: hidden;
+  }
+  
+  .route-card {
+    overflow-x: auto;
+    padding: 16px;
+  }
+  
+  .route-line {
+    margin: 30px 0;
+    min-width: 600px; /* Força uma largura mínima para a linha */
+  }
+  
+  .route-line-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 10px;
+  }
+  
+  .vehicle-marker {
+    min-width: 80px; /* Garante espaço mínimo para os marcadores */
+  }
+  
+  .bus-img {
+    width: 70px; /* Reduz ainda mais para mobile */
+  }
+  
+  .vehicle-label {
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+}
+
+/* Smartphones Grandes (576px - 768px) */
+@media (max-width: 576px) {
+  .routes-main-layout {
+    flex-direction: column;
+    overflow-x: hidden;
+  }
+  
+  .routes-container {
+    width: 100vw;
+    margin-left: -12px;
+    margin-right: -12px;
+    padding: 0 12px;
+  }
+  
+  .route-card {
+    margin: 0;
+    border-radius: 12px;
+    overflow-x: auto;
+  }
+  
+  .route-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .route-line-container {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .route-line {
+    min-width: 800px; /* Largura suficiente para todos os ônibus */
+    height: 8px;
+    margin: 25px 0;
+  }
+  
+  .bus-img {
+    width: 60px;
+  }
+  
+  .vehicle-label {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+  
+  /* Ajuste para tooltips em mobile */
+  .vehicle-tooltip {
+    position: fixed;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    max-width: 90vw;
+    z-index: 9999;
+  }
+}
+
+/* Smartphones Pequenos (< 576px) */
+@media (max-width: 480px) {
+  .route-line {
+    min-width: 700px;
+    height: 6px;
+    margin: 20px 0;
+  }
+  
+  .bus-img {
+    width: 50px;
+  }
+  
+  .vehicle-marker {
+    gap: 6px;
+  }
+  
+  .vehicle-label {
+    font-size: 8px;
+    padding: 2px 4px;
+  }
+  
+  .route-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .route-direction {
+    font-size: 0.85rem;
+    margin: 15px 0 8px;
+  }
+}
+
+/* Orientação Landscape Mobile */
+@media (max-height: 600px) and (orientation: landscape) {
+  .routes-container {
+    min-height: 400px;
+  }
+  
+  .route-line {
+    min-width: 600px;
+    margin: 20px 0;
+  }
+  
+  .bus-img {
+    width: 50px;
+  }
+  
+  .vehicle-label {
+    font-size: 9px;
+  }
+}
+
+/* Scroll horizontal personalizado para linhas de rota */
+.route-line-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.route-line-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.route-line-container::-webkit-scrollbar-thumb {
+  background: var(--accent-yellow);
+  border-radius: 3px;
+}
+
+.route-line-container::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-orange);
+}
+
+/* Indicador visual de que há mais conteúdo para o lado */
+.route-line-container:after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  background: linear-gradient(90deg, transparent, var(--card-bg));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.route-line-container.scrollable:after {
+  opacity: 1;
+}
+
+/* Ajuste para rolagem suave em iOS */
+.route-line-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Container para envolver a linha e permitir scroll */
+.route-line-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Ajuste do layout principal em mobile */
+@media (max-width: 768px) {
+  .routes-main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .routes-container, .side-panels {
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Garante que os cards de rota tenham scroll horizontal quando necessário */
+  .route-card {
+    position: relative;
+  }
+  
+  /* Adiciona padding inferior para espaço da scrollbar */
+  .route-card > div:last-child {
+    padding-bottom: 8px;
+  }
+}
+
+/* Indicador de que há mais conteúdo (seta ou pontos) */
+.scroll-indicator {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent-yellow);
+  font-size: 1.5rem;
+  animation: bounce-horizontal 2s infinite;
+  z-index: 10;
+  display: none;
+}
+
+@keyframes bounce-horizontal {
+  0%, 100% { transform: translateY(-50%) translateX(0); }
+  50% { transform: translateY(-50%) translateX(-5px); }
+}
+
+@media (max-width: 768px) {
+  .scroll-indicator {
+    display: block;
+  }
+}
+
+/* Ajuste para evitar quebra de layout */
+@media (max-width: 768px) {
+  .vehicle-marker {
+    transform-origin: center center;
+  }
+  
+  .vehicle-marker:hover .bus-img {
+    transform: scale(1.05) translateY(-2px); /* Reduz efeito hover em mobile */
+  }
+}
+
+/* Ajuste específico para quando há muitos ônibus na linha */
+@media (max-width: 768px) {
+  .route-line.high-density {
+    min-width: 1000px;
+  }
+  
+  .route-line.medium-density {
+    min-width: 800px;
+  }
+  
+  .route-line.low-density {
+    min-width: 600px;
+  }
+}

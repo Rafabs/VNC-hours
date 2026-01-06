@@ -10,10 +10,6 @@ class YardManager {
     this.waiting10Count = document.getElementById("waiting10Count");
     this.reserveCount = document.getElementById("reserveCount");
     this.unavailableCount = document.getElementById("unavailableCount");
-    this.nextDepartures5 = document.getElementById("nextDepartures5");
-    this.nextDepartures10 = document.getElementById("nextDepartures10");
-    this.departureTimes5 = document.getElementById("departureTimes5");
-    this.departureTimes10 = document.getElementById("departureTimes10");
     this.reserveFilters = document.getElementById("reserveFilters");
     this.parkedMapping = new Map(); // Chave: Prefixo, Valor: { yardId, laneId, slotIndex }
   }

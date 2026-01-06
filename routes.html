@@ -27,6 +27,7 @@
 
   <div class="routes-main-layout">
     <div class="routes-container" id="routesContainer">
+      <!-- As rotas serão geradas dinamicamente aqui pelo routes.js -->
     </div>
 
     <aside class="side-panels">
@@ -34,7 +35,6 @@
         <h3>🕒 Aguardando Partida</h3>
         <div class="waiting-list"></div>
       </div>
-
     </aside>
   </div>
 
@@ -58,40 +58,41 @@
         <span class="capacity">Capacidade: 20 Padrão / 10 Articulado</span>
         <span class="count-badge" id="waiting10Count">0</span>
       </div>
-      <div class="yard-content-scroll">
-        <div class="yard-grid" id="waiting5Grid"></div>
-      </div>
+    </div>
+    <div class="yard-content-scroll">
       <div class="yard-grid waiting-10-grid" id="waiting10Grid"></div>
     </div>
+  </div>
 
-    <!-- Card 3: Reserva e Indisponíveis -->
-    <div class="yard-card reserve-card">
-      <div class="yard-card-header">
-        <h3><i data-lide="shield"></i> Frota VNC - Reserva e Indisponíveis</h3>
-        <div class="yard-stats">
-          <span class="capacity">Carros no Pátio</span>
-          <div class="count-group">
-            <span class="count-badge available-count" id="reserveCount">0</span>
-            <span class="count-badge unavailable-count" id="unavailableCount">0</span>
-          </div>
-        </div>
-      </div>
-      <div class="reserve-grid-container">
-        <div class="reserve-filters" id="reserveFilters">
-          <!-- Filtros serão inseridos aqui via JavaScript -->
-        </div>
-        <div class="reserve-grid" id="reserveGrid">
-          <!-- Veículos reserva e indisponíveis serão gerados dinamicamente -->
+  <!-- Card 3: Reserva e Indisponíveis -->
+  <div class="yard-card reserve-card">
+    <div class="yard-card-header">
+      <h3><i data-lucide="shield"></i> Frota VNC - Reserva e Indisponíveis</h3>
+      <div class="yard-stats">
+        <span class="capacity">Carros no Pátio</span>
+        <div class="count-group">
+          <span class="count-badge available-count" id="reserveCount">0</span>
+          <span class="count-badge unavailable-count" id="unavailableCount">0</span>
         </div>
       </div>
     </div>
+    <div class="reserve-grid-container">
+      <div class="reserve-filters" id="reserveFilters">
+        <!-- Filtros serão inseridos aqui via JavaScript -->
+      </div>
+      <div class="reserve-grid" id="reserveGrid">
+        <!-- Veículos reserva e indisponíveis serão gerados dinamicamente -->
+      </div>
+    </div>
+  </div>
 
-    <script src="js/translations.js"></script>
-    <script src="js/csvLoader.js"></script>
-    <script src="js/schedule.js"></script>
-    <script src="js/routes.js"></script>
-    <script src="js/vehicleManager.js"></script>
-    <script src="js/yardmanager.js"></script>
+  <!-- Scripts -->
+  <script src="js/translations.js"></script>
+  <script src="js/csvLoader.js"></script>
+  <script src="js/schedule.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="js/vehicleManager.js"></script>
+  <script src="js/yardmanager.js"></script>
 
 </body>
 

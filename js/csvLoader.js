@@ -285,54 +285,24 @@ generateNextDays(daysCount) {
   return files;
 }
 
-// Novo método para carregar arquivo de uma data específica
 async loadScheduleForDate(dateString) {
   try {
     const fileName = `${this.formatarDataParaArquivo(dateString)}_tabela_horaria.json`;
     const filePath = `./data/${fileName}`;
     
-    console.log(`📅 Tentando carregar escala para ${dateString}: ${filePath}`);
-    
     const response = await fetch(filePath);
+    
+    // Se o arquivo não existir, retornamos null em vez de buscar o fallback
     if (!response.ok) {
-      // Se não encontrar arquivo específico, usar modelo padrão baseado no dia da semana
-      const date = new Date(dateString);
-      const dayOfWeek = date.getDay(); // 0=Domingo, 1=Segunda, etc.
-      
-      let scheduleType;
-      if (dayOfWeek === 0 || this.isHoliday(date)) {
-        scheduleType = "dom_fer";
-      } else if (dayOfWeek === 6) {
-        scheduleType = "sab";
-      } else {
-        scheduleType = "seg_sex";
-      }
-      
-      return await this.loadCSVData(scheduleType);
+      console.log(`⚠️ Arquivo não encontrado para ${dateString}.`);
+      return null; 
     }
     
     const jsonData = await response.json();
-    const formattedData = this.formatData(jsonData);
-    
-    console.log(`✅ Escala carregada para ${dateString}: ${formattedData.length} horários`);
-    return formattedData;
+    return this.formatData(jsonData);
   } catch (error) {
-    console.error(`❌ Erro ao carregar escala para ${dateString}:`, error);
-    
-    // Fallback para modelo padrão baseado no dia da semana
-    const date = new Date(dateString);
-    const dayOfWeek = date.getDay();
-    
-    let scheduleType;
-    if (dayOfWeek === 0 || this.isHoliday(date)) {
-      scheduleType = "dom_fer";
-    } else if (dayOfWeek === 6) {
-      scheduleType = "sab";
-    } else {
-      scheduleType = "seg_sex";
-    }
-    
-    return await this.loadCSVData(scheduleType);
+    console.error(`❌ Erro técnico ao acessar data ${dateString}:`, error);
+    return null;
   }
-}  
+} 
 }

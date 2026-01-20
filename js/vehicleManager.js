@@ -56,7 +56,7 @@ class VehicleManager {
       console.log(
         "Dados dos veículos carregados:",
         this.vehicles.size,
-        "veículos da VNC"
+        "veículos da VNC",
       );
       return this.vehicles;
     } catch (error) {
@@ -71,7 +71,7 @@ class VehicleManager {
     console.log(
       "Dados de horário definidos para frota:",
       this.currentScheduleData.length,
-      "partidas"
+      "partidas",
     );
   }
 
@@ -160,14 +160,14 @@ class VehicleManager {
           vehicle.proximaViagem = this.findNextTrip(
             vehicle.prefixo,
             this.currentScheduleData,
-            currentTime
+            currentTime,
           );
         } else if (currentTime > retornoTime) {
           // Buscar próxima viagem
           vehicle.proximaViagem = this.findNextTrip(
             vehicle.prefixo,
             this.currentScheduleData,
-            currentTime
+            currentTime,
           );
 
           // Se tem próxima viagem em breve, preparar status
@@ -273,7 +273,7 @@ class VehicleManager {
     const minutes = totalMinutes % 60;
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
       2,
-      "0"
+      "0",
     )}`;
   }
 
@@ -460,7 +460,7 @@ class VehicleManager {
   getVehicleStats(vehiclePrefix, scheduleData) {
     const vehicleSchedule = this.getVehicleSchedule(
       vehiclePrefix,
-      scheduleData
+      scheduleData,
     );
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -486,99 +486,109 @@ class VehicleManager {
     };
   }
 
-  // Obter estatísticas do veículo para múltiplos dias
+  // Obter estatísticas do veículo para múltiplos dias (APENAS se existir arquivo JSON)
   async getVehicleMultiDayStats(vehiclePrefix, scheduleManager, days = 7) {
-    if (
-      !scheduleManager ||
-      typeof scheduleManager.getVehicleScheduleForMultipleDays !== "function"
-    ) {
-      console.warn("ScheduleManager não suporta múltiplos dias");
-      const stats = this.getVehicleStats(
-        vehiclePrefix,
-        this.currentScheduleData
-      );
-      return {
-        totalDays: 1,
-        days: [
-          {
-            date: new Date().toISOString().split("T")[0],
-            dateDisplay: "Hoje",
-            ...stats,
-          },
-        ],
-      };
+    if (!scheduleManager) {
+      console.error("ScheduleManager não fornecido");
+      return { totalDays: 0, days: [] };
     }
 
     try {
-      const multiDaySchedules =
-        await scheduleManager.getVehicleScheduleForMultipleDays(
-          vehiclePrefix,
-          days
-        );
-
+      const daysStats = [];
       const now = new Date();
       const currentTime = now.getHours() * 60 + now.getMinutes();
 
-      const daysStats = multiDaySchedules.map((dayData) => {
-        const dayDate = new Date(dayData.date);
-        const isToday = dayDate.toDateString() === now.toDateString();
+      // Gerar as datas para os próximos dias
+      const nextDays = [];
+      for (let i = 0; i < days; i++) {
+        const date = new Date();
+        date.setDate(date.getDate() + i);
+        const dateISO = date.toISOString().split("T")[0];
 
-        let completedTrips = 0;
-        let pendingTrips = 0;
-        let inProgressTrips = 0;
+        // Formatação para exibição (Ex: "Seg, 20/05")
+        const display =
+          i === 0
+            ? "Hoje"
+            : date.toLocaleDateString("pt-BR", {
+                weekday: "short",
+                day: "2-digit",
+                month: "2-digit",
+              });
 
-        dayData.schedules.forEach((departure) => {
-          const [hours, minutes] = departure.time.split(":").map(Number);
-          const departureTime = hours * 60 + minutes;
-          const retornoTime = departureTime + (departure.duracao || 45);
+        nextDays.push({ date: dateISO, display: display });
+      }
 
-          if (!isToday || currentTime > retornoTime) {
-            completedTrips++;
-          } else if (
-            isToday &&
-            currentTime >= departureTime &&
-            currentTime <= retornoTime
-          ) {
-            inProgressTrips++;
-          } else {
-            pendingTrips++;
+      // Processar cada dia individualmente buscando o arquivo físico
+      for (const day of nextDays) {
+        // O loadScheduleForDate no CSVLoader deve retornar null se o fetch falhar (404)
+        const daySchedules =
+          await scheduleManager.csvLoader.loadScheduleForDate(day.date);
+
+        // ✅ REGRA: Só processa se o arquivo .json existir e tiver dados
+        if (
+          daySchedules &&
+          Array.isArray(daySchedules) &&
+          daySchedules.length > 0
+        ) {
+          const vehicleSchedule = daySchedules.filter(
+            (departure) => departure.vehicle === vehiclePrefix,
+          );
+
+          // Só adicionamos o dia à lista se o veículo específico tiver viagens escaladas
+          if (vehicleSchedule.length > 0) {
+            const isToday = day.date === now.toISOString().split("T")[0];
+            let completed = 0;
+            let pending = 0;
+            let inProgress = 0;
+
+            vehicleSchedule.forEach((departure) => {
+              const [h, m] = departure.time.split(":").map(Number);
+              const depTime = h * 60 + m;
+              const duracao = departure.duracao || 45;
+              const retornoTime = depTime + duracao;
+
+              if (!isToday || currentTime > retornoTime) {
+                completed++;
+              } else if (
+                isToday &&
+                currentTime >= depTime &&
+                currentTime <= retornoTime
+              ) {
+                inProgress++;
+              } else {
+                pending++;
+              }
+            });
+
+            daysStats.push({
+              date: day.date,
+              dateDisplay: day.display,
+              totalTrips: vehicleSchedule.length,
+              completedTrips: completed,
+              inProgressTrips: inProgress,
+              pendingTrips: pending,
+              schedules: vehicleSchedule.sort((a, b) =>
+                a.time.localeCompare(b.time),
+              ),
+            });
           }
-        });
-
-        return {
-          date: dayData.date,
-          dateDisplay: dayData.dateDisplay,
-          dayOfWeek: dayData.dayOfWeek,
-          totalTrips: dayData.schedules.length,
-          completedTrips,
-          inProgressTrips,
-          pendingTrips,
-          schedules: dayData.schedules,
-        };
-      });
+        } else {
+          console.log(
+            `ℹ️ Pulando dia ${day.date}: Arquivo JSON não encontrado ou vazio.`,
+          );
+        }
+      }
 
       return {
         totalDays: daysStats.length,
         days: daysStats,
       };
     } catch (error) {
-      console.error("Erro ao obter estatísticas de múltiplos dias:", error);
-
-      // Fallback para dados de hoje apenas
-      const stats = this.getVehicleStats(
-        vehiclePrefix,
-        this.currentScheduleData
+      console.error(
+        "Erro crítico ao obter estatísticas de múltiplos dias:",
+        error,
       );
-      return {
-        totalDays: 1,
-        days: [
-          {
-            date: new Date().toISOString().split("T")[0],
-            dateDisplay: "Hoje",
-            ...stats,
-          },
-        ],
-      };
+      return { totalDays: 0, days: [] };
     }
   }
 }

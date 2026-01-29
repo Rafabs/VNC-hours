@@ -1,22 +1,96 @@
-// yardmanager.js - VERSÃO CORRIGIDA PARA CONTAGEM DE SLOTS
+// yardmanager.js - Adicionar persistência no localStorage
+
 class YardManager {
   constructor() {
     this.vehicleManager = null;
     this.scheduleManager = null;
+
+    // Elementos das grids de valas
     this.waiting5Grid = document.getElementById("waiting5Grid");
     this.waiting10Grid = document.getElementById("waiting10Grid");
     this.reserveGrid = document.getElementById("reserveGrid");
+
+    // Contadores
     this.waiting5Count = document.getElementById("waiting5Count");
     this.waiting10Count = document.getElementById("waiting10Count");
     this.reserveCount = document.getElementById("reserveCount");
     this.unavailableCount = document.getElementById("unavailableCount");
+
+    // Filtros
     this.reserveFilters = document.getElementById("reserveFilters");
-    this.parkedMapping = new Map(); // Chave: Prefixo, Valor: { yardId, laneId, slotIndex }
+
+    // ✅ PERSISTÊNCIA: Carregar mapeamento salvo do localStorage
+    this.parkedMapping = this.loadParkedMapping();
+
+    this.checkElements();
+  }
+
+  // ✅ CARREGAR MAPEAMENTO SALVO
+  loadParkedMapping() {
+    try {
+      const saved = localStorage.getItem("yardParkedMapping");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        const map = new Map();
+        Object.entries(parsed).forEach(([key, value]) => {
+          map.set(key, value);
+        });
+        console.log(
+          "📂 Mapeamento carregado do localStorage:",
+          map.size,
+          "veículos",
+        );
+        return map;
+      }
+    } catch (error) {
+      console.error("Erro ao carregar mapeamento:", error);
+    }
+    return new Map(); // Retorna mapa vazio se não houver dados salvos
+  }
+
+  // ✅ SALVAR MAPEAMENTO
+  saveParkedMapping() {
+    try {
+      const obj = Object.fromEntries(this.parkedMapping.entries());
+      localStorage.setItem("yardParkedMapping", JSON.stringify(obj));
+    } catch (error) {
+      console.error("Erro ao salvar mapeamento:", error);
+    }
+  }
+
+  // ✅ LIMPAR VAGA QUANDO VEÍCULO SAI
+  clearVehicleSlot(prefixo) {
+    if (this.parkedMapping.has(prefixo)) {
+      this.parkedMapping.delete(prefixo);
+      this.saveParkedMapping(); // Salvar alteração
+      console.log(`🗑️ Vaga liberada para veículo ${prefixo}`);
+    }
+  }
+
+  checkElements() {
+    const elements = {
+      waiting5Grid: this.waiting5Grid,
+      waiting10Grid: this.waiting10Grid,
+      reserveGrid: this.reserveGrid,
+      waiting5Count: this.waiting5Count,
+      waiting10Count: this.waiting10Count,
+      reserveCount: this.reserveCount,
+      unavailableCount: this.unavailableCount,
+      reserveFilters: this.reserveFilters,
+    };
+
+    for (const [name, element] of Object.entries(elements)) {
+      if (!element) {
+        console.warn(`Elemento ${name} não encontrado no DOM`);
+      }
+    }
   }
 
   async initialize(vehicleManager, scheduleManager) {
     this.vehicleManager = vehicleManager;
     this.scheduleManager = scheduleManager;
+
+    // Inicializar primeiro display
     await this.updateYardDisplays();
 
     // Atualizar a cada 10 segundos
@@ -31,16 +105,7 @@ class YardManager {
 
     // 1. Obter APENAS veículos com status "AGUARDANDO"
     const waitingVehicles = this.vehicleManager.getVehiclesAguardando();
-
     console.log(`Encontrados ${waitingVehicles.length} veículos AGUARDANDO`);
-    console.log(
-      "Detalhes dos veículos AGUARDANDO:",
-      waitingVehicles.map((v) => ({
-        prefixo: v.prefixo,
-        tipo: v.tipo,
-        proximaViagem: v.proximaViagem,
-      }))
-    );
 
     // 2. Obter veículos de RESERVA
     const reserveVehicles = this.vehicleManager.getVehiclesReserva();
@@ -48,144 +113,315 @@ class YardManager {
     // 3. Obter todos os veículos para encontrar os EM MANUTENÇÃO
     const allVehicles = Array.from(this.vehicleManager.vehicles.values());
     const maintenanceVehicles = allVehicles.filter(
-      (v) => v.status === "EM MANUTENÇÃO"
+      (v) => v.status === "EM MANUTENÇÃO",
     );
 
     // 4. Distribuir TODOS os veículos AGUARDANDO nos estacionamentos
     this.distributeWaitingVehicles(waitingVehicles);
 
-    // 5. Atualizar próximas partidas
-    this.updateNextDepartures(waitingVehicles);
-
-    // 6. Atualizar grid de reserva
+    // 5. Atualizar grid de reserva
     this.updateReserveGrid(reserveVehicles, maintenanceVehicles);
   }
 
-  distributeWaitingVehicles(waitingVehicles) {
-    this.waiting5Grid.innerHTML = "";
-    this.waiting10Grid.innerHTML = "";
+  // Método para atualizar veículo específico quando termina viagem
+  updateVehicleStatus(prefixo, newStatus, tripData = null) {
+    const vehicle = this.vehicleManager.vehicles.get(prefixo);
+    if (!vehicle) return;
 
-    // Ordenar por horário de saída (quem sai primeiro ocupa a vala)
-    const sorted = [...waitingVehicles].sort((a, b) => {
-      const timeA = this.getMinutesUntilDeparture(a.proximaViagem);
-      const timeB = this.getMinutesUntilDeparture(b.proximaViagem);
-      return timeA - timeB;
-    });
+    const oldStatus = vehicle.status;
 
-    // Configuração dos estacionamentos baseada na sua regra
-    const setupLanes = (count) =>
-      Array.from({ length: count }, (_, i) => ({
-        id: i + 1,
-        maxCapacity: 2, // 2 slots (cada padron usa 1, articulado usa 2)
-        usedSlots: 0,
-        vehicles: [],
-      }));
-
-    const yard1 = setupLanes(5); // Estacionamento 1: 5 vias
-    const yard2 = setupLanes(10); // Estacionamento 2: 10 vias
-    const overflowYard = []; // Recolhidos ao pátio
-
-    sorted.forEach((vehicle) => {
-      const isArticulado = /ARTICULAD|SUPER/i.test(vehicle.tipo || "");
-      const neededSlots = isArticulado ? 2 : 1;
-      let allocated = false;
-
-      // Tenta alocar no Estacionamento 1 primeiro, depois no 2
-      for (let yard of [yard1, yard2]) {
-        const lane = yard.find(
-          (l) => l.maxCapacity - l.usedSlots >= neededSlots
-        );
-        if (lane) {
-          lane.vehicles.push(vehicle);
-          lane.usedSlots += neededSlots;
-          allocated = true;
-          break;
+    // ✅ DISPARAR EVENTO DE MUDANÇA DE STATUS
+    if (oldStatus !== newStatus) {
+      const statusEvent = new CustomEvent('vehicleStatusChanged', {
+        detail: {
+          prefixo: prefixo,
+          oldStatus: oldStatus,
+          newStatus: newStatus,
+          timestamp: new Date()
         }
+      });
+      document.dispatchEvent(statusEvent);
+    }
+
+    // ✅ DETECTAR SE O VEÍCULO ESTÁ SAINDO DA VALA (para alinhamento ou viagem)
+    const wasInYard =
+      oldStatus === "AGUARDANDO" ||
+      oldStatus === "NA PLATAFORMA" ||
+      oldStatus === "ALINHANDO NA PLATAFORMA";
+
+    const leavingYard =
+      wasInYard &&
+      (nowInTrip ||
+        newStatus === "NA PLATAFORMA" ||
+        newStatus === "ALINHANDO NA PLATAFORMA");
+
+    // Se veículo está saindo da vala
+    if (leavingYard) {
+      console.log(`🚌 Veículo ${prefixo} saindo da vala para ${newStatus}`);
+      this.clearVehicleSlot(prefixo); // Limpar a vaga
+    }
+
+    // Se veículo acabou de terminar uma viagem
+    if (wasInTrip && !nowInTrip && newStatus !== "EM VIAGEM") {
+      console.log(`🚌 Veículo ${prefixo} finalizou viagem. Movendo para vala.`);
+
+      // Se tem próxima viagem agendada, manter informações
+      if (tripData?.proximaViagem) {
+        vehicle.proximaViagem = tripData.proximaViagem;
+        vehicle.linhaAtual = tripData.linha;
+        vehicle.plataforma = tripData.plataforma;
       }
 
-      if (!allocated) {
-        overflowYard.push(vehicle);
-      }
-    });
+      // Agora está AGUARDANDO para próxima partida
+      vehicle.status = "AGUARDANDO";
+      vehicle.categoria = "aguardando";
 
-    // Renderização
-    this.renderLanes(yard1, this.waiting5Grid);
-    this.renderLanes(yard2, this.waiting10Grid);
+      // Agendar atualização imediata da interface
+      setTimeout(() => {
+        this.updateYardDisplays();
+      }, 100);
+    }
 
-    // Atualiza contadores
-    this.waiting5Count.textContent = yard1.reduce(
-      (acc, l) => acc + l.vehicles.length,
-      0
-    );
-    this.waiting10Count.textContent = yard2.reduce(
-      (acc, l) => acc + l.vehicles.length,
-      0
-    );
+    // Atualizar status do veículo
+    vehicle.status = newStatus;
 
-    // Transbordamento: Soma os indisponíveis (manutenção) + os que não couberam nas valas
-    const maintenanceCount = Array.from(
-      this.vehicleManager.vehicles.values()
-    ).filter((v) => v.status === "EM MANUTENÇÃO").length;
-    this.unavailableCount.textContent = maintenanceCount + overflowYard.length;
+    // Atualizar categoria
+    const statusInfo = this.vehicleManager.vehicleStatus[newStatus];
+    vehicle.categoria = statusInfo?.category || "aguardando";
+
+    // Se veículo acabou de iniciar viagem
+    if (!wasInTrip && nowInTrip) {
+      console.log(`🚌 Veículo ${prefixo} iniciou viagem. Removendo da vala.`);
+
+      // Remover do mapeamento de estacionados
+      this.clearVehicleSlot(prefixo);
+
+      // Atualizar interface
+      setTimeout(() => {
+        this.updateYardDisplays();
+      }, 100);
+    }
   }
 
   distributeWaitingVehicles(waitingVehicles) {
-    // 1. Limpar as grids visualmente, mas manter a lógica de ocupação
+    // Verificar se os elementos existem
+    if (!this.waiting5Grid || !this.waiting10Grid) {
+      console.error("Elementos das grids não encontrados");
+      return;
+    }
+
     this.waiting5Grid.innerHTML = "";
     this.waiting10Grid.innerHTML = "";
 
+    // ✅ ORDENAÇÃO: Primeiro veículos que já têm vaga alocada, depois os novos
+    const sorted = [...waitingVehicles].sort((a, b) => {
+      // Veículos com vaga já alocada vêm primeiro (para manter posições)
+      const hasSlotA = this.parkedMapping.has(a.prefixo);
+      const hasSlotB = this.parkedMapping.has(b.prefixo);
+
+      if (hasSlotA && !hasSlotB) return -1;
+      if (!hasSlotA && hasSlotB) return 1;
+
+      // Se ambos têm ou não têm vaga, ordenar por tempo até partida
+      const timeA = this.getMinutesUntilDeparture(a.proximaViagem);
+      const timeB = this.getMinutesUntilDeparture(b.proximaViagem);
+
+      if (timeA === null && timeB === null) return 0;
+      if (timeA === null) return 1;
+      if (timeB === null) return -1;
+
+      return timeA - timeB;
+    });
+
+    console.log(
+      "Veículos ordenados (com vagas mantidas):",
+      sorted.map((v) => ({
+        prefixo: v.prefixo,
+        temVaga: this.parkedMapping.has(v.prefixo),
+        vagaAtual: this.parkedMapping.get(v.prefixo),
+        proximaViagem: v.proximaViagem,
+        minutosAtePartida: this.getMinutesUntilDeparture(v.proximaViagem),
+      })),
+    );
+
+    // Configuração das valas
     const yard1 = this.generateLaneStructure(5, 1);
     const yard2 = this.generateLaneStructure(10, 2);
     const allLanes = [...yard1, ...yard2];
-
     const overflow = [];
 
-    // 2. Tentar manter os veículos que já estavam estacionados em suas vagas
-    const stillWaiting = new Set(waitingVehicles.map((v) => v.prefixo));
-    for (let [prefix, pos] of this.parkedMapping.entries()) {
-      if (!stillWaiting.has(prefix)) {
-        this.parkedMapping.delete(prefix); // Remove quem já saiu para viagem
-      }
-    }
-
-    // 3. Alocar veículos
-    waitingVehicles.forEach((vehicle) => {
+    // ✅ FASE 1: Colocar veículos que JÁ TÊM VAGA nas suas posições salvas
+    sorted.forEach((vehicle) => {
       const isArticulado = /ARTICULAD|SUPER/i.test(vehicle.tipo || "");
       const neededSlots = isArticulado ? 2 : 1;
 
-      // Se o veículo já tem uma vaga salva, tenta colocar ele lá
-      let pos = this.parkedMapping.get(vehicle.prefixo);
-      let lane = pos
-        ? allLanes.find((l) => l.yardId === pos.yardId && l.id === pos.laneId)
-        : null;
+      const savedPosition = this.parkedMapping.get(vehicle.prefixo);
 
-      // Se não tem vaga ou a vaga antiga está ocupada por erro, busca nova
-      if (!lane || lane.maxCapacity - lane.usedSlots < neededSlots) {
-        lane = allLanes.find((l) => l.maxCapacity - l.usedSlots >= neededSlots);
+      if (savedPosition) {
+        // Encontrar a vala salva
+        const lane = allLanes.find(
+          (l) =>
+            l.yardId === savedPosition.yardId && l.id === savedPosition.laneId,
+        );
 
         if (lane) {
-          this.parkedMapping.set(vehicle.prefixo, {
-            yardId: lane.yardId,
-            laneId: lane.id,
-          });
+          // ✅ VERIFICAÇÃO: A vala ainda está disponível para este veículo?
+          const hasArticuladoInLane = lane.vehicles.some((v) =>
+            /ARTICULAD|SUPER/i.test(v.tipo || ""),
+          );
+
+          const compatibilityCheck = this.checkLaneCompatibility(
+            lane,
+            vehicle,
+            neededSlots,
+            hasArticuladoInLane,
+          );
+
+          if (compatibilityCheck.valid) {
+            lane.vehicles.push(vehicle);
+            lane.usedSlots += neededSlots;
+            console.log(
+              `✅ ${vehicle.prefixo} mantido na vala ${lane.yardId}-${lane.id} (posição salva)`,
+            );
+          } else {
+            console.log(
+              `⚠️ ${vehicle.prefixo} não pode manter vaga: ${compatibilityCheck.reason}`,
+            );
+            // Remover mapeamento inválido
+            this.parkedMapping.delete(vehicle.prefixo);
+            // Será realocado na fase 2
+          }
+        } else {
+          console.log(`⚠️ Vaga salva não encontrada para ${vehicle.prefixo}`);
+          this.parkedMapping.delete(vehicle.prefixo);
+        }
+      }
+    });
+
+    // ✅ FASE 2: Alocar veículos que NÃO TÊM VAGA ou perderam a vaga
+    sorted.forEach((vehicle) => {
+      // Pular veículos já alocados na fase 1
+      const alreadyAllocated = allLanes.some((lane) =>
+        lane.vehicles.some((v) => v.prefixo === vehicle.prefixo),
+      );
+
+      if (alreadyAllocated) return;
+
+      const isArticulado = /ARTICULAD|SUPER/i.test(vehicle.tipo || "");
+      const neededSlots = isArticulado ? 2 : 1;
+
+      // Buscar vaga disponível, começando pelas valas mais próximas da saída (menor número)
+      let lane = null;
+
+      // Ordenar valas por proximidade (yard1 primeiro, depois yard2, e por número de via)
+      const sortedLanes = [...allLanes].sort((a, b) => {
+        if (a.yardId !== b.yardId) return a.yardId - b.yardId;
+        return a.id - b.id;
+      });
+
+      for (const l of sortedLanes) {
+        const hasSpace = l.maxCapacity - l.usedSlots >= neededSlots;
+        const hasArticuladoInLane = l.vehicles.some((v) =>
+          /ARTICULAD|SUPER/i.test(v.tipo || ""),
+        );
+
+        const compatibilityCheck = this.checkLaneCompatibility(
+          l,
+          vehicle,
+          neededSlots,
+          hasArticuladoInLane,
+        );
+
+        if (hasSpace && compatibilityCheck.valid) {
+          lane = l;
+          break;
         }
       }
 
       if (lane) {
         lane.vehicles.push(vehicle);
         lane.usedSlots += neededSlots;
+        this.parkedMapping.set(vehicle.prefixo, {
+          yardId: lane.yardId,
+          laneId: lane.id,
+        });
+        console.log(
+          `✅ ${vehicle.prefixo} alocado na vala ${lane.yardId}-${lane.id} (nova alocação)`,
+        );
       } else {
+        console.log(`❌ ${vehicle.prefixo} não encontrou vaga adequada`);
         overflow.push(vehicle);
       }
     });
 
-    // 4. Renderizar (usando a função de desenho de valas anterior)
+    // ✅ Salvar mapeamento atualizado
+    this.saveParkedMapping();
+
+    // Renderizar valas
     this.renderLanes(yard1, this.waiting5Grid);
     this.renderLanes(yard2, this.waiting10Grid);
 
-    // Atualizar contadores de transbordamento
-    this.unavailableCount.textContent =
-      overflow.length + (this.maintCount || 0);
+    // Atualizar contadores (com verificação)
+    if (this.waiting5Count) {
+      const yard1Count = yard1.reduce((acc, l) => acc + l.vehicles.length, 0);
+      this.waiting5Count.textContent = yard1Count;
+    }
+
+    if (this.waiting10Count) {
+      const yard2Count = yard2.reduce((acc, l) => acc + l.vehicles.length, 0);
+      this.waiting10Count.textContent = yard2Count;
+    }
+
+    // Contar veículos em manutenção para o contador de indisponíveis
+    const maintenanceCount = Array.from(
+      this.vehicleManager.vehicles.values(),
+    ).filter((v) => v.status === "EM MANUTENÇÃO").length;
+
+    if (this.unavailableCount) {
+      this.unavailableCount.textContent = maintenanceCount + overflow.length;
+    }
+
+    // Log de transbordamento
+    if (overflow.length > 0) {
+      console.log(
+        `🚨 ${overflow.length} veículos não couberam nas valas:`,
+        overflow.map((v) => v.prefixo),
+      );
+    }
+
+    // ✅ LOG DAS VALAS FINAIS
+    console.log("Estado final das valas:");
+    allLanes.forEach((lane) => {
+      if (lane.vehicles.length > 0) {
+        console.log(
+          `  Vala ${lane.yardId}-${lane.id}: ${lane.vehicles.map((v) => v.prefixo).join(", ")}`,
+        );
+      } else {
+        console.log(`  Vala ${lane.yardId}-${lane.id}: VAZIA`);
+      }
+    });
+  }
+
+  // ✅ MÉTODO AUXILIAR: Verificar compatibilidade da vala
+  checkLaneCompatibility(lane, vehicle, neededSlots, hasArticuladoInLane) {
+    const isArticulado = neededSlots === 2;
+
+    if (isArticulado && lane.vehicles.length > 0) {
+      return { valid: false, reason: "Articulado precisa de vala vazia" };
+    }
+
+    if (hasArticuladoInLane && !isArticulado) {
+      return {
+        valid: false,
+        reason: "Não pode colocar padrão em vala com articulado",
+      };
+    }
+
+    if (lane.usedSlots + neededSlots > lane.maxCapacity) {
+      return { valid: false, reason: "Capacidade excedida" };
+    }
+
+    return { valid: true, reason: "Compatível" };
   }
 
   generateLaneStructure(count, yardId) {
@@ -199,18 +435,21 @@ class YardManager {
   }
 
   renderLanes(lanes, container) {
-    lanes.forEach((lane, index) => {
+    if (!container) {
+      console.error("Container não encontrado para renderizar valas");
+      return;
+    }
+
+    lanes.forEach((lane) => {
       const laneDiv = document.createElement("div");
-      // Adicionamos um número visual para a via
       laneDiv.className = `yard-lane ${lane.usedSlots === 0 ? "empty" : ""}`;
       laneDiv.innerHTML = `<span style="position:absolute; top:2px; left:5px; font-size:10px; color:#444;">VIA ${lane.id}</span>`;
 
       // Renderiza os veículos presentes
       lane.vehicles.forEach((v) => {
         const isArticulado = /ARTICULAD|SUPER/i.test(v.tipo || "");
-        const linhaExibicao =
-          v.proximaViagemLinha || v.line || v.linhaAtual || "---";
-        const plataformaExibicao = v.proximaPlataforma || v.plataforma || "---";
+        const linhaExibicao = v.linhaAtual || "---";
+        const plataformaExibicao = v.plataforma || "---";
 
         const card = document.createElement("div");
         card.className = `yard-vehicle-card ${
@@ -218,31 +457,30 @@ class YardManager {
         }`;
 
         card.innerHTML = `
-                <div class="v-row-top">
-                    <span class="v-prefix" style="font-size:1.1rem; color:#fff;">${
-                      v.prefixo
-                    }</span>
-                    <span class="v-line-badge">${linhaExibicao}</span>
-                </div>
-                <div class="v-row-mid" style="margin: 8px 0;">
-                    <div class="v-plat-info">
-                        <small>PLAT:</small> <strong>${plataformaExibicao}</strong>
-                    </div>
-                </div>
-                <div class="v-row-bottom">
-                    <span class="v-time" style="font-size:1rem;">${
-                      v.proximaViagem || "--:--"
-                    }</span>
-                    <i data-lucide="${
-                      isArticulado ? "truck" : "bus"
-                    }" style="width:14px; opacity:0.3"></i>
-                </div>
-            `;
+          <div class="v-row-top">
+            <span class="v-prefix" style="font-size:1.1rem; color:#fff;">${
+              v.prefixo
+            }</span>
+            <span class="v-line-badge">${linhaExibicao}</span>
+          </div>
+          <div class="v-row-mid" style="margin: 8px 0;">
+            <div class="v-plat-info">
+              <small>PLAT:</small> <strong>${plataformaExibicao}</strong>
+            </div>
+          </div>
+          <div class="v-row-bottom">
+            <span class="v-time" style="font-size:1rem;">${
+              v.proximaViagem || "--:--"
+            }</span>
+            <i data-lucide="${
+              isArticulado ? "truck" : "bus"
+            }" style="width:14px; opacity:0.3"></i>
+          </div>
+        `;
         laneDiv.appendChild(card);
       });
 
-      // PREENCHIMENTO VISUAL: Se sobrar espaço (ex: via tem 1 padron mas cabe 2)
-      // Adicionamos um "fantasma" da vaga vazia para manter o layout bonito
+      // PREENCHIMENTO VISUAL: Se sobrar espaço
       if (lane.usedSlots === 1) {
         const emptySlot = document.createElement("div");
         emptySlot.className = "lane-slot-empty";
@@ -252,281 +490,31 @@ class YardManager {
 
       container.appendChild(laneDiv);
     });
+
     if (window.lucide) window.lucide.createIcons();
   }
 
-  renderVehicleInLane(vehicle, container, type) {
-    const timeUntil = this.getMinutesUntilDeparture(vehicle.proximaViagem);
-    const card = document.createElement("div");
-    card.className = "yard-vehicle-card";
-    card.setAttribute("data-type", type);
-
-    card.innerHTML = `
-        <div class="v-header">
-            <span>${vehicle.prefixo}</span>
-            <i data-lucide="${
-              type === "articulado" ? "truck" : "bus"
-            }" style="width:14px"></i>
-        </div>
-        <div class="v-info">${vehicle.modelo || "Padrão"}</div>
-        ${
-          vehicle.proximaViagem
-            ? `<div class="v-time">Sai às ${vehicle.proximaViagem}</div>`
-            : ""
-        }
-    `;
-    container.appendChild(card);
-  }
-
-  renderYard(lanes, container, yardNumber) {
-    // Filtrar apenas vias que têm veículos
-    const occupiedLanes = lanes.filter((lane) => lane.vehicles.length > 0);
-
-    console.log(
-      `Estacionamento ${yardNumber}: ${occupiedLanes.length} vias ocupadas`
-    );
-
-    occupiedLanes.forEach((lane) => {
-      const laneElement = document.createElement("div");
-      laneElement.className = `lane occupied ${
-        lane.hasArticulado ? "has-articulated" : ""
-      }`;
-
-      const slotsHTML = lane.vehicles
-        .map(({ vehicle, type }) =>
-          this.renderVehicleSlot(vehicle, type, lane.hasArticulado)
-        )
-        .join("");
-
-      laneElement.innerHTML = `
-        <div class="lane-number">Via ${lane.number}</div>
-        <div class="lane-slots">
-          ${slotsHTML}
-        </div>
-      `;
-
-      container.appendChild(laneElement);
-    });
-
-    // Adicionar vias vazias
-    const emptyLanes = lanes.filter((lane) => lane.vehicles.length === 0);
-    emptyLanes.forEach((lane) => {
-      const emptyLaneElement = document.createElement("div");
-      emptyLaneElement.className = "lane";
-
-      // Mostrar 2 slots vazios para vias sem articulado
-      const emptySlots = lane.hasArticulado ? 1 : 2;
-
-      emptyLaneElement.innerHTML = `
-        <div class="lane-number">Via ${lane.number}</div>
-        <div class="lane-slots">
-          ${'<div class="vehicle-slot"><div class="vehicle-info">VAGO</div></div>'.repeat(
-            emptySlots
-          )}
-        </div>
-      `;
-
-      container.appendChild(emptyLaneElement);
-    });
-  }
-
-  renderVehicleSlot(vehicle, type, hasArticulado) {
-    const minutesUntil = vehicle.proximaViagem
-      ? this.getMinutesUntilDeparture(vehicle.proximaViagem)
-      : null;
-
-    const vehicleColor = this.getVehicleColor(vehicle.tipo);
-    const isArticulado = type === "articulado";
-
-    // Para via com articulado, mostrar apenas 1 slot grande
-    if (hasArticulado) {
-      return `
-        <div class="vehicle-slot occupied articulated" 
-             style="${vehicleColor ? `--vehicle-color: ${vehicleColor}` : ""}"
-             data-prefixo="${vehicle.prefixo}"
-             data-status="AGUARDANDO"
-             data-tipo="${vehicle.tipo}">
-          <div class="vehicle-info">
-            <div class="vehicle-prefix">${vehicle.prefixo}</div>
-            <div class="vehicle-line">${vehicle.linhaAtual || "Sem linha"}</div>
-            <div class="vehicle-type">${this.formatVehicleType(
-              vehicle.tipo
-            )}</div>
-            ${
-              vehicle.proximaViagem
-                ? `
-              <div class="vehicle-time ${
-                minutesUntil <= 30 ? "departing-soon" : ""
-              }">
-                ${vehicle.proximaViagem}
-                ${
-                  minutesUntil !== null
-                    ? `<br><small>(${minutesUntil} min)</small>`
-                    : ""
-                }
-              </div>
-            `
-                : ""
-            }
-          </div>
-          <div class="first-trip-indicator">ARTICULADO</div>
-          ${
-            minutesUntil !== null && minutesUntil <= 30
-              ? '<div class="departure-pulse"></div>'
-              : ""
-          }
-          <div class="vehicle-type-indicator type-${this.getVehicleTypeClass(
-            vehicle.tipo
-          )}"></div>
-          ${this.getVehicleTooltip(vehicle, minutesUntil)}
-        </div>
-      `;
-    }
-
-    // Para veículos padrão
-    return `
-      <div class="vehicle-slot occupied ${type}" 
-           style="${vehicleColor ? `--vehicle-color: ${vehicleColor}` : ""}"
-           data-prefixo="${vehicle.prefixo}"
-           data-status="AGUARDANDO"
-           data-tipo="${vehicle.tipo}">
-        <div class="vehicle-info">
-          <div class="vehicle-prefix">${vehicle.prefixo}</div>
-          <div class="vehicle-line">${vehicle.linhaAtual || "Sem linha"}</div>
-          <div class="vehicle-type">${this.formatVehicleType(
-            vehicle.tipo
-          )}</div>
-          ${
-            vehicle.proximaViagem
-              ? `
-            <div class="vehicle-time ${
-              minutesUntil <= 30 ? "departing-soon" : ""
-            }">
-              ${vehicle.proximaViagem}
-              ${
-                minutesUntil !== null
-                  ? `<br><small>(${minutesUntil} min)</small>`
-                  : ""
-              }
-            </div>
-          `
-              : ""
-          }
-        </div>
-        ${
-          minutesUntil !== null && minutesUntil <= 30
-            ? '<div class="departure-pulse"></div>'
-            : ""
-        }
-        <div class="vehicle-type-indicator type-${this.getVehicleTypeClass(
-          vehicle.tipo
-        )}"></div>
-        ${this.getVehicleTooltip(vehicle, minutesUntil)}
-      </div>
-    `;
-  }
-
-  getVehicleTooltip(vehicle, minutesUntil) {
-    return `
-      <div class="vehicle-tooltip">
-        <div class="tooltip-header">${vehicle.prefixo} - ${vehicle.modelo}</div>
-        <div class="tooltip-line">
-          <span class="tooltip-label">Status:</span>
-          <span class="tooltip-value" style="color: #6f42c1">AGUARDANDO</span>
-        </div>
-        <div class="tooltip-line">
-          <span class="tooltip-label">Tipo:</span>
-          <span class="tooltip-value">${vehicle.tipo || "N/A"}</span>
-        </div>
-        <div class="tooltip-line">
-          <span class="tooltip-label">Linha:</span>
-          <span class="tooltip-value">${vehicle.linhaAtual || "N/A"}</span>
-        </div>
-        <div class="tooltip-line">
-          <span class="tooltip-label">Plataforma:</span>
-          <span class="tooltip-value">${vehicle.plataforma || "N/A"}</span>
-        </div>
-        ${
-          vehicle.proximaViagem
-            ? `
-          <div class="tooltip-line">
-            <span class="tooltip-label">Próxima:</span>
-            <span class="tooltip-value">${vehicle.proximaViagem}</span>
-          </div>
-          <div class="tooltip-line">
-            <span class="tooltip-label">Falta:</span>
-            <span class="tooltip-value">${minutesUntil} minutos</span>
-          </div>
-        `
-            : ""
-        }
-        ${
-          vehicle.ultimaPartida
-            ? `
-          <div class="tooltip-line">
-            <span class="tooltip-label">Última partida:</span>
-            <span class="tooltip-value">${vehicle.ultimaPartida}</span>
-          </div>
-        `
-            : ""
-        }
-      </div>
-    `;
-  }
-
-  updateNextDepartures(waitingVehicles) {
-    // Pegar todas as próximas partidas dos veículos AGUARDANDO
-    const allDepartures = waitingVehicles
-      .filter((v) => v.proximaViagem)
-      .map((v) => ({
-        time: v.proximaViagem,
-        prefixo: v.prefixo,
-        tipo: v.tipo,
-        minutes: this.getMinutesUntilDeparture(v.proximaViagem),
-      }))
-      .sort((a, b) => a.minutes - b.minutes);
-
-    console.log(`Próximas partidas encontradas: ${allDepartures.length}`);
-
-    // Dividir entre os estacionamentos (5 primeiros no 1, próximos no 2)
-    const yard1Departures = allDepartures.slice(0, 5);
-    const yard2Departures = allDepartures.slice(5, 10);
-
-    // Atualizar displays
-    this.departureTimes5.innerHTML = yard1Departures
-      .map(
-        (d) =>
-          `<span class="departure-time" title="${d.prefixo} - ${d.tipo}">${d.time}</span>`
-      )
-      .join("");
-
-    this.departureTimes10.innerHTML = yard2Departures
-      .map(
-        (d) =>
-          `<span class="departure-time" title="${d.prefixo} - ${d.tipo}">${d.time}</span>`
-      )
-      .join("");
-
-    // Se não houver partidas
-    if (yard1Departures.length === 0) {
-      this.departureTimes5.innerHTML =
-        '<span class="no-departures">Sem partidas</span>';
-    }
-
-    if (yard2Departures.length === 0) {
-      this.departureTimes10.innerHTML =
-        '<span class="no-departures">Sem partidas</span>';
-    }
-  }
-
   updateReserveGrid(reserveVehicles, maintenanceVehicles) {
+    if (!this.reserveGrid) {
+      console.error("Elemento reserveGrid não encontrado");
+      return;
+    }
+
     const allReserve = [...reserveVehicles, ...maintenanceVehicles];
 
-    this.reserveCount.textContent = reserveVehicles.length;
-    this.unavailableCount.textContent = maintenanceVehicles.length;
+    // Atualizar contadores (com verificação)
+    if (this.reserveCount) {
+      this.reserveCount.textContent = reserveVehicles.length;
+    }
+
+    if (this.unavailableCount) {
+      // Já foi atualizado no distributeWaitingVehicles, mas podemos atualizar novamente
+      const maintenanceCount = maintenanceVehicles.length;
+      this.unavailableCount.textContent = maintenanceCount;
+    }
 
     console.log(
-      `Reserva: ${reserveVehicles.length}, Manutenção: ${maintenanceVehicles.length}`
+      `Reserva: ${reserveVehicles.length}, Manutenção: ${maintenanceVehicles.length}`,
     );
 
     this.reserveGrid.innerHTML = "";
@@ -558,7 +546,7 @@ class YardManager {
           ${isMaintenance ? "MANUTENÇÃO" : "DISPONÍVEL"}
         </div>
         <div class="vehicle-type-indicator type-${this.getVehicleTypeClass(
-          vehicle.tipo
+          vehicle.tipo,
         )}"></div>
       `;
 
@@ -566,12 +554,14 @@ class YardManager {
     });
 
     // Criar filtros se não existirem
-    if (this.reserveFilters.children.length === 0) {
+    if (this.reserveFilters && this.reserveFilters.children.length === 0) {
       this.createReserveFilters();
     }
   }
 
   createReserveFilters() {
+    if (!this.reserveFilters) return;
+
     this.reserveFilters.innerHTML = `
       <button class="filter-btn active" data-filter="all">Todos</button>
       <button class="filter-btn" data-filter="available">Disponíveis</button>
@@ -641,14 +631,23 @@ class YardManager {
   }
 
   getMinutesUntilDeparture(departureTime) {
-    if (!departureTime) return null;
+    if (!departureTime || departureTime === "--:--") return null;
 
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
     const [hours, minutes] = departureTime.split(":").map(Number);
-    const departureMinutes = hours * 60 + minutes;
 
-    const diff = departureMinutes - currentTime;
+    if (isNaN(hours) || isNaN(minutes)) return null;
+
+    const departureMinutes = hours * 60 + minutes;
+    let diff = departureMinutes - currentTime;
+
+    // Se for negativo mas menos de 12 horas, pode ser partida no dia seguinte
+    if (diff < -720) {
+      // -12 horas
+      diff += 1440; // Adiciona um dia
+    }
+
     return diff > 0 ? diff : 0;
   }
 
@@ -720,11 +719,13 @@ class YardManager {
   }
 }
 
-// Inicializar quando o DOM estiver carregado
-document.addEventListener("DOMContentLoaded", async () => {
-  const yardManager = new YardManager();
+// yardmanager.js - ATUALIZAR A INICIALIZAÇÃO
 
-  console.log("Inicializando YardManager...");
+document.addEventListener("DOMContentLoaded", async () => {
+  // ✅ EXPOR GLOBALMENTE
+  window.yardManager = new YardManager();
+
+  console.log("🚀 Inicializando Sistema de Pátio...");
 
   // Aguardar um pouco para que o RoutesApp seja inicializado
   setTimeout(async () => {
@@ -733,15 +734,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       const vehicleManager = new VehicleManager();
       const scheduleManager = new ScheduleManager();
 
-      console.log("Carregando dados dos veículos...");
+      console.log("📦 Carregando dados dos veículos...");
 
       // Carregar dados
       await vehicleManager.loadVehicleData();
       await scheduleManager.loadScheduleData();
 
-      console.log(`Veículos carregados: ${vehicleManager.vehicles.size}`);
+      console.log(`✅ Veículos carregados: ${vehicleManager.vehicles.size}`);
       console.log(
-        `Partidas no schedule: ${
+        `✅ Partidas no schedule: ${
           scheduleManager.scheduleData ? scheduleManager.scheduleData.length : 0
         }`
       );
@@ -753,28 +754,85 @@ document.addEventListener("DOMContentLoaded", async () => {
       ) {
         vehicleManager.setCurrentScheduleData(scheduleManager.scheduleData);
         vehicleManager.updateVehicleWithSchedule();
+        
+        // ✅ INICIAR MONITORAMENTO DE STATUS
+        if (vehicleManager.startStatusMonitoring) {
+          vehicleManager.startStatusMonitoring();
+        }
 
-        console.log("Veículos atualizados com dados do schedule");
+        console.log("✅ Veículos atualizados com dados do schedule");
+      }
+
+      // ✅ INICIAR ATUALIZAÇÃO AUTOMÁTICA DO SCHEDULE
+      if (scheduleManager.startAutoRefresh) {
+        scheduleManager.startAutoRefresh();
       }
 
       // Inicializar YardManager
       yardManager.initialize(vehicleManager, scheduleManager);
 
-      console.log("YardManager inicializado com sucesso!");
+      console.log("🎯 Sistema de pátio totalmente inicializado!");
 
-      // Atualizar periodicamente (a cada 30 segundos)
-      setInterval(() => {
-        if (
-          scheduleManager.scheduleData &&
-          scheduleManager.scheduleData.length > 0
-        ) {
-          vehicleManager.setCurrentScheduleData(scheduleManager.scheduleData);
-          vehicleManager.updateVehicleWithSchedule();
-          yardManager.updateYardDisplays();
-        }
-      }, 30000);
+      // ✅ ADICIONAR BOTÃO DE ATUALIZAÇÃO MANUAL PARA DEBUG
+      this.addDebugButton();
+
     } catch (error) {
-      console.error("Erro ao inicializar YardManager:", error);
+      console.error("❌ Erro ao inicializar sistema:", error);
     }
   }, 2000);
 });
+
+// ✅ ADICIONAR BOTÃO DE DEBUG
+function addDebugButton() {
+  const debugBtn = document.createElement('button');
+  debugBtn.innerHTML = '🔄 Atualizar Pátio';
+  debugBtn.style.cssText = `
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10000;
+    padding: 8px 16px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  `;
+  
+  debugBtn.onclick = () => {
+    console.log('🔘 Botão de atualização manual pressionado');
+    if (window.yardManager && window.yardManager.performUpdate) {
+      window.yardManager.performUpdate();
+    }
+  };
+  
+  document.body.appendChild(debugBtn);
+  
+  // Adicionar também contador de atualizações
+  const counterDiv = document.createElement('div');
+  counterDiv.id = 'yardUpdateCounter';
+  counterDiv.style.cssText = `
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    z-index: 10000;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: monospace;
+  `;
+  counterDiv.innerHTML = 'Atualizações: 0';
+  
+  document.body.appendChild(counterDiv);
+  
+  // Atualizar contador
+  setInterval(() => {
+    if (window.yardManager) {
+      counterDiv.innerHTML = `Atualizações: ${window.yardManager.updateCount || 0}`;
+    }
+  }, 1000);
+}

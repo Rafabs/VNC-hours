@@ -9,17 +9,24 @@ class ScheduleManager {
 
     this.csvLoader = new CSVLoader();
     this.scheduleData = [];
+    this.updateInterval = null;
+    this.lastUpdateTime = null;
   }
 
   // Carregar dados dos CSVs
   async loadScheduleData(fileSelection = null) {
     try {
+      // ✅ DISPARAR EVENTO após carregar dados
+      this.triggerScheduleUpdate();
+
+      // ✅ INICIAR ATUALIZAÇÃO AUTOMÁTICA
+      this.startAutoUpdate();
       const csvData = await this.csvLoader.loadCSVData(fileSelection);
       this.scheduleData = this.csvLoader.getFormattedData();
       console.log(
         "Dados de partidas carregados:",
         this.scheduleData.length,
-        "registros"
+        "registros",
       );
       return this.scheduleData;
     } catch (error) {
@@ -27,6 +34,44 @@ class ScheduleManager {
       // Em caso de erro, usar dados de fallback
       this.scheduleData = this.getFallbackData();
       return this.scheduleData;
+    }
+  }
+
+  // ✅ MÉTODO PARA INICIAR ATUALIZAÇÃO AUTOMÁTICA
+  startAutoUpdate() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+
+    // Atualizar a cada 5 segundos (ajuste conforme necessário)
+    this.updateInterval = setInterval(async () => {
+      try {
+        // Simular uma nova carga de dados (ou buscar do servidor se tiver)
+        this.triggerScheduleUpdate();
+      } catch (error) {
+        console.error("Erro na atualização automática:", error);
+      }
+    }, 5000);
+  }
+
+  // ✅ MÉTODO PARA DISPARAR EVENTO DE ATUALIZAÇÃO
+  triggerScheduleUpdate() {
+    this.lastUpdateTime = new Date();
+    const event = new CustomEvent("scheduleUpdated", {
+      detail: {
+        scheduleData: this.scheduleData,
+        timestamp: this.lastUpdateTime,
+      },
+    });
+    document.dispatchEvent(event);
+    console.log("📅 Schedule atualizado e evento disparado");
+  }
+
+  // ✅ MÉTODO PARA PARAR ATUALIZAÇÕES (se necessário)
+  stopAutoUpdate() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+      this.updateInterval = null;
     }
   }
 
@@ -76,7 +121,7 @@ class ScheduleManager {
       const dadosNovos = this.scheduleData.length;
 
       console.log(
-        `🔄 Dados atualizados: ${dadosAntigos} → ${dadosNovos} registros`
+        `🔄 Dados atualizados: ${dadosAntigos} → ${dadosNovos} registros`,
       );
 
       // Verificar se houve mudanças significativas
@@ -176,7 +221,7 @@ class ScheduleManager {
     });
 
     console.log(
-      `📋 Partidas futuras: ${filtered.length} de ${this.scheduleData.length}`
+      `📋 Partidas futuras: ${filtered.length} de ${this.scheduleData.length}`,
     );
     return filtered;
   }
@@ -234,7 +279,7 @@ class ScheduleManager {
     const retornoDate = new Date(partidaDate.getTime() + duracao * 60000);
 
     return `${String(retornoDate.getHours()).padStart(2, "0")}:${String(
-      retornoDate.getMinutes()
+      retornoDate.getMinutes(),
     ).padStart(2, "0")}`;
   }
 
@@ -329,7 +374,7 @@ class ScheduleManager {
 
     // Buscar todas as partidas da linha
     const lineDepartures = this.scheduleData.filter(
-      (departure) => departure.line === line
+      (departure) => departure.line === line,
     );
 
     if (lineDepartures.length === 0) return false;
@@ -424,7 +469,7 @@ class ScheduleManager {
   // Modifique também o método getVehicleSchedule existente para usar o novo formato:
   getVehicleSchedule(vehiclePrefix, scheduleData) {
     const filtered = scheduleData.filter(
-      (departure) => departure.vehicle === vehiclePrefix
+      (departure) => departure.vehicle === vehiclePrefix,
     );
 
     return filtered
@@ -485,5 +530,38 @@ class ScheduleManager {
     });
 
     return sortedDepartures;
+  }
+
+  // ✅ MÉTODO PARA ATUALIZAÇÃO AUTOMÁTICA
+  startAutoRefresh() {
+    console.log('🔄 Iniciando atualização automática do schedule...');
+    
+    // Atualizar a cada 30 segundos (ajuste conforme necessário)
+    setInterval(async () => {
+      try {
+        console.log('⏰ Atualizando dados do schedule...');
+        
+        // Fazer uma cópia dos dados anteriores para comparar
+        const previousData = this.scheduleData ? [...this.scheduleData] : [];
+        
+        // Recarregar dados (simulação - você pode ajustar para buscar do servidor)
+        // await this.loadScheduleData(); // Descomente se quiser recarregar
+        
+        // Disparar evento de atualização
+        const event = new CustomEvent('scheduleRefreshed', {
+          detail: {
+            previousCount: previousData.length,
+            currentCount: this.scheduleData.length,
+            timestamp: new Date()
+          }
+        });
+        document.dispatchEvent(event);
+        
+        console.log('✅ Schedule refrescado');
+        
+      } catch (error) {
+        console.error('❌ Erro ao refrescar schedule:', error);
+      }
+    }, 30000); // 30 segundos
   }
 }

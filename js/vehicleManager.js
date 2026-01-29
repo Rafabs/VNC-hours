@@ -41,6 +41,75 @@ class VehicleManager {
       },
     };
     this.currentScheduleData = []; // Armazenar dados do horário ativo
+    this.updateInterval = null;
+    this.isUpdating = false;
+  }
+
+  // ✅ MÉTODO PARA INICIAR ATUALIZAÇÃO AUTOMÁTICA
+  startAutoUpdate() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+    }
+
+    // Atualizar veículos a cada 2 segundos (mais frequente que o schedule)
+    this.updateInterval = setInterval(() => {
+      if (!this.isUpdating && this.currentScheduleData.length > 0) {
+        this.isUpdating = true;
+
+        try {
+          // Fazer uma cópia dos dados atuais para comparar depois
+          const vehiclesBefore = Array.from(this.vehicles.values()).map(
+            (v) => ({
+              prefixo: v.prefixo,
+              status: v.status,
+              categoria: v.categoria,
+            }),
+          );
+
+          // Atualizar veículos
+          this.updateVehicleWithSchedule();
+
+          // Verificar se houve mudanças
+          const vehiclesAfter = Array.from(this.vehicles.values()).map((v) => ({
+            prefixo: v.prefixo,
+            status: v.status,
+            categoria: v.categoria,
+          }));
+
+          // Disparar evento se houver mudanças
+          if (
+            JSON.stringify(vehiclesBefore) !== JSON.stringify(vehiclesAfter)
+          ) {
+            this.triggerVehicleUpdate();
+          }
+        } catch (error) {
+          console.error("Erro na atualização automática de veículos:", error);
+        } finally {
+          this.isUpdating = false;
+        }
+      }
+    }, 2000);
+  }
+
+  // ✅ MÉTODO PARA DISPARAR EVENTO DE ATUALIZAÇÃO
+  triggerVehicleUpdate() {
+    const stats = this.getFleetStatistics();
+    const event = new CustomEvent("vehiclesUpdated", {
+      detail: {
+        statistics: stats,
+        timestamp: new Date(),
+      },
+    });
+    document.dispatchEvent(event);
+    console.log("🚌 Veículos atualizados e evento disparado");
+  }
+
+  // ✅ MÉTODO PARA PARAR ATUALIZAÇÕES
+  stopAutoUpdate() {
+    if (this.updateInterval) {
+      clearInterval(this.updateInterval);
+      this.updateInterval = null;
+    }
   }
 
   // Carregar dados dos veículos
@@ -118,6 +187,13 @@ class VehicleManager {
 
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
+
+    const previouslyInTrip = new Set();
+    this.vehicles.forEach((vehicle) => {
+      if (vehicle.status === "EM VIAGEM") {
+        previouslyInTrip.add(vehicle.prefixo);
+      }
+    });
 
     // Resetar status APENAS para veículos que não estão em viagem
     this.vehicles.forEach((vehicle) => {
@@ -240,6 +316,31 @@ class VehicleManager {
       if (vehicle.status === "AGUARDANDO" && !vehicle.linhaAtual) {
         vehicle.status = "RESERVA";
         vehicle.categoria = "reserva";
+      }
+      const nowInTrip = new Set();
+      this.vehicles.forEach((vehicle) => {
+        if (vehicle.status === "EM VIAGEM") {
+          nowInTrip.add(vehicle.prefixo);
+        }
+      });
+
+      // Veículos que ESTAVAM em viagem mas AGORA NÃO estão mais
+      const finishedTrips = Array.from(previouslyInTrip).filter(
+        (prefix) => !nowInTrip.has(prefix),
+      );
+
+      if (finishedTrips.length > 0) {
+        console.log(
+          `🎯 Veículos que terminaram viagem: ${finishedTrips.join(", ")}`,
+        );
+
+        // Disparar evento personalizado para notificar outros componentes
+        finishedTrips.forEach((prefix) => {
+          const event = new CustomEvent("vehicleTripFinished", {
+            detail: { prefixo: prefix },
+          });
+          document.dispatchEvent(event);
+        });
       }
     });
   }
@@ -589,6 +690,73 @@ class VehicleManager {
         error,
       );
       return { totalDays: 0, days: [] };
+    }
+  } // <-- Adicionado fechamento do método getVehicleMultiDayStats
+
+  // ✅ MÉTODO PARA OBSERVAR MUDANÇAS NOS VEÍCULOS
+  startStatusMonitoring() {
+    console.log('👀 Iniciando monitoramento de status dos veículos...');
+    
+    // Monitorar a cada 2 segundos
+    setInterval(() => {
+      this.checkForStatusChanges();
+    }, 2000);
+  }
+
+  // ✅ MÉTODO PARA VERIFICAR MUDANÇAS DE STATUS
+  checkForStatusChanges() {
+    if (!this.currentScheduleData || this.currentScheduleData.length === 0) {
+      return;
+    }
+
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    
+    // Fazer uma cópia dos status atuais
+    const previousStatuses = new Map();
+    this.vehicles.forEach((vehicle, prefixo) => {
+      previousStatuses.set(prefixo, {
+        status: vehicle.status,
+        categoria: vehicle.categoria,
+        linhaAtual: vehicle.linhaAtual,
+        plataforma: vehicle.plataforma
+      });
+    });
+
+    // Atualizar status
+    this.updateVehicleWithSchedule();
+
+    // Verificar quais veículos mudaram
+    const changedVehicles = [];
+    this.vehicles.forEach((vehicle, prefixo) => {
+      const previous = previousStatuses.get(prefixo);
+      if (previous && (
+        previous.status !== vehicle.status ||
+        previous.categoria !== vehicle.categoria ||
+        previous.linhaAtual !== vehicle.linhaAtual ||
+        previous.plataforma !== vehicle.plataforma
+      )) {
+        changedVehicles.push({
+          prefixo: prefixo,
+          oldStatus: previous.status,
+          newStatus: vehicle.status,
+          oldCategoria: previous.categoria,
+          newCategoria: vehicle.categoria
+        });
+      }
+    });
+
+    // Disparar evento se houver mudanças
+    if (changedVehicles.length > 0) {
+      console.log(`🔄 ${changedVehicles.length} veículos mudaram de status:`, changedVehicles);
+      
+      const event = new CustomEvent('vehicleStatusesChanged', {
+        detail: {
+          changedVehicles: changedVehicles,
+          timestamp: now
+        }
+      });
+      document.dispatchEvent(event);
     }
   }
 }

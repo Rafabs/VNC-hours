@@ -2085,37 +2085,33 @@ function gerarResumoCompleto() {
     };
 }
 
-// Exportar para JSON no padrão dd_mm_yyyy_tabela_horaria.json
 function exportarJSON() {
-    if (!escalaAtual.horarios || escalaAtual.horarios.length === 0) {
-        alert('Nenhuma escala para exportar! Atribua veículos aos horários primeiro.');
-        return;
-    }
-
     const data = document.getElementById('dataEscala').value;
+    const tipoDia = document.getElementById('tipoDia').value;
+    
     if (!data) {
-        alert('Selecione uma data!');
+        alert('Selecione uma data para exportar!');
         return;
     }
 
-    // Usar a data corrigida
+    const chaveExclusao = `${data}_${tipoDia}`;
+    const linhasExcluidasHoje = linhasExcluidas[chaveExclusao] || [];
+
+    const dadosParaExportar = horariosPredefinidos.filter(horario => 
+        !linhasExcluidasHoje.includes(horario.LINHA)
+    );
+
+    // Continue com a lógica de exportação usando 'dadosParaExportar' em vez de 'horariosPredefinidos'
     const dataFormatada = formatarDataParaArquivoCorrigida(data);
     const nomeArquivo = `${dataFormatada}_tabela_horaria.json`;
-
-    const dataStr = JSON.stringify(escalaAtual.horarios, null, 2);
-    const dataBlob = new Blob([dataStr], {type: 'application/json'});
     
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(dataBlob);
-    link.download = nomeArquivo;
-    link.click();
-    
-    console.log('Escala exportada:', {
-        arquivo: nomeArquivo,
-        horarios: escalaAtual.horarios.length
-    });
-
-    alert(`✅ Arquivo exportado com sucesso!\n\n📁 Nome: ${nomeArquivo}\n📅 Data: ${formatarData(data)}\n🕒 Horários: ${escalaAtual.horarios.length}`);
+    const blob = new Blob([JSON.stringify(dadosParaExportar, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nomeArquivo;
+    a.click();
+    URL.revokeObjectURL(url);
 }
 
 // Funções de abas

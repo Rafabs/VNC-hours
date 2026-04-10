@@ -1270,6 +1270,46 @@
     "GARAGEM": "VILA NOVA CACHOEIRINHA"
   },
   {
+    "PREFIXO": "EW-001",
+    "MODELO": "PARADISO G8 1800 DD",
+    "TIPO": "PADRON",
+    "PORTAS_LE": 0,
+    "PORTAS_LD": 3,
+    "PLACA": "LAB2W01",
+    "STATUS_OP": "EM FÁBRICA",
+    "GARAGEM": "VILA NOVA CACHOEIRINHA"
+  },  
+  {
+    "PREFIXO": "EW-002",
+    "MODELO": "PARADISO G8 1800 DD",
+    "TIPO": "PADRON",
+    "PORTAS_LE": 0,
+    "PORTAS_LD": 3,
+    "PLACA": "LAB2W02",
+    "STATUS_OP": "EM FÁBRICA",
+    "GARAGEM": "VILA NOVA CACHOEIRINHA"
+  },  
+  {
+    "PREFIXO": "EW-003",
+    "MODELO": "PARADISO G8 1800 DD",
+    "TIPO": "PADRON",
+    "PORTAS_LE": 0,
+    "PORTAS_LD": 3,
+    "PLACA": "LAB2W03",
+    "STATUS_OP": "EM FÁBRICA",
+    "GARAGEM": "VILA NOVA CACHOEIRINHA"
+  },  
+  {
+    "PREFIXO": "EW-004",
+    "MODELO": "PARADISO G8 1800 DD",
+    "TIPO": "PADRON",
+    "PORTAS_LE": 0,
+    "PORTAS_LD": 3,
+    "PLACA": "LAB2W04",
+    "STATUS_OP": "EM FÁBRICA",
+    "GARAGEM": "VILA NOVA CACHOEIRINHA"
+  },        
+  {
     "PREFIXO": "-A 2086",
     "MODELO": "APACHE VIP 4",
     "TIPO": "PADRON",

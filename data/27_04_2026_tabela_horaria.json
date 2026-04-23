@@ -2010,16 +2010,6 @@
     "DURACAO": 174
   },
   {
-    "PARADA": "05",
-    "PARTIDA": "16:55",
-    "BG_COLOR": "#525252",
-    "TXT_COLOR": "#FFFFFF",
-    "LINHA": "L008/42",
-    "DESTINO": "JARDIM CENTENÁRIO (CIRC.)",
-    "CARRO": "48-02545",
-    "DURACAO": 52
-  },
-  {
     "PARADA": "08",
     "PARTIDA": "16:56",
     "BG_COLOR": "#92D050",

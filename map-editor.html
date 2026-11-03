@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Editor de Traçado - VNC</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/map-editor.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="header">
+    <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
+    <div class="header-title">Editor de Traçado</div>
+    <div class="header-actions">
+      <select id="selLinha" class="field-input"></select>
+      <input id="inputNovaLinha" class="field-input" placeholder="Nova linha (ex: L002/10)" style="width:140px" />
+      <button id="btnAddLinha" class="file-btn">+ LINHA</button>
+      <button id="btnImport" class="file-btn">IMPORTAR</button>
+      <button id="btnExport" class="file-btn primary">EXPORTAR</button>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <aside class="segments-panel">
+    <div class="segments-header">
+      <h3>Trechos</h3>
+      <span id="segmentCount" class="count-badge">0</span>
+    </div>
+    <div id="segmentsList" class="segments-list"></div>
+    <div class="segments-footer">
+      <div class="hint-small">Modo: <b id="drawMode">aguardando 1º clique</b></div>
+      <div class="mode-buttons">
+        <button id="btnModoDesenho" class="file-btn active-mode">✏️ DESENHAR</button>
+        <button id="btnModoSemaforo" class="file-btn">🚦 SEMÁFORO</button>
+        <button id="btnModoParada" class="file-btn">🚏 PARADA</button>
+        <button id="btnModoEditar" class="file-btn">↕️ EDITAR VÉRTICES</button>
+      </div>
+      <button id="btnCancelDraw" class="file-btn">CANCELAR</button>
+    </div>
+  </aside>
+
+  <div id="statusToast" class="status-toast hidden"></div>
+  <input type="file" id="fileInput" accept=".json" hidden />
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/mapEditor.js"></script>
+</body>
+</html>

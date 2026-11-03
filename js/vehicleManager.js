@@ -98,6 +98,7 @@ class VehicleManager {
       detail: {
         statistics: stats,
         timestamp: new Date(),
+        vehicleManager: this,   // ← ADICIONE ESTA LINHA
       },
     });
     document.dispatchEvent(event);

@@ -1,523 +1,384 @@
-class RoutesApp {
-  constructor() {
-    this.scheduleManager = new ScheduleManager();
-    this.routesContainer = document.getElementById("routesContainer");
-    this.waitingList = document.querySelector(".waiting-list");
-    this.reserveList = document.querySelector(".reserve-list");
-    this.clockElement = document.getElementById("clock");
-    this.dateElement = document.getElementById("date");
-    this.lucide = window.lucide || null;
-    this.init();
-  }
+/* ============================================================
+   routes.html - Oficial
+   - Importa data/tracados-vnc.json automaticamente
+   - Carrega scheduleData
+   - Inicia VehicleManager + trajectorySimulator
+   - Painel "Em Viagem" no sidebar
+   - Toggle de semáforos/paradas no header
+   ============================================================ */
 
-  async init() {
-    // Carrega dados de horários
-    const scheduleData = await this.scheduleManager.loadScheduleData();
+const ROUTES_CFG = {
+  TRACADOS_URL: 'data/tracados-vnc.json',
+};
 
-    // 🔹 Carrega dados da frota
-    const fleetData = await fetch("./data/vehicles.json").then((r) => r.json());
-    this.fleetMap = {};
-    fleetData.forEach((v) => {
-      this.fleetMap[v.PREFIXO.toUpperCase()] = {
-        modelo: v.MODELO,
-        tipo: v.TIPO,
-        status: v.STATUS_OP,
-        garagem: v.GARAGEM, // ← Agora carrega a informação da garagem
-        bgColor: this.pickColorForLine(v.PREFIXO),
-      };
-    });
+let rotasMap;
+let tracadosData = null;
+let scheduleData = null;
+let vehicleManager = null;
 
-    // 🔹 Enriquecimento dos dados de viagem
-    scheduleData.forEach((d, i) => {
-      d.bgColor = d.bgColor || this.pickColorForLine(d.line, i);
-      d.textColor = d.textColor || "#fff";
-      d.duracao = d.duracao || 60;
+const layersTrecho = new Map();
+const semaforoMarkersGlobais = new Map();
+const paradaMarkersGlobais   = new Map();
+const visibilidade = { semaforos: true, paradas: true };
+const CORES = { ida: '#2ecc71', volta: '#3498db' };
 
-      const prefixo = (d.vehicle || "").toUpperCase().trim();
-      if (this.fleetMap[prefixo]) {
-        d.model = this.fleetMap[prefixo].modelo;
-        d.type = this.fleetMap[prefixo].tipo;
-        d.garagem = this.fleetMap[prefixo].garagem; // ← Também adiciona garagem aos escalados
-      }
-    });
+/* ---------- Mapa ---------- */
+function initRotasMap() {
+  rotasMap = L.map('map').setView([-23.5505, -46.6333], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap', maxZoom: 19,
+  }).addTo(rotasMap);
+  window.rotasMap = () => rotasMap;
+}
 
-    this.renderWaiting(scheduleData);
-    this.renderReserve(scheduleData);
-    this.startRealtimeUpdate(scheduleData);
+/* ---------- Desenho ---------- */
+function desenharTracados(tracados) {
+  // Limpa layers antigos
+  layersTrecho.forEach(l => rotasMap.removeLayer(l));
+  layersTrecho.clear();
+  semaforoMarkersGlobais.forEach(m => rotasMap.removeLayer(m));
+  semaforoMarkersGlobais.clear();
+  paradaMarkersGlobais.forEach(m => rotasMap.removeLayer(m));
+  paradaMarkersGlobais.clear();
 
-    // Atualiza relógio + tema
-    this.updateClock();
-    setInterval(() => this.updateClock(), 1000);
-  }
-  updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, "0");
-    const m = String(now.getMinutes()).padStart(2, "0");
-    const s = String(now.getSeconds()).padStart(2, "0");
-    if (this.clockElement) this.clockElement.textContent = `${h}:${m}:${s}`;
+  if (!tracados?.linhas) return;
 
-    const d = String(now.getDate()).padStart(2, "0");
-    const mo = String(now.getMonth() + 1).padStart(2, "0");
-    const y = now.getFullYear();
-    if (this.dateElement) this.dateElement.textContent = `${d}/${mo}/${y}`;
+  const bbox = [];
 
-    // tema dia/noite automático
-    document.body.dataset.theme =
-      now.getHours() >= 6 && now.getHours() < 18 ? "day" : "night";
-  }
+  tracados.linhas.forEach(linha => {
+    const coresLinha = buscarCoresLinhaNoSchedule(linha.linha);
+    const corBg  = coresLinha.bg;
+    const corTxt = coresLinha.txt;
 
-  pickColorForLine(line, idx = 0) {
-    // Paleta agradável para diferenciar linhas
-    const palette = [
-      "#FF6F00",
-      "#FFC107",
-      "#D32F2F",
-      "#FF7043",
-      "#40E0D0",
-      "#2196F3",
-      "#9C27B0",
-      "#4CAF50",
-    ];
-    // stable-ish pick based on hash
-    let hash = 0;
-    for (let i = 0; i < line.length; i++)
-      hash = (hash << 5) - hash + line.charCodeAt(i);
-    const pick = Math.abs(hash) % palette.length;
-    return palette[pick];
-  }
+    ['ida', 'volta'].forEach(sentido => {
+      // 1) Trechos
+      (linha[sentido]?.trechos || []).forEach(t => {
+        const latlngs = t.geometria.map(p => [p.lat, p.lng]);
+        latlngs.forEach(p => bbox.push(p));
 
-  // Decide tipo de veículo pelo texto (tenta cobrir vários padrões)
-  detectVehicleType(vehicleStr = "") {
-    const s = vehicleStr.toLowerCase();
-    if (/ele(tric|tro)|e-|spark|ev|elétrico/.test(s))
-      return { type: "electric", icon: "zap" };
-    if (/articulad|artic|biart|art/.test(s))
-      return { type: "articulado", icon: "truck" };
-    if (/micro|microônibus|micro-bus|midibus|van/.test(s))
-      return { type: "micro", icon: "shopping-bag" };
-    if (/metro|metrô|tren|trem|tram/.test(s))
-      return { type: "tram", icon: "train" };
-    if (/res|r\/|reserve|standby|stand/.test(s))
-      return { type: "reserve", icon: "clock" };
-    return { type: "bus", icon: "bus" };
-  }
+        // Halo branco por baixo
+        const halo = L.polyline(latlngs, {
+          color: '#ffffff', weight: 10, opacity: .6,
+          lineCap: 'round', lineJoin: 'round',
+        }).addTo(rotasMap).bringToBack();
+        layersTrecho.set(`${linha.linha}-${sentido}-${t.id}-halo`, halo);
 
-  // Atualização contínua (render em loop)
-  startRealtimeUpdate(data) {
-    const update = () => {
-      this.renderWaiting(data);
-      this.renderReserve(data);
-      this.routesContainer.innerHTML = "";
-      this.renderRoutes(data);
-
-      if (this.lucide && typeof this.lucide.replace === "function") {
-        try {
-          this.lucide.replace();
-        } catch (e) {}
-      }
-    };
-
-    // Atualiza uma vez por segundo (estável e suficiente)
-    update();
-    setInterval(update, 10000);
-  }
-
-  renderWaiting(data) {
-    const now = new Date();
-    const nowMins = now.getHours() * 60 + now.getMinutes();
-
-    // Consideramos os próximos 10 veículos que partem (ordenados por tempo)
-    const waiting = data
-      .map((d) => ({ ...d }))
-      .filter((d) => {
-        const [h, m] = d.time.split(":").map(Number);
-        const dep = h * 60 + m;
-        // partem no futuro (ou no mesmo minuto)
-        return dep >= nowMins;
-      })
-      .sort((a, b) => {
-        const ta = a.time.split(":").map(Number);
-        const tb = b.time.split(":").map(Number);
-        return ta[0] * 60 + ta[1] - (tb[0] * 60 + tb[1]);
-      })
-      .slice(0, 20);
-
-    if (!this.waitingList) return;
-
-    if (waiting.length === 0) {
-      this.waitingList.innerHTML = "<em>Nenhum veículo aguardando</em>";
-      return;
-    }
-
-    this.waitingList.innerHTML = waiting
-      .map((d) => {
-        const mins = this.scheduleManager.minutesUntilDeparture(d.time);
-        // progress relativo em janela de 30 minutos -> 0..100
-        const windowMin = 30;
-        const pct = Math.max(
-          4,
-          Math.min(
-            100,
-            Math.round((1 - Math.min(windowMin, mins) / windowMin) * 100)
-          )
+        // Traçado na cor da linha
+        const poly = L.polyline(latlngs, {
+          color: corBg, weight: 6,
+          opacity: sentido === 'ida' ? .95 : .75,
+          dashArray: sentido === 'volta' ? '10,6' : null,
+          lineCap: 'round', lineJoin: 'round',
+        }).addTo(rotasMap);
+        poly.bindTooltip(
+          `${linha.linha} • ${sentido.toUpperCase()} • ${t.nome} • ${t.velocidade_kmh} km/h`,
+          { sticky: true }
         );
-        const vt = this.detectVehicleType(d.vehicle, d.model, d.type);
-        const label = `${d.line} • ${d.vehicle}`;
-        const destino = d.destination || "";
-        return `
-          <div class="waiting-item" title="${destino}">
-            <div class="vehicle-meta">
-              <div class="vehicle-info">
-                <strong class="vehicle-label">${label}</strong>
-                <small class="vehicle-dest">${destino}</small>
-              </div>
-            </div>
+        layersTrecho.set(`${linha.linha}-${sentido}-${t.id}`, poly);
+      });
 
-            <div class="vehicle-time">
-              <span>${mins} min</span>
-            </div>
-
-            <div class="vehicle-extra">
-              <span class="vehicle-clock">${d.time}</span>
-            </div>
-          </div>
-      `;
-      })
-      .join("");
-  }
-
-  renderReserve(data) {
-    if (!this.reserveList) return;
-    const now = new Date();
-
-    // 🔹 Obter todos os veículos escalados para hoje
-    const scheduledVehicles = new Set();
-    data.forEach((d) => {
-      if (d.vehicle && d.vehicle.trim()) {
-        scheduledVehicles.add(d.vehicle.toUpperCase().trim());
-      }
-    });
-
-    // 🔹 Filtrar veículos da frota que NÃO estão escalados e são da VILA NOVA CACHOEIRINHA
-    const reserveVehicles = [];
-    const processedPrefixos = new Set(); // Para evitar duplicatas
-
-    Object.keys(this.fleetMap).forEach((prefixo) => {
-      const vehicleInfo = this.fleetMap[prefixo];
-
-      // Pular se já processamos este prefixo
-      if (processedPrefixos.has(prefixo)) return;
-
-      // Verifica se o veículo é da VILA NOVA CACHOEIRINHA e está EM OPERAÇÃO
-      if (
-        vehicleInfo.garagem === "VILA NOVA CACHOEIRINHA" &&
-        vehicleInfo.status === "EM OPERAÇÃO" &&
-        !scheduledVehicles.has(prefixo)
-      ) {
-        reserveVehicles.push({
-          vehicle: prefixo,
-          model: vehicleInfo.modelo,
-          type: vehicleInfo.tipo,
-          garagem: vehicleInfo.garagem,
-          status: "DISPONÍVEL",
-          bgColor: vehicleInfo.bgColor || this.getVehicleColor(prefixo),
+      // 2) Semáforos
+      (linha[sentido]?.semaforos || []).forEach(s => {
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="semaforo-marker">🚦</div>`,
+          iconSize: [22, 22], iconAnchor: [11, 11],
         });
-
-        processedPrefixos.add(prefixo); // Marcar como processado
-      }
-    });
-
-    // 🔹 Também incluir veículos marcados como reserva no schedule (apenas da VNC e EM OPERAÇÃO)
-    const explicitReserve = data.filter((d) => {
-      const prefixo = (d.vehicle || "").toUpperCase().trim();
-      const vehicleInfo = this.fleetMap[prefixo];
-
-      return (
-        vehicleInfo &&
-        vehicleInfo.garagem === "VILA NOVA CACHOEIRINHA" &&
-        vehicleInfo.status === "EM OPERAÇÃO" &&
-        (/(^R$)|\bRES\b|\bRESERVA\b|\bSTANDBY\b|reserve/i.test(d.vehicle) ||
-          !scheduledVehicles.has(prefixo))
-      );
-    });
-
-    // Combinar e remover duplicatas
-    const allReserveMap = new Map();
-
-    // Primeiro adicionar os veículos de reserva explícitos
-    explicitReserve.forEach((vehicle) => {
-      const key = vehicle.vehicle.toUpperCase().trim();
-      if (!allReserveMap.has(key)) {
-        allReserveMap.set(key, vehicle);
-      }
-    });
-
-    // Depois adicionar os veículos não escalados (se não existirem ainda)
-    reserveVehicles.forEach((vehicle) => {
-      const key = vehicle.vehicle.toUpperCase().trim();
-      if (!allReserveMap.has(key)) {
-        allReserveMap.set(key, vehicle);
-      }
-    });
-
-    const allReserve = Array.from(allReserveMap.values()).slice(0, 63);
-
-    // Ordenar por prefixo para melhor visualização
-    allReserve.sort((a, b) => {
-      return a.vehicle.localeCompare(b.vehicle);
-    });
-
-    if (allReserve.length === 0) {
-      this.reserveList.innerHTML = "<em>Nenhum veículo reserva</em>";
-      return;
-    }
-
-    this.reserveList.innerHTML = allReserve
-      .map((d) => {
-        const mins = d.time
-          ? this.scheduleManager.minutesUntilDeparture(d.time)
-          : -1;
-        const vt = this.detectVehicleType(d.vehicle);
-        const label = `${d.vehicle} ${d.line ? "• " + d.line : ""}`;
-        const statusText =
-          d.status || (mins >= 0 ? `Parte em ${mins} min` : "Disponível");
-
-        return `
-      <div class="reserve-item">
-        <div style="display:flex;gap:8px;align-items:center;">
-          <i data-lucide="${vt.icon}" class="vehicle-icon" style="--bus-color:${
-          d.bgColor || "#666"
-        }"></i>
-          <div style="display:flex;flex-direction:column;">
-            <strong style="font-size:0.95em">${label}</strong>
-            <small style="opacity:.8">${
-              d.destination || d.model || "Veículo reserva"
-            }</small>
-          </div>
-        </div>
-
-        <div style="text-align:right;">
-          <div class="status">${statusText}</div>
-          <div style="font-size:11px; color:rgba(255,255,255,0.45)">${
-            d.time || "V.N. CACHOEIRINHA"
-          }</div>
-        </div>
-      </div>
-    `;
-      })
-      .join("");
-  }
-
-  // Adicione este método na classe RoutesApp
-  getVehicleColor(vehicle, index = 0) {
-    if (!vehicle) return "#666";
-
-    // Para veículos já com bgColor
-    if (this.fleetMap[vehicle] && this.fleetMap[vehicle].bgColor) {
-      return this.fleetMap[vehicle].bgColor;
-    }
-
-    // Gerar cor consistente baseada no prefixo do veículo
-    const palette = [
-      "#666666",
-      "#888888",
-      "#555555",
-      "#777777",
-      "#999999",
-      "#6B7280",
-      "#4B5563",
-      "#374151",
-      "#6D7280",
-      "#4B5563",
-    ];
-
-    let hash = 0;
-    for (let i = 0; i < vehicle.length; i++) {
-      hash = (hash << 5) - hash + vehicle.charCodeAt(i);
-    }
-    const pick = Math.abs(hash) % palette.length;
-    return palette[pick];
-  }
-
-  renderRoutes(data) {
-    const now = new Date();
-    const nowMins = now.getHours() * 60 + now.getMinutes();
-    const nowSecs = now.getSeconds();
-
-    const grouped = {};
-    data.forEach((d) => {
-      if (!grouped[d.line]) grouped[d.line] = [];
-      grouped[d.line].push(d);
-    });
-
-    Object.entries(grouped).forEach(([line, trips]) => {
-      trips.sort((a, b) => {
-        const ta = a.time.split(":").map(Number);
-        const tb = b.time.split(":").map(Number);
-        return ta[0] * 60 + ta[1] - (tb[0] * 60 + tb[1]);
+        const mk = L.marker([s.lat, s.lng], { icon }).addTo(rotasMap);
+        mk.bindTooltip(`🚦 ${linha.linha} • ${s.tempo_parada_s}s`, { sticky: true });
+        const k = `${linha.linha}-${sentido}-${s.id}`;
+        semaforoMarkersGlobais.set(k, mk);
+        if (!visibilidade.semaforos) rotasMap.removeLayer(mk);
       });
 
-      const first = trips[0];
-      const card = document.createElement("div");
-      card.className = "route-card";
-
-      card.innerHTML = `
-      <div class="route-header">
-        <div style="display:flex;gap:12px;align-items:center;">
-          <div style="width:12px;height:12px;border-radius:3px;background:${
-            first.bgColor
-          };box-shadow:0 4px 10px ${first.bgColor}22;"></div>
-          <h3 style="margin:0;">${line} — <span style="opacity:.9; font-weight:600">${
-        first.destination || "—"
-      }</span></h3>
-        </div>
-        <span style="font-size:0.95em;opacity:.9">${trips.length} viagens</span>
-      </div>
-
-      <div class="route-direction">➡️ IDA</div>
-      <div class="route-line route-line-ida"></div>
-      <div class="route-direction">⬅️ VOLTA</div>
-      <div class="route-line route-line-volta"></div>
-    `;
-
-      const lineIda = card.querySelector(".route-line-ida");
-      const lineVolta = card.querySelector(".route-line-volta");
-
-      // Estilo das linhas
-      lineIda.style.background = `linear-gradient(90deg, ${first.bgColor}33, ${first.bgColor}11)`;
-      lineVolta.style.background = `linear-gradient(90deg, ${first.bgColor}22, ${first.bgColor}08)`;
-
-      trips.forEach((trip) => {
-        const [h, m] = trip.time.split(":").map(Number);
-        const start = h * 60 + m;
-        const duracao = trip.duracao || 60;
-        const end = start + duracao;
-
-        const nowTotal = nowMins + nowSecs / 60;
-        if (nowTotal >= start && nowTotal <= end) {
-          const progress = (nowTotal - start) / duracao;
-          const ida = progress < 0.5;
-
-          // CORREÇÃO: Para VOLTA, inverter o progresso
-          let pos;
-          if (ida) {
-            // IDA: 0% → 100% (esquerda para direita)
-            pos = Math.min(Math.max(progress * 2 * 100, 0), 100);
-          } else {
-            // VOLTA: 100% → 0% (direita para esquerda)
-            const voltaProgress = (progress - 0.5) * 2;
-            pos = Math.min(Math.max(100 - voltaProgress * 100, 0), 100);
-          }
-
-          const marker = document.createElement("div");
-          marker.className = "vehicle-marker";
-          marker.style.left = `${pos}%`;
-
-          const vt = this.detectVehicleType(trip.vehicle);
-          const remainingMin = Math.max(0, Math.ceil((1 - progress) * duracao));
-          const percInt = Math.max(
-            0,
-            Math.min(100, Math.round(progress * 100))
-          );
-
-          marker.innerHTML = `
-          <div class="pulse" style="background:${trip.bgColor}55"></div>
-          <div class="vehicle-tooltip">
-            <strong>${trip.vehicle}</strong><br>
-            ${trip.model || trip.type || ""}<br>
-            ${trip.destination || ""}<br>
-            ${percInt}% do trajeto — Faltam ${remainingMin} min
-          </div>
-          </div>
-          <div class="vehicle-label">${trip.vehicle}</div>
-          ${this.renderBusImage(trip.type, trip.model, ida)}
-        `;
-
-          // Adicionar evento de clique para abrir modal
-          marker.addEventListener("click", () => {
-            this.showVehicleModal(trip);
-          });
-
-          const targetLine = ida ? lineIda : lineVolta;
-          targetLine.appendChild(marker);
-        }
+      // 3) Paradas
+      (linha[sentido]?.paradas || []).forEach(p => {
+        const icon = L.divIcon({
+          className: '',
+          html: `<div class="parada-marker">🚏</div>`,
+          iconSize: [22, 22], iconAnchor: [11, 11],
+        });
+        const mk = L.marker([p.lat, p.lng], { icon }).addTo(rotasMap);
+        mk.bindTooltip(`🚏 ${linha.linha} • ${p.tempo_parada_s}s`, { sticky: true });
+        const k = `${linha.linha}-${sentido}-${p.id}`;
+        paradaMarkersGlobais.set(k, mk);
+        if (!visibilidade.paradas) rotasMap.removeLayer(mk);
       });
-
-      this.routesContainer.appendChild(card);
     });
+  });
+
+  if (bbox.length) rotasMap.fitBounds(L.latLngBounds(bbox), { padding: [60, 60] });
+}
+
+/* Busca BG_COLOR/TXT_COLOR da linha no scheduleData */
+function buscarCoresLinhaNoSchedule(codigoLinha) {
+  const data = window.vehicleManager?.currentScheduleData || scheduleData || [];
+  const norm = s => String(s || '').toUpperCase().replace(/\s+/g, '').trim();
+  const alvo = norm(codigoLinha);
+
+  const partida = data.find(d => norm(d.line) === alvo);
+  if (partida) {
+    const bg  = partida.bgColor || partida.bg_color || partida.BG_COLOR
+             || partida.bg || partida.corFundo;
+    const txt = partida.textColor || partida.text_color || partida.TXT_COLOR
+             || partida.txt || partida.corTexto;
+    if (bg) return { bg, txt: txt || '#ffffff' };
   }
+  return { bg: '#64748b', txt: '#ffffff' };
+}
 
-  // Adicione este método para mostrar modal
-  showVehicleModal(vehicle) {
-    const modal = document.getElementById("vehicleModal");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalBody = document.getElementById("modalBody");
+/* Badge flutuante com o código da linha */
+function criarBadgeLinha(linha, corBg, corTxt) {
+  const trechos = linha.ida.trechos;
+  if (!trechos.length) return null;
 
-    modalTitle.textContent = `Veículo ${vehicle.vehicle}`;
-    modalBody.innerHTML = `
-    <div class="vehicle-details">
-      <div class="detail-item">
-        <strong>Linha:</strong> ${vehicle.line}
-      </div>
-      <div class="detail-item">
-        <strong>Destino:</strong> ${vehicle.destination || "—"}
-      </div>
-      <div class="detail-item">
-        <strong>Modelo:</strong> ${vehicle.model || "—"}
-      </div>
-      <div class="detail-item">
-        <strong>Tipo:</strong> ${vehicle.type || "—"}
-      </div>
-      <div class="detail-item">
-        <strong>Partida:</strong> ${vehicle.time}
-      </div>
-      <div class="detail-item">
-        <strong>Duração:</strong> ${vehicle.duracao || 60} min
-      </div>
-      <div class="detail-item">
-        <strong>Garagem:</strong> ${vehicle.garagem || "—"}
-      </div>
-    </div>
-  `;
+  const meio = Math.floor(trechos.length / 2);
+  const geom = trechos[meio].geometria;
+  if (!geom?.length) return null;
+  const ponto = geom[Math.floor(geom.length / 2)];
 
-    modal.classList.add("active");
+  const html = `
+    <span style="
+      background:${corBg}; color:${corTxt};
+      padding:3px 10px; border-radius:8px;
+      font-size:12px; font-weight:800; letter-spacing:.5px;
+      box-shadow:0 2px 6px rgba(0,0,0,.5);
+      border:2px solid #fff; white-space:nowrap;
+    ">${esc(linha.linha)}</span>`;
 
-    // Fechar modal
-    document.getElementById("closeModal").onclick = () => {
-      modal.classList.remove("active");
-    };
+  return L.marker([ponto.lat, ponto.lng], {
+    icon: L.divIcon({
+      className: '', html,
+      iconSize: [80, 24], iconAnchor: [40, 12],
+    }),
+    interactive: false,
+    zIndexOffset: 500,
+  }).addTo(rotasMap);
+}
 
-    // Fechar ao clicar fora
-    modal.onclick = (e) => {
-      if (e.target === modal) {
-        modal.classList.remove("active");
-      }
-    };
-  }
-  renderBusImage(type, model, ida) {
-    const dir = ida ? "IDA" : "VOLTA";
-    const t = (type || "").toUpperCase();
-    const m = (model || "").toUpperCase();
-
-    let fileBase;
-
-    // Ordem de prioridade: modelo > tipo
-    if (/SUPERARTICULADO|23M/.test(m + t)) fileBase = "BRTII-SUPERARTICULADO";
-    else if (/ARTICULADO/.test(m + t)) fileBase = "M5-ARTICULADO";
-    else if (/MILLENNIUM\s*4/.test(m)) fileBase = "M4-PADRON";
-    else if (/MILLENNIUM\s*5/.test(m)) fileBase = "M5-PADRON";
-    else if (/PADRON/.test(m + t)) fileBase = "M5-PADRON";
-    else fileBase = "M5-PADRON"; // fallback
-
-    const src = `img/vehicles/${fileBase}-${dir}.jpg`;
-    return `
-    <img src="${src}" 
-         alt="${model || type}" 
-         class="bus-img ${ida ? "forward" : "backward"}" 
-         loading="lazy" 
-         title="${model || type}" />
-  `;
+/* ---------- Carregamento ---------- */
+async function carregarTracados() {
+  try {
+    const resp = await fetch(ROUTES_CFG.TRACADOS_URL);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status} — ${ROUTES_CFG.TRACADOS_URL}`);
+    tracadosData = await resp.json();
+    desenharTracados(tracadosData);
+    console.log('[routes] traçados:', tracadosData.linhas?.length ?? 0, 'linha(s)');
+    return tracadosData;
+  } catch (err) {
+    console.error('[routes] falha ao carregar traçados:', err);
+    alert(
+      'Não foi possível carregar o traçado em:\n' +
+      ROUTES_CFG.TRACADOS_URL +
+      '\n\nVerifique se o arquivo existe. Use o botão de upload no mapa como alternativa.'
+    );
+    return null;
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => new RoutesApp());
+async function carregarSchedule() {
+  try {
+    const sm = new ScheduleManager();
+    scheduleData = await sm.loadScheduleData();
+    if (!scheduleData || !scheduleData.length) {
+      scheduleData = sm.getFallbackData();
+    }
+    console.log('[routes] schedule:', scheduleData.length, 'partidas');
+    return scheduleData;
+  } catch (err) {
+    console.error('[routes] erro schedule:', err);
+    return [];
+  }
+}
+
+function initVehicleManager() {
+  vehicleManager = new VehicleManager();
+  vehicleManager.setCurrentScheduleData(scheduleData);
+  window.vehicleManager = vehicleManager;
+
+  vehicleManager.loadVehicleData().then(() => {
+    vehicleManager.updateVehicleWithSchedule();
+    vehicleManager.triggerVehicleUpdate();
+    vehicleManager.startAutoUpdate();
+    vehicleManager.startStatusMonitoring();
+    renderPainelEmViagem();
+
+    if (tracadosData) desenharTracados(tracadosData);
+  });
+
+  document.addEventListener('vehiclesUpdated', renderPainelEmViagem);
+  document.addEventListener('vehicleStatusesChanged', renderPainelEmViagem);
+}
+
+/* ---------- Painel Em Viagem ---------- */
+function renderPainelEmViagem() {
+  if (!vehicleManager) return;
+  const emViagem = vehicleManager.getVehiclesEmViagem();
+  document.getElementById('emViagemCount').textContent = emViagem.length;
+
+  const aguardando = vehicleManager.getVehiclesAguardando().length
+                   + vehicleManager.getVehiclesNaPlataforma().length
+                   + vehicleManager.getVehiclesAlinhando().length;
+  const reserva = vehicleManager.getVehiclesReserva().length;
+  document.getElementById('patioCount').textContent = aguardando;
+  document.getElementById('reservaCount').textContent = reserva;
+
+  const el = document.getElementById('emViagemList');
+  if (!emViagem.length) {
+    el.innerHTML = '<div class="hint-small">Nenhum veículo em viagem agora.</div>';
+    return;
+  }
+
+  el.innerHTML = emViagem.map(v => {
+    const sentido = calcularSentido(v);
+    const destino = (v.linhaAtual ? buscarDestinoLinha(v.linhaAtual) : '') || '—';
+    const progresso = calcularProgresso(v);
+    return `
+      <div class="trip-card ${sentido}">
+        <div class="trip-top">
+          <span class="prefixo-badge">${esc(v.prefixo)}</span>
+          <span class="linha-badge">${esc(v.linhaAtual || '—')}</span>
+          <span class="destino">${esc(destino)}</span>
+        </div>
+        <div class="trip-info">
+          <span>Partiu: <b>${esc(v.ultimaPartida || '—')}</b></span>
+          <span>Retorno: <b>${esc(v.horarioRetorno || '—')}</b></span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${progresso}%"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function calcularSentido(v) {
+  if (!v.ultimaPartida || !v.duracaoViagem) return 'ida';
+  const agora = new Date();
+  const minAgora = agora.getHours()*60 + agora.getMinutes();
+  const [h, m] = v.ultimaPartida.split(':').map(Number);
+  const partida = h*60 + m;
+  let decorrido = minAgora - partida;
+  if (decorrido < 0) decorrido += 24*60;
+  return decorrido <= v.duracaoViagem / 2 ? 'ida' : 'volta';
+}
+
+function calcularProgresso(v) {
+  if (!v.ultimaPartida || !v.duracaoViagem) return 0;
+  const agora = new Date();
+  const minAgora = agora.getHours()*60 + agora.getMinutes();
+  const [h, m] = v.ultimaPartida.split(':').map(Number);
+  const partida = h*60 + m;
+  let decorrido = minAgora - partida;
+  if (decorrido < 0) decorrido += 24*60;
+  const pct = (decorrido / v.duracaoViagem) * 100;
+  return Math.max(0, Math.min(100, pct));
+}
+
+function buscarDestinoLinha(linha) {
+  if (!tracadosData?.linhas) return '';
+  const l = tracadosData.linhas.find(x => x.linha === linha);
+  return l?.nome || '';
+}
+
+/* ---------- Tabs da sidebar ---------- */
+function inicializarTabs() {
+  document.querySelectorAll('.sidebar-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const alvo = tab.dataset.tab;
+      document.querySelectorAll('.sidebar-tab').forEach(t =>
+        t.classList.toggle('active', t === tab));
+      document.querySelectorAll('.sidebar-body').forEach(b =>
+        b.style.display = b.dataset.body === alvo ? 'block' : 'none');
+    });
+  });
+}
+
+/* ---------- Toggle semáforos / paradas ---------- */
+function alternarVisibilidade(tipo) {
+  visibilidade[tipo] = !visibilidade[tipo];
+  const mostrar = visibilidade[tipo];
+  const map = rotasMap;
+
+  if (tipo === 'semaforos') {
+    semaforoMarkersGlobais.forEach(m => {
+      if (mostrar) { if (!map.hasLayer(m)) m.addTo(map); }
+      else { if (map.hasLayer(m)) map.removeLayer(m); }
+    });
+    document.getElementById('btnToggleSemaforos').classList.toggle('active', mostrar);
+    showToast(`${mostrar ? '🚦 Mostrando' : '🚦 Ocultando'} semáforos`);
+  } else if (tipo === 'paradas') {
+    paradaMarkersGlobais.forEach(m => {
+      if (mostrar) { if (!map.hasLayer(m)) m.addTo(map); }
+      else { if (map.hasLayer(m)) map.removeLayer(m); }
+    });
+    document.getElementById('btnToggleParadas').classList.toggle('active', mostrar);
+    showToast(`${mostrar ? '🚏 Mostrando' : '🚏 Ocultando'} paradas`);
+  }
+}
+
+let toastTimerR;
+function showToast(msg) {
+  let el = document.getElementById('toast-routes');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast-routes';
+    el.className = 'status-toast hidden';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.classList.remove('hidden');
+  clearTimeout(toastTimerR);
+  toastTimerR = setTimeout(() => el.classList.add('hidden'), 1800);
+}
+
+/* ---------- Boot ---------- */
+async function boot() {
+  initRotasMap();
+  inicializarTabs();
+
+  // Carrega schedule ANTES do traçado
+  await carregarSchedule();
+  const tracados = await carregarTracados();
+
+  initVehicleManager();
+
+  if (tracados) {
+    const tentar = () => {
+      if (vehicleManager.vehicles.size > 0) {
+        iniciarSimulacao(tracados, vehicleManager);
+        document.removeEventListener('vehiclesUpdated', tentar);
+      }
+    };
+    tentar();
+    document.addEventListener('vehiclesUpdated', tentar);
+    setTimeout(tentar, 3000);
+  }
+
+  document.getElementById('btnCarregarTracado').onclick = () =>
+    document.getElementById('jsonInput').click();
+  document.getElementById('jsonInput').onchange = async (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    try {
+      tracadosData = JSON.parse(await f.text());
+      desenharTracados(tracadosData);
+      atualizarTracadoSimulacao(tracadosData);
+    } catch (err) { alert('JSON inválido: ' + err.message); }
+    e.target.value = '';
+  };
+
+  document.getElementById('btnToggleSidebar').onclick = () =>
+    document.getElementById('sidePanels').classList.toggle('hidden');
+
+  document.getElementById('btnToggleSemaforos').onclick = () => alternarVisibilidade('semaforos');
+  document.getElementById('btnToggleParadas').onclick = () => alternarVisibilidade('paradas');
+
+  if (window.lucide) lucide.createIcons();
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+document.addEventListener('DOMContentLoaded', boot);

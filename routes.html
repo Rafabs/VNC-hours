@@ -1,99 +1,100 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rotas - VNC</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="css/routes.css" />
-  <script src="js/lucide.js"></script>
-  <!-- Lucide icons (already used in projeto) -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-
 <body>
-  <div class="file-selector" id="fileSelector">
-    <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
-  </div>
 
-  <div class="header glass">
-    <div class="header-title">Rotas</div>
-    <div class="header-clock">
-      <div class="date" id="date">00/00/0000</div>
-      <div class="clock" id="clock">00:00:00</div>
+<div class="header">
+  <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
+  <button id="btnToggleSemaforos" class="file-btn toggle-btn active" title="Ocultar semáforos">🚦</button>
+  <button id="btnToggleParadas" class="file-btn toggle-btn active" title="Ocultar paradas">🚏</button>
+  <button id="btnToggleSidebar" class="file-btn" title="Mostrar/ocultar pátio">
+    <i data-lucide="panel-right"></i>
+  </button>
+</div>
+
+  <div id="map"></div>
+
+  <!-- Sidebar: pátio (mesma estrutura de antes) -->
+  <aside class="side-panels" id="sidePanels">
+
+    <div class="sidebar-tabs">
+      <button class="sidebar-tab active" data-tab="viagem">
+        <i data-lucide="bus" style="width:14px;height:14px"></i>
+        EM VIAGEM <span class="badge" id="emViagemCount">0</span>
+      </button>
+      <button class="sidebar-tab" data-tab="patio">
+        <i data-lucide="warehouse" style="width:14px;height:14px"></i>
+        PÁTIO <span class="badge" id="patioCount">0</span>
+      </button>
+      <button class="sidebar-tab" data-tab="reserva">
+        <i data-lucide="shield" style="width:14px;height:14px"></i>
+        RESERVA <span class="badge" id="reservaCount">0</span>
+      </button>
     </div>
-  </div>
 
-  <div class="routes-main-layout">
-    <div class="routes-container" id="routesContainer">
-      <!-- As rotas serão geradas dinamicamente aqui pelo routes.js -->
+    <!-- ABA EM VIAGEM -->
+    <div class="sidebar-body" data-body="viagem">
+      <div id="emViagemList"></div>
     </div>
 
-    <aside class="side-panels">
-      <div class="card waiting-card" id="waitingCard">
-        <h3>🕒 Aguardando Partida</h3>
-        <div class="waiting-list"></div>
-      </div>
-    </aside>
-  </div>
+<!-- ABA PÁTIO -->
+<div class="sidebar-body" data-body="patio" style="display:none">
 
-  <!-- Card 1: Aguardando - 5 Vias -->
-  <div class="yard-card waiting-card">
-    <div class="yard-card-header">
-      <h3><i data-lucide="clock"></i> Aguardando Partida - 5 Vias</h3>
-      <div class="yard-stats">
-        <span class="capacity">Capacidade: 10 Padrão / 5 Articulado</span>
-        <span class="count-badge" id="waiting5Count">0</span>
-      </div>
+  <div class="yard-section">
+    <div class="yard-section-title">
+      <span>Aguardando · 5 Vias</span>
+      <span class="badge-mini" id="waiting5Count">0</span>
     </div>
     <div class="yard-grid waiting-5-grid" id="waiting5Grid"></div>
   </div>
 
-  <!-- Card 2: Aguardando - 10 Vias -->
-  <div class="yard-card waiting-card">
-    <div class="yard-card-header">
-      <h3><i data-lucide="clock"></i> Aguardando Partida - 10 Vias</h3>
-      <div class="yard-stats">
-        <span class="capacity">Capacidade: 20 Padrão / 10 Articulado</span>
-        <span class="count-badge" id="waiting10Count">0</span>
-      </div>
+  <div class="yard-section">
+    <div class="yard-section-title">
+      <span>Aguardando · 10 Vias</span>
+      <span class="badge-mini" id="waiting10Count">0</span>
     </div>
-    <div class="yard-content-scroll">
+    <div class="yard-scroll">
       <div class="yard-grid waiting-10-grid" id="waiting10Grid"></div>
     </div>
   </div>
 
-  <!-- Card 3: Reserva e Indisponíveis -->
-  <div class="yard-card reserve-card">
-    <div class="yard-card-header">
-      <h3><i data-lucide="shield"></i> Frota VNC - Reserva e Indisponíveis</h3>
-      <div class="yard-stats">
-        <span class="capacity">Carros no Pátio</span>
-        <div class="count-group">
-          <span class="count-badge available-count" id="reserveCount">0</span>
-          <span class="count-badge unavailable-count" id="unavailableCount">0</span>
-        </div>
-      </div>
-    </div>
-    <div class="reserve-grid-container">
-      <div class="reserve-filters" id="reserveFilters">
-        <!-- Filtros serão inseridos aqui via JavaScript -->
-      </div>
-      <div class="reserve-grid" id="reserveGrid">
-        <!-- Veículos reserva e indisponíveis serão gerados dinamicamente -->
-      </div>
-    </div>
-  </div>
+</div>
 
-  <!-- Scripts -->
+<!-- ABA RESERVA -->
+<div class="sidebar-body" data-body="reserva" style="display:none">
+
+  <div class="reserve-filters" id="reserveFilters"></div>
+  <div class="reserve-grid" id="reserveGrid"></div>
+
+  <span id="reserveCount" style="display:none"></span>
+  <span id="unavailableCount" style="display:none"></span>
+
+</div>
+
+  </aside>
+
+  <!-- Inputs ocultos -->
+  <input type="file" id="jsonInput" accept=".json" hidden />
+  <button id="btnCarregarTracado" class="file-btn floating" title="Carregar traçado JSON">
+    <i data-lucide="upload"></i>
+  </button>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="js/translations.js"></script>
   <script src="js/csvLoader.js"></script>
   <script src="js/schedule.js"></script>
-  <script src="js/routes.js"></script>
   <script src="js/vehicleManager.js"></script>
   <script src="js/yardmanager.js"></script>
   <script src="js/SynchronizationManager .js"></script>
+  <script src="js/trajectorySimulator.js"></script>
+  <script src="js/routes.js"></script>   <!-- último -->
 </body>
-
 </html>

@@ -628,8 +628,13 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
     transform: translateY(105%);
     opacity: 1;   /* não usa fade, usa slide */
     pointer-events: none;
+    visibility: hidden;              /* ← garante que não captura toque */
   }
-
+#btnToggleSidebar {
+  position: relative;
+  z-index: 3000;                /* acima da sidebar (1000) e do mapa */
+  pointer-events: auto;
+}
   /* Handle visual no topo do sheet */
   .side-panels::before {
     content: '';

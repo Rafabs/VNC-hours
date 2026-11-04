@@ -125,19 +125,22 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
   left: 6px !important;
 }
 
-/* === CARD DE VEÍCULO NA VALA === */
+/* Card do veículo na vala — versão compacta (opção A desktop) */
 .yard-vehicle-card {
   flex: 1;
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   border-radius: 6px;
-  padding: 6px 8px;
-  display: flex; flex-direction: column;
-  justify-content: space-between;
-  gap: 2px;
+  padding: 4px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1px;
   cursor: pointer;
   transition: all .15s;
   border-left: 3px solid #2196F3;
-  min-height: 60px;
+  min-height: 52px;
+  text-align: center;
 }
 .yard-vehicle-card:hover {
   background: linear-gradient(135deg, #2a3a52 0%, #131c30 100%);
@@ -147,51 +150,49 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
 .yard-vehicle-card.padron      { border-left-color: #2196F3; }
 .yard-vehicle-card.articulated { border-left-color: #FF9800; }
 
+/* Só o prefixo e a hora ficam visíveis */
 .yard-vehicle-card .v-row-top {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  width: 100%;
 }
 .yard-vehicle-card .v-prefix {
   font-size: .78rem !important;
   font-weight: 800 !important;
   color: #fff !important;
-  line-height: 1;
-  letter-spacing: .3px;
+  line-height: 1.1;
+  letter-spacing: .2px;
 }
 .yard-vehicle-card .v-line-badge {
-  background: #334155; color: #e2e8f0;
-  font-size: .6rem; font-weight: 700;
-  padding: 1px 5px; border-radius: 4px;
-  max-width: 60px; overflow: hidden;
-  text-overflow: ellipsis; white-space: nowrap;
-}
-.yard-vehicle-card .v-row-mid {
-  margin: 2px 0 !important;
-}
-.yard-vehicle-card .v-plat-info {
-  font-size: .6rem;
+  font-size: .55rem;
   color: #94a3b8;
-  display: flex; align-items: center; gap: 3px;
+  background: transparent;
+  padding: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.yard-vehicle-card .v-plat-info small {
-  font-size: .55rem; opacity: .7;
-  letter-spacing: .3px;
-}
-.yard-vehicle-card .v-plat-info strong {
-  color: #f39c12; font-weight: 700;
-}
+.yard-vehicle-card .v-row-mid { display: none; }  /* esconde plataforma no grid */
+
 .yard-vehicle-card .v-row-bottom {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  width: 100%;
 }
 .yard-vehicle-card .v-time {
-  font-size: .75rem !important;
+  font-size: .7rem !important;
   font-weight: 700;
   color: #2ecc71;
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 .yard-vehicle-card.articulated .v-time { color: #FF9800; }
+.yard-vehicle-card .v-row-bottom i { display: none; }  /* esconde ícone */
 
 /* Slot vazio ao lado de um veículo */
 .lane-slot-empty {
@@ -588,3 +589,194 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
 }
 .toggle-btn.active:hover { background: #27ae60; }
 .toggle-btn:not(.active):hover { background: #475569; opacity: .8; }
+
+/* ============================================================
+   MOBILE (iPhone 15 — 393×852)
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Header compacto */
+  .header {
+    height: 56px;
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .header-title { font-size: .95rem; }
+  .header-clock { display: none; }   /* esconde no mobile, economiza espaço */
+  .header .file-btn {
+    padding: 6px 10px;
+    font-size: .72rem;
+  }
+  .toggle-btn { min-width: 38px; padding: 6px 8px; }
+  .toggle-btn i { width: 16px; height: 16px; }
+
+  /* Mapa fullscreen (mas com espaço pro header) */
+  #map { inset: 56px 0 0 0; }
+
+  /* Sidebar vira bottom sheet */
+  .side-panels {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 62vh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  .side-panels.hidden {
+    transform: translateY(105%);
+    opacity: 1;   /* não usa fade, usa slide */
+    pointer-events: none;
+  }
+
+  /* Handle visual no topo do sheet */
+  .side-panels::before {
+    content: '';
+    display: block;
+    width: 40px; height: 4px;
+    background: #475569;
+    border-radius: 2px;
+    margin: 8px auto 4px;
+    flex-shrink: 0;
+  }
+
+  /* Tabs ocupam toda a largura, texto menor */
+  .sidebar-tab { padding: 10px 4px; font-size: .68rem; }
+  .sidebar-tab .badge { font-size: .6rem; padding: 1px 5px; }
+  .sidebar-body { padding: 8px; }
+
+  /* Cards de viagem mais compactos */
+  .trip-card { padding: 8px 10px; }
+  .trip-card .prefixo-badge { font-size: .7rem; }
+  .trip-card .linha-badge { font-size: .65rem; }
+  .trip-card .destino { font-size: .65rem; }
+  .trip-card .trip-info { font-size: .65rem; }
+
+  /* Pátio: 2 colunas no mobile (era 5) */
+  .waiting-5-grid, .waiting-10-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Reserva: 1 coluna */
+  .reserve-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Botão flutuante acima do bottom sheet */
+  .file-btn.floating {
+    bottom: calc(62vh + 16px + env(safe-area-inset-bottom, 0));
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    padding: 10px 18px;
+  }
+
+  /* Quando a sidebar está fechada, o botão desce */
+  .side-panels.hidden ~ .file-btn.floating,
+  body:has(.side-panels.hidden) .file-btn.floating {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0));
+  }
+
+  /* Balão do veículo menor no mobile */
+  .vehicle-balloon { font-size: 8px; padding: 1px 5px; }
+  .vehicle-balloon .vb-prefixo { font-size: 8px; line-height: 12px; }
+  .vehicle-balloon .vb-linha   { font-size: 7.5px; line-height: 12px; }
+  .vehicle-balloon .vb-destino { font-size: 7.5px; max-width: 70px; line-height: 12px; }
+  .vehicle-icon { width: 28px; height: 28px; }
+}
+
+/* ============================================================
+   POPUP DO VEÍCULO
+   ============================================================ */
+.vehicle-popup .leaflet-popup-content-wrapper {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 32px rgba(0,0,0,.6);
+  padding: 0;
+}
+.vehicle-popup .leaflet-popup-content {
+  margin: 0;
+  min-width: 260px;
+}
+.vehicle-popup .leaflet-popup-tip {
+  background: #0f172a;
+  border: 1px solid #334155;
+}
+.vehicle-popup .leaflet-popup-close-button {
+  color: #94a3b8;
+  padding: 8px;
+}
+
+.vp-container {
+  padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  font-family: inherit;
+}
+.vp-header {
+  display: flex; align-items: center; gap: 6px;
+}
+.vp-prefixo {
+  padding: 3px 10px; border-radius: 6px;
+  font-weight: 800; font-size: 13px;
+  color: #0f172a; letter-spacing: .3px;
+}
+.vp-linha {
+  padding: 3px 8px; border-radius: 6px;
+  font-weight: 700; font-size: 11px;
+}
+.vp-fase {
+  margin-left: auto;
+  font-size: 10px; font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.vp-destino {
+  font-size: 12px; color: #cbd5e1;
+  font-weight: 500;
+  white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vp-progress-wrap { display: flex; flex-direction: column; gap: 4px; }
+.vp-progress-bar {
+  height: 8px; background: #1e293b;
+  border-radius: 4px; overflow: hidden;
+  position: relative;
+}
+.vp-progress-fill {
+  height: 100%; border-radius: 4px;
+  transition: width .4s linear;
+  box-shadow: 0 0 8px rgba(46,204,113,.4);
+}
+.vp-progress-info {
+  display: flex; justify-content: space-between;
+  font-size: 10px; color: #94a3b8;
+  font-weight: 600;
+}
+
+.vp-status {
+  display: flex; align-items: center; gap: 8px;
+  background: #020617;
+  border-left: 3px solid;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.vp-status-icon { font-size: 16px; }
+.vp-status-text {
+  font-size: 12px; font-weight: 600;
+  color: #e2e8f0;
+}
+
+.vp-info {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding-top: 6px;
+  border-top: 1px solid #1e293b;
+  font-size: 11px;
+}
+.vp-info > div { display: flex; justify-content: space-between; gap: 4px; }
+.vp-info > div > span { color: #94a3b8; }
+.vp-info > div > b { color: #e2e8f0; font-weight: 600; }

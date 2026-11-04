@@ -1,12 +1,12 @@
 /* ============================================================
-   trajectorySimulator.js - VNC (multi-linha + semáforos)
+   trajectorySimulator.js - VNC (multi-linha + semáforos + popup)
    Regra de viagem:
      - tFase  = relógio da fase (0..metade = ida, metade..duracao = volta)
      - tGeom  = tempo percorrido na geometria, respeitando km/h e semáforos
      - Se tGeom < tFase, veículo ESPERA no fim do traçado até o relógio bater
    ============================================================ */
 const SIM_CFG = {
-  NOME_ORIGEM: 'VILA NOVA CACHOEIRINHA',   // ← ajuste pro nome do seu pátio
+  NOME_ORIGEM: 'VILA NOVA CACHOEIRINHA',
 };
 
 const SimState = {
@@ -63,7 +63,6 @@ function prepararGrupo(grupo) {
     return entry;
   });
 
-  // Mescla semáforos + paradas num único array de eventos de parada
   const eventosParada = [
     ...(grupo?.semaforos || []).map(s => ({ ...s, _tipo: 'semaforo' })),
     ...(grupo?.paradas   || []).map(p => ({ ...p, _tipo: 'parada'   })),
@@ -73,9 +72,7 @@ function prepararGrupo(grupo) {
     return { ...s, tNoTrechoS: t };
   }).sort((a, b) => a.tNoTrechoS - b.tNoTrechoS);
 
-  // Mantém o nome "semaforos" pra não quebrar o resto do código
   const semaforos = eventosParada;
-
   return { trechos, semaforos, duracaoGeomS: acumulado };
 }
 
@@ -103,224 +100,6 @@ function criarMarcador(prefixo, veiculo) {
   if (!primeiro) return;
 
   const sentido = calcularSentidoSim(veiculo);
-  const destino = buscarDestinoSim(veiculo.linhaAtual);
-  const imgUrl = imagemDoVeiculo(veiculo, sentido);
-
-  const html = `
-    <div class="vehicle-wrap">
-      <div class="vehicle-balloon ${sentido}">
-        <span class="vb-prefixo">${escSim(prefixo)}</span>
-        <span class="vb-linha">${escSim(veiculo.linhaAtual || '—')}</span>
-        <span class="vb-destino">${escSim(destino || sentido.toUpperCase())}</span>
-      </div>
-      <img class="vehicle-icon" src="${imgUrl}" alt="${escSim(prefixo)}" />
-    </div>
-  `;
-
-  const icon = L.divIcon({
-    className: '',
-    html,
-    iconSize: [180, 80],
-    iconAnchor: [90, 70],   // âncora na parte de baixo (onde fica a imagem)
-  });
-
-  const marker = L.marker([primeiro.lat, primeiro.lng], {
-    icon, zIndexOffset: 1000,
-  }).addTo(map);
-
-  // Fallback se a imagem não carregar
-  setTimeout(() => {
-    const img = marker.getElement()?.querySelector('.vehicle-icon');
-    if (img && !img.complete) {
-      img.onerror = () => {
-        img.style.display = 'none';
-        const fb = document.createElement('div');
-        fb.className = 'vehicle-icon no-img';
-        fb.textContent = prefixo.split(' ').pop();
-        img.parentNode.appendChild(fb);
-      };
-    } else if (img && img.naturalWidth === 0) {
-      img.style.display = 'none';
-      const fb = document.createElement('div');
-      fb.className = 'vehicle-icon no-img';
-      fb.textContent = prefixo.split(' ').pop();
-      img.parentNode.appendChild(fb);
-    }
-  }, 200);
-
-  SimState.marcadores.set(prefixo, {
-  marker,
-  veiculo,
-  prefixo,
-  sentido,   // ← guarda o sentido atual
-});
-}
-
-function buscarCoresDaLinha(veiculo) {
-  const data = window.vehicleManager?.currentScheduleData || [];
-  // Encontra a partida deste veículo (por prefixo + linha + horário de partida)
-  const partida = data.find(d =>
-    d.vehicle === veiculo.prefixo &&
-    d.line === veiculo.linhaAtual &&
-    d.time === veiculo.ultimaPartida
-  );
-  if (partida) {
-    return {
-      bg: partida.bgColor || '#334155',
-      txt: partida.textColor || '#ffffff',
-    };
-  }
-  // Fallback: pega só pela linha (primeira partida)
-  const porLinha = data.find(d => d.line === veiculo.linhaAtual);
-  if (porLinha) return {
-    bg: porLinha.bgColor || '#334155',
-    txt: porLinha.textColor || '#ffffff',
-  };
-  return { bg: '#334155', txt: '#ffffff' };
-}
-
-const MODELO_ALIASES = {
-  // Millennium 4
-  'MILLENNIUM 4': 'M4',
-  'MILLENNIUM4': 'M4',
-  'MILLENNIUM-4': 'M4',
-  'M4': 'M4',
-
-  // Millennium 5
-  'MILLENNIUM 5': 'M5',
-  'MILLENNIUM5': 'M5',
-  'MILLENNIUM-5': 'M5',
-  'M5': 'M5',
-
-  // BRT II — variações com que o JSON pode vir
-  'BRT II': 'BRTII',
-  'BRTII': 'BRTII',
-  'BRT-2': 'BRTII',
-  'BRT 2': 'BRTII',
-  'MILLENNIUM BRT II 23M': 'BRTII',
-  'MILLENNIUM BRTII 23M': 'BRTII',
-  'MILLENNIUM BRT II': 'BRTII',
-  'MILLENNIUM BRTII': 'BRTII',
-  'BRT II 23M': 'BRTII',
-};
-
-const TIPO_ALIASES = {
-  'PADRON': 'PADRON',
-  'PADRÃO': 'PADRON',
-  'PADRAO': 'PADRON',
-  'ARTICULADO': 'ARTICULADO',
-  'SUPERARTICULADO': 'SUPERARTICULADO',
-  'SUPER ARTICULADO': 'SUPERARTICULADO',
-};
-
-function normalizar(valor, aliases) {
-  const v = String(valor || '').toUpperCase().trim();
-  if (aliases[v]) return aliases[v];
-  // tenta variações com espaço/hífen
-  for (const [key, val] of Object.entries(aliases)) {
-    if (v.replace(/[\s\-_]+/g, '') === key.replace(/[\s\-_]+/g, '')) return val;
-  }
-  return v;
-}
-
-function imagemDoVeiculo(veiculo, sentido) {
-  const modelo = normalizar(veiculo.modelo, MODELO_ALIASES);
-  const tipo   = normalizar(veiculo.tipo,   TIPO_ALIASES);
-  const s      = sentido === 'volta' ? 'VOLTA' : 'IDA';
-
-  if (!modelo || !tipo) return placeholderImg(veiculo);
-
-  // Codifica o nome do arquivo (espaços, acentos, etc.)
-  const arquivo = `${modelo}-${tipo}-${s}.jpg`;
-  return `img/vehicles/${encodeURIComponent(arquivo)}`;
-}
-
-function placeholderImg(veiculo) {
-  // SVG data-uri: círculo com sufixo do prefixo (último trecho depois do espaço)
-  const suf = String(veiculo.prefixo || '?').split(' ').pop();
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40">
-    <circle cx="20" cy="20" r="18" fill="#2ecc71" stroke="#fff" stroke-width="2"/>
-    <text x="20" y="25" text-anchor="middle" font-family="sans-serif" font-size="11"
-          font-weight="700" fill="#fff">${suf}</text>
-  </svg>`;
-  return 'data:image/svg+xml;base64,' + btoa(svg);
-}
-
-function calcularSentidoSim(veiculo) {
-  if (!veiculo.ultimaPartida || !veiculo.duracaoViagem) return 'ida';
-  const agora = new Date();
-  const minAgora = agora.getHours()*60 + agora.getMinutes();
-  const [h, m] = veiculo.ultimaPartida.split(':').map(Number);
-  const partida = h*60 + m;
-  let decorrido = minAgora - partida;
-  if (decorrido < 0) decorrido += 24*60;
-  return decorrido <= veiculo.duracaoViagem / 2 ? 'ida' : 'volta';
-}
-
-function buscarDestinoSim(linha) {
-  if (!SimState.tracados?.linhas) return '';
-  const l = SimState.tracados.linhas.find(x => x.linha === linha);
-  return l?.nome || '';
-}
-
-function removerMarcador(p) {
-  const entry = SimState.marcadores.get(p);
-  if (!entry) return;
-  window.rotasMap?.()?.removeLayer(entry.marker);
-  SimState.marcadores.delete(p);
-}
-
-function loop() {
-  if (!SimState.rodando) return;
-  const mgr = SimState.veiculoMgr;
-  if (mgr?.vehicles) {
-    mgr.vehicles.forEach((v, prefixo) => {
-      if (v.categoria !== 'viagem' || !v.ultimaPartida) return;
-      const entry = SimState.marcadores.get(prefixo);
-      if (!entry) return;
-
-      // Atualiza posição
-      const pos = posicaoAtual(v);
-      if (pos) entry.marker.setLatLng([pos.lat, pos.lng]);
-
-      // Recalcula sentido e atualiza balão/imagem se mudou
-      const sentidoAtual = calcularSentidoSim(v);
-      if (entry.sentido !== sentidoAtual) {
-        entry.sentido = sentidoAtual;
-        atualizarVisualMarcador(entry, v, sentidoAtual);
-      }
-    });
-  }
-  SimState.rafId = requestAnimationFrame(loop);
-}
-
-function destinoDoSentido(veiculo, sentido) {
-  const destinoPlanilha = buscarDestinoSim(veiculo.linhaAtual)
-    || buscarDestinoPartida(veiculo)
-    || '—';
-  if (sentido === 'volta') return SIM_CFG.NOME_ORIGEM;
-  return destinoPlanilha;
-}
-
-/* Busca o DESTINO específico da partida no scheduleData (mais preciso que o nome da linha) */
-function buscarDestinoPartida(veiculo) {
-  const data = window.vehicleManager?.currentScheduleData || [];
-  const p = data.find(d =>
-    d.vehicle === veiculo.prefixo &&
-    d.line === veiculo.linhaAtual &&
-    d.time === veiculo.ultimaPartida
-  );
-  return p?.destination || null;
-}
-
-function criarMarcador(prefixo, veiculo) {
-  const map = window.rotasMap?.();
-  const cache = SimState.cacheLinhas.get(veiculo.linhaAtual);
-  if (!map || !cache) return;
-  const primeiro = cache.ida.trechos[0]?.geometria?.[0];
-  if (!primeiro) return;
-
-  const sentido = calcularSentidoSim(veiculo);
   const cores = buscarCoresDaLinha(veiculo);
   const destino = destinoDoSentido(veiculo, sentido);
   const imgUrl = imagemDoVeiculo(veiculo, sentido);
@@ -333,7 +112,7 @@ function criarMarcador(prefixo, veiculo) {
         <span class="vb-destino">${escSim(destino)}</span>
       </div>
       <img class="vehicle-icon" src="${imgUrl}" alt="${escSim(prefixo)}"
-           style="border-color:${sentido==='volta'?'#3498db':'#2ecc71'}" />
+           style="border-color:${sentido === 'volta' ? '#3498db' : '#2ecc71'}" />
     </div>
   `;
 
@@ -343,7 +122,39 @@ function criarMarcador(prefixo, veiculo) {
   });
   const marker = L.marker([primeiro.lat, primeiro.lng], { icon, zIndexOffset: 1000 }).addTo(map);
 
-  SimState.marcadores.set(prefixo, { marker, veiculo, prefixo, sentido });
+  // Fallback da imagem
+  setTimeout(() => {
+    const img = marker.getElement()?.querySelector('.vehicle-icon');
+    if (!img) return;
+    const aplicarFallback = () => {
+      img.style.display = 'none';
+      const fb = document.createElement('div');
+      fb.className = 'vehicle-icon no-img';
+      fb.textContent = prefixo.split(' ').pop();
+      img.parentNode.appendChild(fb);
+    };
+    if (!img.complete) img.onerror = aplicarFallback;
+    else if (img.naturalWidth === 0) aplicarFallback();
+  }, 200);
+
+  // Registra entry ANTES de ligar o popup (pra closure achar)
+  const entry = {
+    marker,
+    veiculo,
+    prefixo,
+    sentido,
+    popupAberto: false,
+    statusAtual: null,
+  };
+  SimState.marcadores.set(prefixo, entry);
+
+  // Popup (usa entry.statusAtual atualizado pelo loop)
+  marker.bindPopup(
+    () => gerarPopupVeiculo(prefixo, veiculo, entry.statusAtual),
+    { maxWidth: 320, className: 'vehicle-popup', autoPan: true }
+  );
+  marker.on('popupopen', () => { entry.popupAberto = true; });
+  marker.on('popupclose', () => { entry.popupAberto = false; });
 }
 
 function atualizarVisualMarcador(entry, veiculo, sentido) {
@@ -370,7 +181,160 @@ function atualizarVisualMarcador(entry, veiculo, sentido) {
   }
 }
 
-/* ---------- Posição ---------- */
+function removerMarcador(p) {
+  const entry = SimState.marcadores.get(p);
+  if (!entry) return;
+  window.rotasMap?.()?.removeLayer(entry.marker);
+  SimState.marcadores.delete(p);
+}
+
+/* ---------- Loop ---------- */
+let ultimaSincronizacao = 0;
+
+function loop() {
+  if (!SimState.rodando) return;
+  const agora = Date.now();
+
+  if (agora - ultimaSincronizacao > 1000) {
+    ultimaSincronizacao = agora;
+    sincronizarMarcadores();
+  }
+
+  const mgr = SimState.veiculoMgr;
+  if (mgr?.vehicles) {
+    mgr.vehicles.forEach((v, prefixo) => {
+      const entry = SimState.marcadores.get(prefixo);
+      if (!entry) return;
+
+      if (v.categoria !== 'viagem' || !v.ultimaPartida) {
+        removerMarcador(prefixo);
+        return;
+      }
+
+      const pos = posicaoAtual(v);
+      if (!pos) {
+        removerMarcador(prefixo);
+        return;
+      }
+
+      entry.marker.setLatLng([pos.lat, pos.lng]);
+      entry.statusAtual = pos.status;
+
+      if (entry.popupAberto) {
+        entry.marker.setPopupContent(gerarPopupVeiculo(prefixo, v, pos.status));
+      }
+
+      const sentidoAtual = calcularSentidoSim(v);
+      if (entry.sentido !== sentidoAtual) {
+        entry.sentido = sentidoAtual;
+        atualizarVisualMarcador(entry, v, sentidoAtual);
+      }
+    });
+  }
+
+  SimState.rafId = requestAnimationFrame(loop);
+}
+
+/* ---------- Cores / imagem / destino ---------- */
+function buscarCoresDaLinha(veiculo) {
+  const data = window.vehicleManager?.currentScheduleData || [];
+  const partida = data.find(d =>
+    d.vehicle === veiculo.prefixo &&
+    d.line === veiculo.linhaAtual &&
+    d.time === veiculo.ultimaPartida
+  );
+  if (partida) {
+    return {
+      bg: partida.bgColor || '#334155',
+      txt: partida.textColor || '#ffffff',
+    };
+  }
+  const porLinha = data.find(d => d.line === veiculo.linhaAtual);
+  if (porLinha) return {
+    bg: porLinha.bgColor || '#334155',
+    txt: porLinha.textColor || '#ffffff',
+  };
+  return { bg: '#334155', txt: '#ffffff' };
+}
+
+function destinoDoSentido(veiculo, sentido) {
+  const destinoPlanilha = buscarDestinoSim(veiculo.linhaAtual)
+    || buscarDestinoPartida(veiculo)
+    || '—';
+  if (sentido === 'volta') return SIM_CFG.NOME_ORIGEM;
+  return destinoPlanilha;
+}
+
+function buscarDestinoPartida(veiculo) {
+  const data = window.vehicleManager?.currentScheduleData || [];
+  const p = data.find(d =>
+    d.vehicle === veiculo.prefixo &&
+    d.line === veiculo.linhaAtual &&
+    d.time === veiculo.ultimaPartida
+  );
+  return p?.destination || null;
+}
+
+function buscarDestinoSim(linha) {
+  if (!SimState.tracados?.linhas) return '';
+  const l = SimState.tracados.linhas.find(x => x.linha === linha);
+  return l?.nome || '';
+}
+
+const MODELO_ALIASES = {
+  'MILLENNIUM 4': 'M4', 'MILLENNIUM4': 'M4', 'MILLENNIUM-4': 'M4', 'M4': 'M4',
+  'MILLENNIUM 5': 'M5', 'MILLENNIUM5': 'M5', 'MILLENNIUM-5': 'M5', 'M5': 'M5',
+  'BRT II': 'BRTII', 'BRTII': 'BRTII', 'BRT-2': 'BRTII', 'BRT 2': 'BRTII',
+  'MILLENNIUM BRT II 23M': 'BRTII', 'MILLENNIUM BRTII 23M': 'BRTII',
+  'MILLENNIUM BRT II': 'BRTII', 'MILLENNIUM BRTII': 'BRTII', 'BRT II 23M': 'BRTII',
+};
+
+const TIPO_ALIASES = {
+  'PADRON': 'PADRON', 'PADRÃO': 'PADRON', 'PADRAO': 'PADRON',
+  'ARTICULADO': 'ARTICULADO',
+  'SUPERARTICULADO': 'SUPERARTICULADO', 'SUPER ARTICULADO': 'SUPERARTICULADO',
+};
+
+function normalizar(valor, aliases) {
+  const v = String(valor || '').toUpperCase().trim();
+  if (aliases[v]) return aliases[v];
+  for (const [key, val] of Object.entries(aliases)) {
+    if (v.replace(/[\s\-_]+/g, '') === key.replace(/[\s\-_]+/g, '')) return val;
+  }
+  return v;
+}
+
+function imagemDoVeiculo(veiculo, sentido) {
+  const modelo = normalizar(veiculo.modelo, MODELO_ALIASES);
+  const tipo   = normalizar(veiculo.tipo,   TIPO_ALIASES);
+  const s      = sentido === 'volta' ? 'VOLTA' : 'IDA';
+  if (!modelo || !tipo) return placeholderImg(veiculo);
+  const arquivo = `${modelo}-${tipo}-${s}.jpg`;
+  return `img/vehicles/${encodeURIComponent(arquivo)}`;
+}
+
+function placeholderImg(veiculo) {
+  const suf = String(veiculo.prefixo || '?').split(' ').pop();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40">
+    <circle cx="20" cy="20" r="18" fill="#2ecc71" stroke="#fff" stroke-width="2"/>
+    <text x="20" y="25" text-anchor="middle" font-family="sans-serif" font-size="11"
+          font-weight="700" fill="#fff">${suf}</text>
+  </svg>`;
+  return 'data:image/svg+xml;base64,' + btoa(svg);
+}
+
+function calcularSentidoSim(veiculo) {
+  if (!veiculo.ultimaPartida || !veiculo.duracaoViagem) return 'ida';
+  const agora = new Date();
+  const minAgora = agora.getHours()*60 + agora.getMinutes();
+  const [h, m] = veiculo.ultimaPartida.split(':').map(Number);
+  const partida = h*60 + m;
+  let decorrido = minAgora - partida;
+  if (decorrido < 0) decorrido += 24*60;
+  return decorrido <= veiculo.duracaoViagem / 2 ? 'ida' : 'volta';
+}
+
+/* ---------- Posição + Status ---------- */
 function posicaoAtual(veiculo) {
   const cache = SimState.cacheLinhas.get(veiculo.linhaAtual);
   if (!cache) return null;
@@ -388,49 +352,81 @@ function posicaoAtual(veiculo) {
   if (decorrido < 0) decorrido += 24 * 60;
   if (decorrido > duracaoMin) return null;
 
-  // Qual fase
   const ehIda = decorrido <= metadeMin;
   const grupo = ehIda ? cache.ida : cache.volta;
+  const fase = ehIda ? 'ida' : 'volta';
 
-  // tFase: posição no relógio da fase (em segundos)
   const tFaseS = (ehIda ? decorrido : decorrido - metadeMin) * 60;
-  const tFaseMaxS = metadeMin * 60; // duração nominal da fase
+  const tFaseMaxS = metadeMin * 60;
 
-  // Duração real percorrendo a geometria (respeitando km/h + semáforos)
   const tGeomPercorridoS = duracaoGeomComSemaforos(grupo, tFaseS);
   const duracaoRealS = grupo.duracaoGeomS + tempoTotalParadas(grupo);
 
-  // Se a geometria demora mais que o tFase nominal, usamos o tFase
-  // (não tem como "esperar" — o veículo segue o relógio).
-  // Se demora menos, ele chega cedo e ESPERA no fim.
   let tEfetivoS;
   if (tGeomPercorridoS >= tFaseS || duracaoRealS >= tFaseMaxS) {
-    // Geometria é o gargalo → segue a posição geométrica em tempo real
     tEfetivoS = tGeomPercorridoS;
   } else {
-    // Relógio é o gargalo → anda até onde a velocidade permite
-    // (não passa da duração geométrica)
     tEfetivoS = Math.min(tGeomPercorridoS, duracaoRealS);
   }
 
-  // Traduz tEfetivoS (com paradas) em tBruto no traçado (sem paradas)
   const tBrutoS = removerParadas(grupo, tEfetivoS);
 
-  // Se já terminou o traçado, fica no fim esperando
+  // Detecta parada / espera
+  let parado = null;
+  let aguardando = null;
+
   if (tBrutoS >= grupo.duracaoGeomS) {
-    const geomFim = grupo.trechos[grupo.trechos.length - 1].geometria;
-    return geomFim[geomFim.length - 1];
+    const falta = Math.max(0, (tFaseMaxS - tFaseS) / 60);
+    if (falta > 0.05) {
+      aguardando = { faltaS: falta * 60 };
+    }
+  } else {
+    let paradasCumpridas = 0;
+    for (const s of grupo.semaforos) {
+      const tChegada = s.tNoTrechoS + paradasCumpridas;
+      const tSaida   = tChegada + s.tempo_parada_s;
+      if (tEfetivoS >= tChegada && tEfetivoS < tSaida) {
+        parado = {
+          tipo: s._tipo || 'semaforo',
+          id: s.id || '',
+          faltaS: tSaida - tEfetivoS,
+          totalS: s.tempo_parada_s,
+        };
+        break;
+      }
+      if (tEfetivoS >= tSaida) paradasCumpridas += s.tempo_parada_s;
+    }
   }
 
-  return posicaoNoGrupoPorTempoBruto(grupo, tBrutoS);
+  const progresso = Math.max(0, Math.min(1, tFaseS / tFaseMaxS));
+
+  let pos = null;
+  if (tBrutoS >= grupo.duracaoGeomS) {
+    const geomFim = grupo.trechos[grupo.trechos.length - 1].geometria;
+    pos = geomFim[geomFim.length - 1];
+  } else {
+    pos = posicaoNoGrupoPorTempoBruto(grupo, tBrutoS);
+  }
+  if (!pos) return null;
+
+  return {
+    lat: pos.lat,
+    lng: pos.lng,
+    status: {
+      fase,
+      progresso,
+      parado,
+      aguardando,
+      tFaseS,
+      tFaseMaxS,
+    },
+  };
 }
 
 /* ---------- Tempo com semáforos ---------- */
 function tempoTotalParadas(grupo) {
   return grupo.semaforos.reduce((s, x) => s + x.tempo_parada_s, 0);
 }
-
-/* Dado tBruto (sem paradas), retorna o tempo efetivo (com paradas) até esse ponto */
 function adicionarParadas(grupo, tBrutoS) {
   let extra = 0;
   for (const s of grupo.semaforos) {
@@ -439,8 +435,6 @@ function adicionarParadas(grupo, tBrutoS) {
   }
   return tBrutoS + extra;
 }
-
-/* Inverso: dado tEfetivoS (com paradas), retorna tBruto (sem paradas) */
 function removerParadas(grupo, tEfetivoS) {
   let tBruto = tEfetivoS;
   let paradas = 0;
@@ -449,7 +443,6 @@ function removerParadas(grupo, tEfetivoS) {
     if (tBruto >= chegadaEfetiva + s.tempo_parada_s) {
       paradas += s.tempo_parada_s;
     } else if (tBruto >= chegadaEfetiva && tBruto < chegadaEfetiva + s.tempo_parada_s) {
-      // Está parado no semáforo → congela no ponto
       return s.tNoTrechoS;
     } else {
       break;
@@ -457,12 +450,7 @@ function removerParadas(grupo, tEfetivoS) {
   }
   return Math.max(0, tBruto - paradas);
 }
-
-/* Quanto tempo já foi gasto pra percorrer até tFaseS, considerando velocidades reais */
 function duracaoGeomComSemaforos(grupo, tFaseS) {
-  // Avança no tempo real da fase até acabar o tempo geométrico
-  // Simples: o tempo efetivo máximo é duracaoGeomS + paradas.
-  // O que "anda" no mapa é limitado por tFaseS (relógio).
   return Math.min(tFaseS, grupo.duracaoGeomS + tempoTotalParadas(grupo));
 }
 
@@ -470,14 +458,12 @@ function duracaoGeomComSemaforos(grupo, tFaseS) {
 function posicaoNoGrupoPorTempoBruto(grupo, tBrutoS) {
   const { trechos, duracaoGeomS } = grupo;
   if (!trechos.length || duracaoGeomS <= 0) return null;
-
   const t = Math.max(0, Math.min(duracaoGeomS, tBrutoS));
   const tr = trechos.find(x => t >= x.inicioS && t <= x.fimS) || trechos[trechos.length - 1];
   const f = (t - tr.inicioS) / (tr.fimS - tr.inicioS);
   return interpolarNaGeometria(tr.geometria, f);
 }
 
-/* ---------- Geo ---------- */
 function interpolarNaGeometria(geom, fracao) {
   if (!geom?.length) return null;
   if (geom.length === 1) return geom[0];
@@ -507,6 +493,65 @@ function haversine(a, b) {
 function escSim(s) {
   return String(s ?? '').replace(/[&<>"']/g, c =>
     ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------- Popup ---------- */
+function gerarPopupVeiculo(prefixo, veiculo, status) {
+  if (!status) {
+    return `<div style="padding:8px;color:#94a3b8;font-size:12px">Calculando…</div>`;
+  }
+  const { fase, progresso, parado, aguardando } = status;
+  const pct = Math.round(progresso * 100);
+  const cor = fase === 'ida' ? '#2ecc71' : '#3498db';
+  const destino = destinoDoSentido(veiculo, fase);
+  const cores = buscarCoresDaLinha(veiculo);
+
+  let statusTxt = '', statusCor = cor, statusIcon = '🚌';
+  if (aguardando) {
+    const min = Math.floor(aguardando.faltaS / 60);
+    const seg = Math.floor(aguardando.faltaS % 60);
+    statusIcon = '⏸️'; statusCor = '#f39c12';
+    statusTxt = fase === 'ida'
+      ? `Aguardando para iniciar a volta · ${min}:${String(seg).padStart(2,'0')}`
+      : `Aguardando fim da viagem · ${min}:${String(seg).padStart(2,'0')}`;
+  } else if (parado) {
+    const seg = Math.ceil(parado.faltaS);
+    statusIcon = parado.tipo === 'parada' ? '🚏' : '🚦';
+    statusCor = parado.tipo === 'parada' ? '#3498db' : '#f39c12';
+    const label = parado.tipo === 'parada' ? 'Parada' : 'Semáforo';
+    statusTxt = `Parado no ${label} · ${seg}s restantes`;
+  } else {
+    statusTxt = fase === 'ida' ? 'Em deslocamento (ida)' : 'Em deslocamento (volta)';
+  }
+
+  return `
+    <div class="vp-container">
+      <div class="vp-header">
+        <span class="vp-prefixo" style="background:${cor}">${escSim(prefixo)}</span>
+        <span class="vp-linha" style="background:${cores.bg};color:${cores.txt}">${escSim(veiculo.linhaAtual || '—')}</span>
+        <span class="vp-fase" style="color:${cor}">${fase.toUpperCase()}</span>
+      </div>
+      <div class="vp-destino">${escSim(destino)}</div>
+      <div class="vp-progress-wrap">
+        <div class="vp-progress-bar">
+          <div class="vp-progress-fill" style="width:${pct}%;background:${cor}"></div>
+        </div>
+        <div class="vp-progress-info">
+          <span>${pct}% do percurso</span>
+          <span>${aguardando ? 'aguardando' : parado ? 'parado' : 'em movimento'}</span>
+        </div>
+      </div>
+      <div class="vp-status" style="border-color:${statusCor}">
+        <span class="vp-status-icon">${statusIcon}</span>
+        <span class="vp-status-text">${escSim(statusTxt)}</span>
+      </div>
+      <div class="vp-info">
+        <div><span>Partida:</span> <b>${escSim(veiculo.ultimaPartida || '—')}</b></div>
+        <div><span>Retorno:</span> <b>${escSim(veiculo.horarioRetorno || '—')}</b></div>
+        <div><span>Plataforma:</span> <b>${escSim(veiculo.plataforma || '—')}</b></div>
+      </div>
+    </div>
+  `;
 }
 
 /* ---------- Controles ---------- */

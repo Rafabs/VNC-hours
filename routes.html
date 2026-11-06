@@ -11,24 +11,30 @@
 </head>
 <body>
 
-<div class="header">
-  <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
-  <button id="btnToggleSemaforos" class="file-btn toggle-btn active" title="Ocultar semáforos">🚦</button>
-  <button id="btnToggleParadas" class="file-btn toggle-btn active" title="Ocultar paradas">🚏</button>
-  <button id="btnToggleSidebar" class="file-btn" title="Mostrar/ocultar pátio">
-    <i data-lucide="panel-right"></i>
-  </button>
-</div>
+  <div class="header">
+    <button class="file-btn" onclick="window.location.href='index.html'">VOLTAR</button>
+    <button id="btnToggleSemaforos" class="file-btn toggle-btn active" title="Ocultar semáforos">🚦</button>
+    <button id="btnToggleParadas" class="file-btn toggle-btn active" title="Ocultar paradas">🚏</button>
+    <button id="btnExportLog" class="file-btn" title="Exportar log de viagens">
+      <i data-lucide="download" style="width:14px;height:14px"></i> LOG
+    </button>
+    <button id="btnToggleSidebar" class="file-btn" title="Mostrar/ocultar pátio">
+      <i data-lucide="panel-right"></i>
+    </button>
+  </div>
 
   <div id="map"></div>
 
-  <!-- Sidebar: pátio (mesma estrutura de antes) -->
   <aside class="side-panels" id="sidePanels">
 
     <div class="sidebar-tabs">
       <button class="sidebar-tab active" data-tab="viagem">
         <i data-lucide="bus" style="width:14px;height:14px"></i>
-        EM VIAGEM <span class="badge" id="emViagemCount">0</span>
+        VIAGEM <span class="badge" id="emViagemCount">0</span>
+      </button>
+      <button class="sidebar-tab" data-tab="plataforma">
+        <i data-lucide="bus-front" style="width:14px;height:14px"></i>
+        PLATAFORMA <span class="badge" id="plataformaCount">0</span>
       </button>
       <button class="sidebar-tab" data-tab="patio">
         <i data-lucide="warehouse" style="width:14px;height:14px"></i>
@@ -45,43 +51,41 @@
       <div id="emViagemList"></div>
     </div>
 
-<!-- ABA PÁTIO -->
-<div class="sidebar-body" data-body="patio" style="display:none">
-
-  <div class="yard-section">
-    <div class="yard-section-title">
-      <span>Aguardando · 5 Vias</span>
-      <span class="badge-mini" id="waiting5Count">0</span>
+    <!-- ABA PLATAFORMA -->
+    <div class="sidebar-body" data-body="plataforma" style="display:none">
+      <div id="plataformasList"></div>
     </div>
-    <div class="yard-grid waiting-5-grid" id="waiting5Grid"></div>
-  </div>
 
-  <div class="yard-section">
-    <div class="yard-section-title">
-      <span>Aguardando · 10 Vias</span>
-      <span class="badge-mini" id="waiting10Count">0</span>
+    <!-- ABA PÁTIO -->
+    <div class="sidebar-body" data-body="patio" style="display:none">
+      <div class="yard-section">
+        <div class="yard-section-title">
+          <span>Aguardando · 5 Vias</span>
+          <span class="badge-mini" id="waiting5Count">0</span>
+        </div>
+        <div class="yard-grid waiting-5-grid" id="waiting5Grid"></div>
+      </div>
+      <div class="yard-section">
+        <div class="yard-section-title">
+          <span>Aguardando · 10 Vias</span>
+          <span class="badge-mini" id="waiting10Count">0</span>
+        </div>
+        <div class="yard-scroll">
+          <div class="yard-grid waiting-10-grid" id="waiting10Grid"></div>
+        </div>
+      </div>
     </div>
-    <div class="yard-scroll">
-      <div class="yard-grid waiting-10-grid" id="waiting10Grid"></div>
+
+    <!-- ABA RESERVA -->
+    <div class="sidebar-body" data-body="reserva" style="display:none">
+      <div class="reserve-filters" id="reserveFilters"></div>
+      <div class="reserve-grid" id="reserveGrid"></div>
+      <span id="reserveCount" style="display:none"></span>
+      <span id="unavailableCount" style="display:none"></span>
     </div>
-  </div>
-
-</div>
-
-<!-- ABA RESERVA -->
-<div class="sidebar-body" data-body="reserva" style="display:none">
-
-  <div class="reserve-filters" id="reserveFilters"></div>
-  <div class="reserve-grid" id="reserveGrid"></div>
-
-  <span id="reserveCount" style="display:none"></span>
-  <span id="unavailableCount" style="display:none"></span>
-
-</div>
 
   </aside>
 
-  <!-- Inputs ocultos -->
   <input type="file" id="jsonInput" accept=".json" hidden />
   <button id="btnCarregarTracado" class="file-btn floating" title="Carregar traçado JSON">
     <i data-lucide="upload"></i>
@@ -94,7 +98,8 @@
   <script src="js/vehicleManager.js"></script>
   <script src="js/yardmanager.js"></script>
   <script src="js/SynchronizationManager .js"></script>
+  <script src="js/tripLogger.js"></script>
   <script src="js/trajectorySimulator.js"></script>
-  <script src="js/routes.js"></script>   <!-- último -->
+  <script src="js/routes.js"></script>
 </body>
 </html>

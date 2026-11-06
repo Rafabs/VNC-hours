@@ -785,3 +785,129 @@ html, body { height: 100%; margin: 0; overflow: hidden; }
 .vp-info > div { display: flex; justify-content: space-between; gap: 4px; }
 .vp-info > div > span { color: #94a3b8; }
 .vp-info > div > b { color: #e2e8f0; font-weight: 600; }
+
+/* ============================================================
+   PAINEL PLATAFORMAS
+   ============================================================ */
+#plataformasList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 8px;
+}
+
+.plataforma-slot {
+  background: #0f172a;
+  border-radius: 8px;
+  padding: 8px;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all .15s;
+}
+
+.plataforma-slot .pl-num {
+  font-size: .62rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+/* Vazia */
+.plataforma-vazia {
+  border: 1px dashed #334155;
+  align-items: center;
+  justify-content: center;
+}
+.plataforma-vazia .pl-num { position: absolute; top: 8px; left: 8px; }
+.plataforma-vazia .pl-livre {
+  color: #475569;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Ocupada */
+.plataforma-ocupada {
+  border: 1px solid #334155;
+  border-left: 3px solid var(--cor-status);
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+.plataforma-ocupada:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(0,0,0,.4);
+}
+
+.plataforma-ocupada .pl-veiculo {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.plataforma-ocupada .pl-prefixo {
+  font-size: .9rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: .3px;
+}
+.plataforma-ocupada .pl-linha {
+  font-size: .6rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+  line-height: 1.4;
+}
+
+.plataforma-ocupada .pl-status {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+.plataforma-ocupada .pl-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+  animation: pulse-dot 1.5s infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+.plataforma-ocupada .pl-partida {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: .68rem;
+  margin-top: auto;
+  padding-top: 4px;
+  border-top: 1px solid #1e293b;
+}
+.plataforma-ocupada .pl-partida-hora {
+  font-weight: 700;
+  color: #cbd5e1;
+  font-variant-numeric: tabular-nums;
+}
+.plataforma-ocupada .pl-partida-falta {
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* Mobile: lista vertical, 1 coluna */
+@media (max-width: 767px) {
+  #plataformasList {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .plataforma-slot { min-height: 72px; }
+  .plataforma-ocupada .pl-prefixo { font-size: .85rem; }
+}

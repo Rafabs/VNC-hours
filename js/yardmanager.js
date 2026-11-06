@@ -738,7 +738,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Carregar dados
       await vehicleManager.loadVehicleData();
-      await scheduleManager.loadScheduleData();
+      await scheduleManager.loadScheduleDataWithRollover();
 
       console.log(`✅ Veículos carregados: ${vehicleManager.vehicles.size}`);
       console.log(

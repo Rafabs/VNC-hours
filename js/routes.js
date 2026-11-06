@@ -1,10 +1,5 @@
 /* ============================================================
    routes.html - Oficial
-   - Importa data/tracados-vnc.json automaticamente
-   - Carrega scheduleData
-   - Inicia VehicleManager + trajectorySimulator
-   - Painel "Em Viagem" no sidebar
-   - Toggle de semáforos/paradas no header
    ============================================================ */
 
 const ROUTES_CFG = {
@@ -22,7 +17,9 @@ const paradaMarkersGlobais   = new Map();
 const visibilidade = { semaforos: true, paradas: true };
 const CORES = { ida: '#2ecc71', volta: '#3498db' };
 
-/* ---------- Mapa ---------- */
+/* ============================================================
+   MAPA
+   ============================================================ */
 function initRotasMap() {
   rotasMap = L.map('map').setView([-23.5505, -46.6333], 13);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -31,9 +28,10 @@ function initRotasMap() {
   window.rotasMap = () => rotasMap;
 }
 
-/* ---------- Desenho ---------- */
+/* ============================================================
+   DESENHO DE TRAÇADOS
+   ============================================================ */
 function desenharTracados(tracados) {
-  // Limpa layers antigos
   layersTrecho.forEach(l => rotasMap.removeLayer(l));
   layersTrecho.clear();
   semaforoMarkersGlobais.forEach(m => rotasMap.removeLayer(m));
@@ -51,19 +49,16 @@ function desenharTracados(tracados) {
     const corTxt = coresLinha.txt;
 
     ['ida', 'volta'].forEach(sentido => {
-      // 1) Trechos
       (linha[sentido]?.trechos || []).forEach(t => {
         const latlngs = t.geometria.map(p => [p.lat, p.lng]);
         latlngs.forEach(p => bbox.push(p));
 
-        // Halo branco por baixo
         const halo = L.polyline(latlngs, {
           color: '#ffffff', weight: 10, opacity: .6,
           lineCap: 'round', lineJoin: 'round',
         }).addTo(rotasMap).bringToBack();
         layersTrecho.set(`${linha.linha}-${sentido}-${t.id}-halo`, halo);
 
-        // Traçado na cor da linha
         const poly = L.polyline(latlngs, {
           color: corBg, weight: 6,
           opacity: sentido === 'ida' ? .95 : .75,
@@ -77,11 +72,9 @@ function desenharTracados(tracados) {
         layersTrecho.set(`${linha.linha}-${sentido}-${t.id}`, poly);
       });
 
-      // 2) Semáforos
       (linha[sentido]?.semaforos || []).forEach(s => {
         const icon = L.divIcon({
-          className: '',
-          html: `<div class="semaforo-marker">🚦</div>`,
+          className: '', html: `<div class="semaforo-marker">🚦</div>`,
           iconSize: [22, 22], iconAnchor: [11, 11],
         });
         const mk = L.marker([s.lat, s.lng], { icon }).addTo(rotasMap);
@@ -91,11 +84,9 @@ function desenharTracados(tracados) {
         if (!visibilidade.semaforos) rotasMap.removeLayer(mk);
       });
 
-      // 3) Paradas
       (linha[sentido]?.paradas || []).forEach(p => {
         const icon = L.divIcon({
-          className: '',
-          html: `<div class="parada-marker">🚏</div>`,
+          className: '', html: `<div class="parada-marker">🚏</div>`,
           iconSize: [22, 22], iconAnchor: [11, 11],
         });
         const mk = L.marker([p.lat, p.lng], { icon }).addTo(rotasMap);
@@ -105,12 +96,16 @@ function desenharTracados(tracados) {
         if (!visibilidade.paradas) rotasMap.removeLayer(mk);
       });
     });
+
+    if (linha.ida?.trechos?.length) {
+      const badge = criarBadgeLinha(linha, corBg, corTxt);
+      if (badge) layersTrecho.set(`${linha.linha}-badge`, badge);
+    }
   });
 
   if (bbox.length) rotasMap.fitBounds(L.latLngBounds(bbox), { padding: [60, 60] });
 }
 
-/* Busca BG_COLOR/TXT_COLOR da linha no scheduleData */
 function buscarCoresLinhaNoSchedule(codigoLinha) {
   const data = window.vehicleManager?.currentScheduleData || scheduleData || [];
   const norm = s => String(s || '').toUpperCase().replace(/\s+/g, '').trim();
@@ -127,11 +122,9 @@ function buscarCoresLinhaNoSchedule(codigoLinha) {
   return { bg: '#64748b', txt: '#ffffff' };
 }
 
-/* Badge flutuante com o código da linha */
 function criarBadgeLinha(linha, corBg, corTxt) {
   const trechos = linha.ida.trechos;
   if (!trechos.length) return null;
-
   const meio = Math.floor(trechos.length / 2);
   const geom = trechos[meio].geometria;
   if (!geom?.length) return null;
@@ -147,16 +140,14 @@ function criarBadgeLinha(linha, corBg, corTxt) {
     ">${esc(linha.linha)}</span>`;
 
   return L.marker([ponto.lat, ponto.lng], {
-    icon: L.divIcon({
-      className: '', html,
-      iconSize: [80, 24], iconAnchor: [40, 12],
-    }),
-    interactive: false,
-    zIndexOffset: 500,
+    icon: L.divIcon({ className: '', html, iconSize: [80, 24], iconAnchor: [40, 12] }),
+    interactive: false, zIndexOffset: 500,
   }).addTo(rotasMap);
 }
 
-/* ---------- Carregamento ---------- */
+/* ============================================================
+   CARREGAMENTO
+   ============================================================ */
 async function carregarTracados() {
   try {
     const resp = await fetch(ROUTES_CFG.TRACADOS_URL);
@@ -168,9 +159,8 @@ async function carregarTracados() {
   } catch (err) {
     console.error('[routes] falha ao carregar traçados:', err);
     alert(
-      'Não foi possível carregar o traçado em:\n' +
-      ROUTES_CFG.TRACADOS_URL +
-      '\n\nVerifique se o arquivo existe. Use o botão de upload no mapa como alternativa.'
+      'Não foi possível carregar o traçado em:\n' + ROUTES_CFG.TRACADOS_URL +
+      '\n\nVerifique se o arquivo existe.'
     );
     return null;
   }
@@ -179,7 +169,7 @@ async function carregarTracados() {
 async function carregarSchedule() {
   try {
     const sm = new ScheduleManager();
-    scheduleData = await sm.loadScheduleData();
+    scheduleData = await sm.loadScheduleDataWithRollover();
     if (!scheduleData || !scheduleData.length) {
       scheduleData = sm.getFallbackData();
     }
@@ -191,6 +181,49 @@ async function carregarSchedule() {
   }
 }
 
+/* ============================================================
+   ROLLOVER DE MEIA-NOITE
+   ============================================================ */
+async function recarregarScheduleComRollover() {
+  try {
+    const sm = new ScheduleManager();
+    const novo = await sm.loadScheduleDataWithRollover();
+    if (!novo || !novo.length) return;
+
+    scheduleData = novo;
+    if (vehicleManager) {
+      vehicleManager.setCurrentScheduleData(novo);
+      vehicleManager.updateVehicleWithSchedule();
+      vehicleManager.triggerVehicleUpdate();
+    }
+    if (tracadosData) desenharTracados(tracadosData);
+    if (tracadosData) window.atualizarTracadoSimulacao(tracadosData);
+
+    console.log(`[routes] ✅ rollover OK — ${novo.length} partidas`);
+    showToast(`🔄 Virada de dia: ${novo.length} partidas carregadas`);
+  } catch (e) {
+    console.error('[routes] erro no rollover:', e);
+  }
+}
+
+function agendarRolloverDiario() {
+  const agora = new Date();
+  const proximaMeiaNoite = new Date(agora);
+  proximaMeiaNoite.setHours(24, 1, 0, 0);
+  const delay = proximaMeiaNoite - agora;
+
+  setTimeout(async () => {
+    console.log('[routes] 🔄 Virada de dia — recarregando com rollover...');
+    await recarregarScheduleComRollover();
+    agendarRolloverDiario();
+  }, delay);
+
+  console.log(`[routes] ⏰ Rollover agendado pra ${proximaMeiaNoite.toLocaleString()}`);
+}
+
+/* ============================================================
+   VEHICLE MANAGER
+   ============================================================ */
 function initVehicleManager() {
   vehicleManager = new VehicleManager();
   vehicleManager.setCurrentScheduleData(scheduleData);
@@ -202,26 +235,36 @@ function initVehicleManager() {
     vehicleManager.startAutoUpdate();
     vehicleManager.startStatusMonitoring();
     renderPainelEmViagem();
+    renderPlataformas();
 
     if (tracadosData) desenharTracados(tracadosData);
   });
 
   document.addEventListener('vehiclesUpdated', renderPainelEmViagem);
   document.addEventListener('vehicleStatusesChanged', renderPainelEmViagem);
+  document.addEventListener('vehiclesUpdated', renderPlataformas);
+  document.addEventListener('vehicleStatusesChanged', renderPlataformas);
+
+  // Countdown das plataformas (30s)
+  setInterval(renderPlataformas, 30000);
 }
 
-/* ---------- Painel Em Viagem ---------- */
+/* ============================================================
+   PAINEL EM VIAGEM
+   ============================================================ */
 function renderPainelEmViagem() {
   if (!vehicleManager) return;
   const emViagem = vehicleManager.getVehiclesEmViagem();
   document.getElementById('emViagemCount').textContent = emViagem.length;
 
-  const aguardando = vehicleManager.getVehiclesAguardando().length
-                   + vehicleManager.getVehiclesNaPlataforma().length
-                   + vehicleManager.getVehiclesAlinhando().length;
+  const aguardando = vehicleManager.getVehiclesAguardando().length;
   const reserva = vehicleManager.getVehiclesReserva().length;
+  const alinhando = vehicleManager.getVehiclesAlinhando().length;
+  const plataforma = vehicleManager.getVehiclesNaPlataforma().length;
+
   document.getElementById('patioCount').textContent = aguardando;
   document.getElementById('reservaCount').textContent = reserva;
+  document.getElementById('plataformaCount').textContent = alinhando + plataforma;
 
   const el = document.getElementById('emViagemList');
   if (!emViagem.length) {
@@ -252,6 +295,75 @@ function renderPainelEmViagem() {
   }).join('');
 }
 
+/* ============================================================
+   PAINEL PLATAFORMAS
+   ============================================================ */
+function renderPlataformas() {
+  if (!vehicleManager) return;
+  const el = document.getElementById('plataformasList');
+  if (!el) return;
+
+  // Agrupa por plataforma (só alinhando + na plataforma)
+  const porPlataforma = new Map();
+  vehicleManager.vehicles.forEach(v => {
+    if (!v.plataforma) return;
+    if (v.categoria !== 'plataforma' && v.categoria !== 'alinhando') return;
+    porPlataforma.set(String(v.plataforma).padStart(2, '0'), v);
+  });
+
+  // 8 plataformas fixas
+  const numeros = ['01','02','03','04','05','06','07','08'];
+  const agora = new Date();
+  const minAgora = agora.getHours() * 60 + agora.getMinutes();
+
+  el.innerHTML = numeros.map(num => {
+    const v = porPlataforma.get(num);
+    if (!v) {
+      return `
+        <div class="plataforma-slot plataforma-vazia">
+          <div class="pl-num">PLAT. ${num}</div>
+          <div class="pl-livre">LIVRE</div>
+        </div>
+      `;
+    }
+
+    // Countdown até a partida
+    const [hh, mm] = (v.proximaViagem || '00:00').split(':').map(Number);
+    const partidaMin = hh * 60 + mm;
+    let faltaMin = partidaMin - minAgora;
+    if (faltaMin < 0) faltaMin += 24 * 60;
+
+    const isAlinhando = v.categoria === 'alinhando';
+    const corStatus = isAlinhando ? '#17a2b8' : '#f39c12';
+    const labelStatus = isAlinhando ? 'ALINHANDO' : 'NA PLATAFORMA';
+
+    // Cores da linha
+    const coresLinha = buscarCoresLinhaNoSchedule(v.linhaAtual);
+
+    return `
+      <div class="plataforma-slot plataforma-ocupada ${isAlinhando ? 'alinhando' : 'na-plataforma'}"
+           style="--cor-status:${corStatus}">
+        <div class="pl-num">PLAT. ${num}</div>
+        <div class="pl-veiculo">
+          <span class="pl-prefixo">${esc(v.prefixo)}</span>
+          <span class="pl-linha" style="background:${coresLinha.bg};color:${coresLinha.txt}">${esc(v.linhaAtual || '—')}</span>
+        </div>
+        <div class="pl-status" style="color:${corStatus}">
+          <span class="pl-status-dot"></span>
+          ${labelStatus}
+        </div>
+        <div class="pl-partida">
+          <span class="pl-partida-hora">${esc(v.proximaViagem || '—')}</span>
+          <span class="pl-partida-falta">${faltaMin} min</span>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
 function calcularSentido(v) {
   if (!v.ultimaPartida || !v.duracaoViagem) return 'ida';
   const agora = new Date();
@@ -281,7 +393,9 @@ function buscarDestinoLinha(linha) {
   return l?.nome || '';
 }
 
-/* ---------- Tabs da sidebar ---------- */
+/* ============================================================
+   TABS DA SIDEBAR
+   ============================================================ */
 function inicializarTabs() {
   document.querySelectorAll('.sidebar-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -294,7 +408,9 @@ function inicializarTabs() {
   });
 }
 
-/* ---------- Toggle semáforos / paradas ---------- */
+/* ============================================================
+   TOGGLE SEMÁFOROS / PARADAS
+   ============================================================ */
 function alternarVisibilidade(tipo) {
   visibilidade[tipo] = !visibilidade[tipo];
   const mostrar = visibilidade[tipo];
@@ -332,16 +448,18 @@ function showToast(msg) {
   toastTimerR = setTimeout(() => el.classList.add('hidden'), 1800);
 }
 
-/* ---------- Boot ---------- */
+/* ============================================================
+   BOOT
+   ============================================================ */
 async function boot() {
   initRotasMap();
   inicializarTabs();
 
-  // Carrega schedule ANTES do traçado
   await carregarSchedule();
   const tracados = await carregarTracados();
 
   initVehicleManager();
+  agendarRolloverDiario();
 
   if (tracados) {
     const tentar = () => {
@@ -372,6 +490,22 @@ async function boot() {
 
   document.getElementById('btnToggleSemaforos').onclick = () => alternarVisibilidade('semaforos');
   document.getElementById('btnToggleParadas').onclick = () => alternarVisibilidade('paradas');
+
+  document.getElementById('btnExportLog').onclick = () => {
+    if (!window.TripLogger) { showToast('Logger indisponível'); return; }
+    const resumo = window.TripLogger.resumo();
+    if (resumo.total === 0) { showToast('Nenhum log registrado ainda'); return; }
+    const json = confirm(
+      `Exportar ${resumo.total} viagens?\n\n` +
+      `OK: ${resumo.porStatus.ok}\n` +
+      `Ajustar: ${resumo.porStatus.ajustar}\n` +
+      `Recolher: ${resumo.porStatus.recolher}\n` +
+      `Diferença média: ${resumo.media} min\n\n` +
+      `OK = JSON | Cancelar = CSV`
+    );
+    if (json) window.TripLogger.exportar();
+    else window.TripLogger.exportarCSV();
+  };
 
   if (window.lucide) lucide.createIcons();
 }

@@ -1,10 +1,10 @@
 class ScheduleManager {
   constructor() {
     this.config = {
-      immediateThreshold: 4, // minutos para considerar "embarque imediato"
-      confirmedThreshold: 6, // minutos para considerar "confirmado"
-      updateInterval: 10000, // intervalo de atualização em milissegundos
-      language: "pt", // idioma inicial
+      immediateThreshold: 4,
+      confirmedThreshold: 6,
+      updateInterval: 10000,
+      language: "pt",
     };
 
     this.csvLoader = new CSVLoader();
@@ -13,28 +13,70 @@ class ScheduleManager {
     this.lastUpdateTime = null;
   }
 
-  // Carregar dados dos CSVs
-  async loadScheduleData(fileSelection = null) {
-    try {
-      // ✅ DISPARAR EVENTO após carregar dados
-      this.triggerScheduleUpdate();
+  // ============================================================
+  // ROLLOVER DE MEIA-NOITE
+  // ============================================================
+  async loadScheduleDataWithRollover(fileSelection = null) {
+    // 1) Carrega o dia atual via CSVLoader
+    await this.csvLoader.loadCSVData(fileSelection);
+    this.scheduleData = this.csvLoader.getFormattedData();
 
-      // ✅ INICIAR ATUALIZAÇÃO AUTOMÁTICA
-      this.startAutoUpdate();
-      const csvData = await this.csvLoader.loadCSVData(fileSelection);
-      this.scheduleData = this.csvLoader.getFormattedData();
-      console.log(
-        "Dados de partidas carregados:",
-        this.scheduleData.length,
-        "registros",
-      );
-      return this.scheduleData;
-    } catch (error) {
-      console.error("Erro ao carregar dados:", error);
-      // Em caso de erro, usar dados de fallback
-      this.scheduleData = this.getFallbackData();
+    const diaAtual = this.getCurrentDate();
+    const diaAnterior = this.dateStrMenosUmDia(diaAtual);
+
+    // 2) Busca partidas do dia anterior (pode retornar null)
+    let partidasAnteriores = null;
+    try {
+      partidasAnteriores = await this.csvLoader.loadScheduleForDate(diaAnterior);
+    } catch (e) {
+      console.warn('[rollover] erro ao carregar dia anterior:', e);
+    }
+
+    if (!Array.isArray(partidasAnteriores) || partidasAnteriores.length === 0) {
+      console.log('[rollover] nenhuma partida do dia anterior para reter');
+      this.triggerScheduleUpdate();
       return this.scheduleData;
     }
+
+    // 3) Filtra só as que AINDA NÃO retornaram
+    const agora = new Date();
+    const minAgora = agora.getHours() * 60 + agora.getMinutes();
+
+    const retidas = partidasAnteriores.filter(p => {
+      if (!p.time) return false;
+      const [h, m] = p.time.split(':').map(Number);
+      if (isNaN(h) || isNaN(m)) return false;
+
+      const partidaMin = h * 60 + m;
+      const retornoMin = partidaMin + (p.duracao || 90);
+      const retornoReal = retornoMin >= partidaMin ? retornoMin : retornoMin + 1440;
+      return (minAgora + 1440) < retornoReal;
+    });
+
+    // 4) Marca origem e concatena SEM duplicar
+    const marcadas = retidas.map(p => ({ ...p, _doDiaAnterior: true }));
+    const chave = p => `${p.vehicle}|${p.time}|${p.line}`;
+    const jaExiste = new Set(this.scheduleData.map(chave));
+    const novas = marcadas.filter(p => !jaExiste.has(chave(p)));
+
+    this.scheduleData = [...novas, ...this.scheduleData];
+
+    console.log(
+      `[rollover] ${novas.length} partidas do dia ${diaAnterior} retidas ` +
+      `(${retidas.length} candidatas, ${retidas.length - novas.length} duplicadas)`
+    );
+
+    this.triggerScheduleUpdate();
+    return this.scheduleData;
+  }
+
+  dateStrMenosUmDia(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() - 1);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${dd}`;
   }
 
   // ✅ MÉTODO PARA INICIAR ATUALIZAÇÃO AUTOMÁTICA
@@ -43,10 +85,8 @@ class ScheduleManager {
       clearInterval(this.updateInterval);
     }
 
-    // Atualizar a cada 5 segundos (ajuste conforme necessário)
     this.updateInterval = setInterval(async () => {
       try {
-        // Simular uma nova carga de dados (ou buscar do servidor se tiver)
         this.triggerScheduleUpdate();
       } catch (error) {
         console.error("Erro na atualização automática:", error);
@@ -67,7 +107,7 @@ class ScheduleManager {
     console.log("📅 Schedule atualizado e evento disparado");
   }
 
-  // ✅ MÉTODO PARA PARAR ATUALIZAÇÕES (se necessário)
+  // ✅ MÉTODO PARA PARAR ATUALIZAÇÕES
   stopAutoUpdate() {
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
@@ -75,9 +115,12 @@ class ScheduleManager {
     }
   }
 
-  // Carregar arquivo específico
+  // Carregar arquivo específico (compatibilidade)
   async loadSelectedFile(fileSelection) {
-    return await this.loadScheduleData(fileSelection);
+    await this.csvLoader.loadCSVData(fileSelection);
+    this.scheduleData = this.csvLoader.getFormattedData();
+    this.triggerScheduleUpdate();
+    return this.scheduleData;
   }
 
   // Dados de fallback em caso de erro no carregamento
@@ -117,27 +160,26 @@ class ScheduleManager {
   async refreshScheduleData(fileSelection = null) {
     try {
       const dadosAntigos = this.scheduleData.length;
-      await this.loadScheduleData(fileSelection);
+      await this.csvLoader.loadCSVData(fileSelection);
+      this.scheduleData = this.csvLoader.getFormattedData();
       const dadosNovos = this.scheduleData.length;
 
       console.log(
         `🔄 Dados atualizados: ${dadosAntigos} → ${dadosNovos} registros`,
       );
 
-      // Verificar se houve mudanças significativas
       if (dadosAntigos !== dadosNovos) {
         console.log("📈 Mudança detectada nos dados da escala");
-        return true; // Houve mudanças
+        return true;
       }
 
-      return false; // Sem mudanças significativas
+      return false;
     } catch (error) {
       console.error("Erro no refresh dos dados:", error);
       return false;
     }
   }
 
-  // Verificar se há novas partidas disponíveis
   hasNewDepartures() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -147,14 +189,12 @@ class ScheduleManager {
       const departureTime = hours * 60 + minutes;
       const minutesUntil = departureTime - currentTime;
 
-      // Considerar "nova" partidas que entraram na janela de 30 minutos
       return minutesUntil >= 0 && minutesUntil <= 30;
     });
 
     return novasPartidas.length > 0;
   }
 
-  // Obter estatísticas atualizadas
   getScheduleStats() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -191,14 +231,12 @@ class ScheduleManager {
     return stats;
   }
 
-  // Calcular minutos até a partida
   minutesUntilDeparture(departureTime) {
     const now = new Date();
     const [hours, minutes] = departureTime.split(":").map(Number);
     const departureDate = new Date();
     departureDate.setHours(hours, minutes, 0, 0);
 
-    // Se o horário já passou hoje, considerar para amanhã
     if (departureDate < now) {
       departureDate.setDate(departureDate.getDate() + 1);
     }
@@ -206,7 +244,6 @@ class ScheduleManager {
     return Math.floor((departureDate - now) / (1000 * 60));
   }
 
-  // Obter TODAS as partidas futuras (incluindo as que já passaram há menos de 1 minuto)
   getAllUpcomingDepartures() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -216,7 +253,6 @@ class ScheduleManager {
       const departureTime = hours * 60 + minutes;
       const minutesUntil = this.minutesUntilDeparture(departure.time);
 
-      // Incluir partidas que ainda não ocorreram OU que ocorreram há menos de 1 minuto
       return minutesUntil >= -1;
     });
 
@@ -226,48 +262,41 @@ class ScheduleManager {
     return filtered;
   }
 
-  // Obter as próximas X partidas a partir do horário atual
   getNextDepartures(limit = 10) {
     const allDepartures = this.getAllUpcomingDepartures();
 
-    // Ordenar por horário mais próximo
     const sortedDepartures = allDepartures.sort((a, b) => {
       const minutesA = this.minutesUntilDeparture(a.time);
       const minutesB = this.minutesUntilDeparture(b.time);
       return minutesA - minutesB;
     });
 
-    // Retornar apenas as próximas X partidas
     return sortedDepartures.slice(0, limit);
   }
 
-  // Obter todas as partidas restantes (para scroll)
   getRemainingDepartures(limit = 10) {
     const allDepartures = this.getAllUpcomingDepartures();
 
-    // Ordenar por horário mais próximo
     const sortedDepartures = allDepartures.sort((a, b) => {
       const minutesA = this.minutesUntilDeparture(a.time);
       const minutesB = this.minutesUntilDeparture(b.time);
       return minutesA - minutesB;
     });
 
-    // Retornar todas as partidas a partir da posição X
     return sortedDepartures;
   }
 
-  // Verificar status da partida
   getDepartureStatus(departureTime) {
     const minutesUntil = this.minutesUntilDeparture(departureTime);
 
     if (minutesUntil < 0) {
-      return "departed"; // Já partiu
+      return "departed";
     } else if (minutesUntil <= this.config.immediateThreshold) {
-      return "immediate"; // Embarque imediato (0-4 minutos)
+      return "immediate";
     } else if (minutesUntil <= this.config.confirmedThreshold) {
-      return "confirmed"; // Confirmado (5-6 minutos)
+      return "confirmed";
     } else {
-      return "scheduled"; // Previsto (7+ minutos)
+      return "scheduled";
     }
   }
 
@@ -283,12 +312,10 @@ class ScheduleManager {
     ).padStart(2, "0")}`;
   }
 
-  // Obter duração da viagem por linha/veículo
   getDuracaoViagem(departure) {
-    return departure.duracao || 45; // Default 45 minutos
+    return departure.duracao || 45;
   }
 
-  // Calcular tempo até o retorno do veículo
   getTempoAteRetorno(departure) {
     const now = new Date();
     const [hours, minutes] = departure.time.split(":").map(Number);
@@ -304,7 +331,6 @@ class ScheduleManager {
     return Math.max(0, diffMinutes);
   }
 
-  // Verificar se veículo está em viagem
   isVeiculoEmViagem(departure) {
     const now = new Date();
     const [hours, minutes] = departure.time.split(":").map(Number);
@@ -317,7 +343,6 @@ class ScheduleManager {
     return now >= partidaDate && now <= retornoDate;
   }
 
-  // Obter próximos retornos de veículos
   getProximosRetornos(limit = 10) {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -329,7 +354,7 @@ class ScheduleManager {
         const duracao = this.getDuracaoViagem(departure);
         const retornoTime = partidaTime + duracao;
 
-        return retornoTime >= currentTime && retornoTime <= currentTime + 120; // Próximas 2 horas
+        return retornoTime >= currentTime && retornoTime <= currentTime + 120;
       })
       .map((departure) => ({
         vehicle: departure.vehicle,
@@ -345,7 +370,6 @@ class ScheduleManager {
     return retornos;
   }
 
-  // Obter o nome do arquivo CSV atual
   getCurrentCSVFileName() {
     try {
       if (
@@ -362,24 +386,20 @@ class ScheduleManager {
     }
   }
 
-  // Verificar se a operação está encerrada para uma linha específica
   isLineOperationEnded(line) {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
-    // Se for antes das 04:30, considerar operação do dia anterior encerrada
     if (currentTime < 4 * 60 + 30) {
-      return true; // Operação encerrada até 04:30
+      return true;
     }
 
-    // Buscar todas as partidas da linha
     const lineDepartures = this.scheduleData.filter(
       (departure) => departure.line === line,
     );
 
     if (lineDepartures.length === 0) return false;
 
-    // Encontrar última partida da linha
     const lastDeparture = lineDepartures.reduce((latest, current) => {
       const [latestHours, latestMinutes] = latest.time.split(":").map(Number);
       const [currentHours, currentMinutes] = current.time
@@ -396,13 +416,11 @@ class ScheduleManager {
     const lastDepartureTime = lastHours * 60 + lastMinutes;
     const duracao = lastDeparture.duracao || 45;
 
-    // Considerar operação encerrada 1 minuto após o retorno da última viagem
     const operationEndTime = lastDepartureTime + duracao + 1;
 
     return currentTime > operationEndTime;
   }
 
-  // Obter status da operação por linha
   getLineOperationStatus(line) {
     if (this.isLineOperationEnded(line)) {
       return {
@@ -419,13 +437,11 @@ class ScheduleManager {
     };
   }
 
-  // Obter horários de um veículo para múltiplos dias
   async getVehicleScheduleForMultipleDays(vehiclePrefix, days = 7) {
     try {
       const hoje = new Date();
       const schedules = [];
 
-      // Buscar horários para cada dia
       for (let i = 0; i < days; i++) {
         const data = new Date(hoje);
         data.setDate(hoje.getDate() + i);
@@ -435,10 +451,9 @@ class ScheduleManager {
         const dia = String(data.getDate()).padStart(2, "0");
         const dataStr = `${ano}-${mes}-${dia}`;
 
-        // Carregar dados do dia
         const daySchedule = await this.csvLoader.loadScheduleForDate(dataStr);
+        if (!daySchedule) continue;
 
-        // Filtrar apenas os horários do veículo específico
         const vehicleSchedule = daySchedule
           .filter((departure) => departure.vehicle === vehiclePrefix)
           .map((departure) => ({
@@ -466,7 +481,6 @@ class ScheduleManager {
     }
   }
 
-  // Modifique também o método getVehicleSchedule existente para usar o novo formato:
   getVehicleSchedule(vehiclePrefix, scheduleData) {
     const filtered = scheduleData.filter(
       (departure) => departure.vehicle === vehiclePrefix,
@@ -485,7 +499,6 @@ class ScheduleManager {
       });
   }
 
-  // Adicione este método auxiliar:
   getCurrentDate() {
     const hoje = new Date();
     const ano = hoje.getFullYear();
@@ -494,21 +507,17 @@ class ScheduleManager {
     return `${ano}-${mes}-${dia}`;
   }
 
-  // Obter partidas filtradas por operação (exclui linhas encerradas)
   getFilteredDepartures() {
     const allDepartures = this.getAllUpcomingDepartures();
 
-    // Filtrar partidas de linhas que ainda estão em operação
     return allDepartures.filter((departure) => {
       return !this.isLineOperationEnded(departure.line);
     });
   }
 
-  // Obter próximas partidas filtradas
   getFilteredNextDepartures(limit = 10) {
     const filteredDepartures = this.getFilteredDepartures();
 
-    // Ordenar por horário mais próximo
     const sortedDepartures = filteredDepartures.sort((a, b) => {
       const minutesA = this.minutesUntilDeparture(a.time);
       const minutesB = this.minutesUntilDeparture(b.time);
@@ -518,11 +527,9 @@ class ScheduleManager {
     return sortedDepartures.slice(0, limit);
   }
 
-  // Obter todas as partidas restantes filtradas
   getFilteredRemainingDepartures() {
     const filteredDepartures = this.getFilteredDepartures();
 
-    // Ordenar por horário mais próximo
     const sortedDepartures = filteredDepartures.sort((a, b) => {
       const minutesA = this.minutesUntilDeparture(a.time);
       const minutesB = this.minutesUntilDeparture(b.time);
@@ -535,19 +542,13 @@ class ScheduleManager {
   // ✅ MÉTODO PARA ATUALIZAÇÃO AUTOMÁTICA
   startAutoRefresh() {
     console.log('🔄 Iniciando atualização automática do schedule...');
-    
-    // Atualizar a cada 30 segundos (ajuste conforme necessário)
+
     setInterval(async () => {
       try {
         console.log('⏰ Atualizando dados do schedule...');
-        
-        // Fazer uma cópia dos dados anteriores para comparar
+
         const previousData = this.scheduleData ? [...this.scheduleData] : [];
-        
-        // Recarregar dados (simulação - você pode ajustar para buscar do servidor)
-        // await this.loadScheduleData(); // Descomente se quiser recarregar
-        
-        // Disparar evento de atualização
+
         const event = new CustomEvent('scheduleRefreshed', {
           detail: {
             previousCount: previousData.length,
@@ -556,12 +557,12 @@ class ScheduleManager {
           }
         });
         document.dispatchEvent(event);
-        
+
         console.log('✅ Schedule refrescado');
-        
+
       } catch (error) {
         console.error('❌ Erro ao refrescar schedule:', error);
       }
-    }, 30000); // 30 segundos
+    }, 30000);
   }
 }

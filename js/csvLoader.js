@@ -2,6 +2,7 @@ class CSVLoader {
   constructor() {
     this.data = [];
     this.currentFile = "";
+    this._manifest = null;   // cache do manifest    
   }
 
   // Formatar data para o padrão dd_mm_yyyy

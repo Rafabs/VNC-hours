@@ -241,15 +241,12 @@ class BusDeparturesApp {
     this.linesData.set(lineKey, {
       ...lineData,
       status: newStatus,
+      manualStatus: true,     // ✅ marca que foi escolhido manualmente
       lastUpdate: new Date(),
     });
 
     this.updateLinesDisplay();
-
-    // Se status for "encerrada", verificar se é automático
-    if (newStatus === "ended") {
-      console.log(`Linha ${lineData.line} encerrada manualmente`);
-    }
+    console.log(`Linha ${lineKey} → status manual: ${newStatus}`);
   }
 
   // No arquivo app.js, adicione este método à classe BusDeparturesApp
@@ -352,44 +349,34 @@ class BusDeparturesApp {
 
   // Criar elemento de linha
   createLineElement(lineData, lang) {
-    const div = document.createElement("div");
-    div.className = "line-status-item";
-    div.addEventListener("click", () => this.showStatusModal(lineData));
+    const div = document.createElement('div');
+    div.className = `line-status-item status-${lineData.status || 'normal'}`;
+    div.addEventListener('click', () => this.showStatusModal(lineData));
 
     const statusTexts = {
-      pt: {
-        normal: "OPERAÇÃO NORMAL",
-        reduced: "VELOCIDADE REDUZIDA",
-        paralyzed: "PARALISADA",
-        ended: "ENCERRADA",
-      },
-      en: {
-        normal: "NORMAL OPERATION",
-        reduced: "REDUCED SPEED",
-        paralyzed: "PARALYZED",
-        ended: "ENDED",
-      },
+      pt: { normal: 'OPERAÇÃO NORMAL', reduced: 'VELOCIDADE REDUZIDA', paralyzed: 'PARALISADA', ended: 'ENCERRADA' },
+      en: { normal: 'NORMAL OPERATION',  reduced: 'REDUCED SPEED',     paralyzed: 'PARALYZED', ended: 'ENDED' },
     };
-
     const statusClass = {
-      normal: "status-normal",
-      reduced: "status-reduced",
-      paralyzed: "status-paralyzed",
-      ended: "status-ended",
+      normal: 'status-normal',
+      reduced: 'status-reduced',
+      paralyzed: 'status-paralyzed',
+      ended: 'status-ended',
     };
 
-    const currentLang = lang || "pt";
-    const status = lineData.status || "normal";
+    const currentLang = lang || 'pt';
+    const status = lineData.status || 'normal';
 
     div.innerHTML = `
-        <div class="line-color" style="background-color: ${lineData.bgColor};"></div>
-        <div class="line-info">
-            <div class="line-number">${lineData.line}</div>
-            <div class="line-destination">${lineData.destination}</div>
-        </div>
-        <div class="line-status ${statusClass[status]}">
-            ${statusTexts[currentLang][status]}
-        </div>
+      <div class="line-color" style="background-color: ${lineData.bgColor};"></div>
+      <div class="line-info">
+        <div class="line-number">${lineData.line}</div>
+        <div class="line-destination">${lineData.destination}</div>
+      </div>
+      <div class="line-status ${statusClass[status]}">
+        ${statusTexts[currentLang][status]}
+        ${lineData.manualStatus ? '<span class="manual-dot" title="Definido manualmente"></span>' : ''}
+      </div>
     `;
 
     return div;
@@ -399,69 +386,65 @@ class BusDeparturesApp {
   updateLinesAutoStatus() {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
-    const allDepartures = this.scheduleManager.getAllUpcomingDepartures();
+    const allDepartures = this.scheduleManager.scheduleData || [];
 
-    // Agrupar partidas por linha
-    const linesLastDeparture = new Map();
+    // Estatísticas por linha
     const linesStats = new Map();
-
     allDepartures.forEach((departure) => {
-      const [hours, minutes] = departure.time.split(":").map(Number);
+      const [hours, minutes] = departure.time.split(':').map(Number);
       const departureTime = hours * 60 + minutes;
       const lineKey = departure.line;
 
-      if (
-        !linesLastDeparture.has(lineKey) ||
-        departureTime > linesLastDeparture.get(lineKey)
-      ) {
-        linesLastDeparture.set(lineKey, departureTime);
-      }
-
-      // Coletar estatísticas por linha
       if (!linesStats.has(lineKey)) {
         linesStats.set(lineKey, {
           total: 0,
           futuras: 0,
+          ultimaPartida: -1,
           emViagem: 0,
         });
       }
-
       const stats = linesStats.get(lineKey);
       stats.total++;
+      if (departureTime > stats.ultimaPartida) stats.ultimaPartida = departureTime;
 
-      const minutesUntil = this.scheduleManager.minutesUntilDeparture(
-        departure.time
-      );
-      if (minutesUntil >= 0) {
-        stats.futuras++;
-      }
-
-      if (this.scheduleManager.isVeiculoEmViagem(departure)) {
-        stats.emViagem++;
-      }
+      const minutesUntil = this.scheduleManager.minutesUntilDeparture(departure.time);
+      if (minutesUntil >= 0) stats.futuras++;
+      if (this.scheduleManager.isVeiculoEmViagem(departure)) stats.emViagem++;
     });
 
-    // Atualizar status das linhas baseado nas estatísticas
+    // Atualizar cada linha
     this.linesData.forEach((lineData, lineKey) => {
-      const lastDepartureTime = linesLastDeparture.get(lineKey);
-      const stats = linesStats.get(lineKey);
+      if (lineData.manualStatus) return; // manual manda
 
-      // Se não há partidas futuras e a última partida foi há mais de 30 minutos
-      if ((!stats || stats.futuras === 0) && lastDepartureTime) {
-        if (currentTime > lastDepartureTime + 30) {
-          if (lineData.status !== "ended") {
-            this.updateLineStatus(lineData, "ended");
-            console.log(`🔄 Linha ${lineKey} encerrada automaticamente`);
-          }
+      const stats = linesStats.get(lineKey);
+      const isOperationEnded = this.scheduleManager.isLineOperationEnded(lineKey);
+
+      // Sem partidas futuras → encerrada
+      if (isOperationEnded || !stats || stats.futuras === 0) {
+        if (lineData.status !== 'ended') {
+          this.linesData.set(lineKey, {
+            ...lineData,
+            status: 'ended',
+            manualStatus: false,
+            lastUpdate: now,
+          });
+          console.log(`🔄 Linha ${lineKey} encerrada automaticamente`);
         }
-      } else if (stats && stats.futuras > 0) {
-        // Se há partidas futuras e estava encerrada, reativar
-        if (lineData.status === "ended") {
-          this.updateLineStatus(lineData, "normal");
+      } else {
+        // Tem partidas futuras → normal
+        if (lineData.status === 'ended') {
+          this.linesData.set(lineKey, {
+            ...lineData,
+            status: 'normal',
+            manualStatus: false,
+            lastUpdate: now,
+          });
           console.log(`🔄 Linha ${lineKey} reativada automaticamente`);
         }
       }
     });
+
+    this.updateLinesDisplay();
   }
 
   // Método para forçar refresh manual (útil para debugging)
@@ -472,17 +455,16 @@ class BusDeparturesApp {
 
   // Inicializar dados das linhas a partir dos horários carregados
   initializeLinesFromSchedule() {
-    const allDepartures = this.scheduleManager.getAllUpcomingDepartures();
+    // ✅ Usa TODAS as partidas (inclusive as que já passaram)
+    // Antes: getAllUpcomingDepartures() filtrava e sumia com linhas encerradas
+    const allDepartures = this.scheduleManager.scheduleData || [];
     const uniqueLines = new Map();
 
-    // Coletar linhas únicas
     allDepartures.forEach((departure) => {
       const lineKey = departure.line;
       if (!uniqueLines.has(lineKey)) {
-        // Verificar status inicial da operação
-        const isOperationEnded =
-          this.scheduleManager.isLineOperationEnded(lineKey);
-        const initialStatus = isOperationEnded ? "ended" : "normal";
+        const isOperationEnded = this.scheduleManager.isLineOperationEnded(lineKey);
+        const initialStatus = isOperationEnded ? 'ended' : 'normal';
 
         uniqueLines.set(lineKey, {
           line: departure.line,
@@ -490,24 +472,26 @@ class BusDeparturesApp {
           bgColor: departure.bgColor,
           textColor: departure.textColor,
           status: initialStatus,
+          manualStatus: false,
         });
       }
     });
 
-    // Manter status existentes se possível
+    // Manter status existentes (manual ou não)
     uniqueLines.forEach((newLineData, lineKey) => {
       if (this.linesData.has(lineKey)) {
-        // Manter status anterior, exceto se a operação mudou
         const existingData = this.linesData.get(lineKey);
-        const isOperationEnded =
-          this.scheduleManager.isLineOperationEnded(lineKey);
 
-        if (isOperationEnded && existingData.status !== "ended") {
-          newLineData.status = "ended"; // Forçar encerramento se operação acabou
-        } else if (!isOperationEnded && existingData.status === "ended") {
-          newLineData.status = "normal"; // Reativar se operação voltou
-        } else {
+        if (existingData.manualStatus) {
+          // Status escolhido manualmente pelo CCO → preserva
           newLineData.status = existingData.status;
+          newLineData.manualStatus = true;
+        } else {
+          // Status automático → reavalia
+          const isOperationEnded = this.scheduleManager.isLineOperationEnded(lineKey);
+          if (isOperationEnded) newLineData.status = 'ended';
+          else if (existingData.status === 'ended') newLineData.status = 'normal';
+          else newLineData.status = existingData.status;
         }
       }
       this.linesData.set(lineKey, newLineData);
@@ -869,7 +853,7 @@ class BusDeparturesApp {
 
     try {
       // Carregar dados dos CSVs
-      await this.scheduleManager.loadScheduleData();
+      await this.scheduleManager.loadScheduleDataWithRollover();
 
       // Atualizar informações da escala
       this.updateScheduleInfo();

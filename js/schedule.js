@@ -156,6 +156,11 @@ class ScheduleManager {
     ];
   }
 
+  // Alias de compatibilidade — mantém código antigo funcionando
+  async loadScheduleData(fileSelection = null) {
+    return await this.loadScheduleDataWithRollover(fileSelection);
+  }
+
   // Refresh inteligente dos dados
   async refreshScheduleData(fileSelection = null) {
     try {

@@ -748,13 +748,15 @@ class BusDeparturesApp {
 
     // Adicionar partidas à tabela
     departuresToShow.forEach((departure) => {
+      // ✅ Partidas do dia anterior NÃO aparecem no index.html
+      // (o CCO só quer saber das partidas do dia atual)
+      if (departure._doDiaAnterior) return;
+
       const minutesUntil = this.scheduleManager.minutesUntilDeparture(
-        departure.time,
-        departure._doDiaAnterior === true
+        departure.time
       );
       const status = this.scheduleManager.getDepartureStatus(departure.time);
 
-      // Não mostrar partidas que já passaram há mais de 1 minuto
       if (minutesUntil < -1) return;
 
       const row = document.createElement("tr");

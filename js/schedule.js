@@ -17,43 +17,54 @@ class ScheduleManager {
   // ROLLOVER DE MEIA-NOITE
   // ============================================================
   async loadScheduleDataWithRollover(fileSelection = null) {
-    // 1) Carrega o dia atual via CSVLoader
+    // 1) Guarda partidas do dia anterior que JÁ ESTÃO em memória (se houver)
+    const anterioresEmMemoria = (this.scheduleData || []).filter(p => p._doDiaAnterior);
+
+    // 2) Carrega o dia atual
     await this.csvLoader.loadCSVData(fileSelection);
     this.scheduleData = this.csvLoader.getFormattedData();
 
     const diaAtual = this.getCurrentDate();
     const diaAnterior = this.dateStrMenosUmDia(diaAtual);
 
-    // 2) Busca partidas do dia anterior (pode retornar null)
-    let partidasAnteriores = null;
+    // 3) Busca partidas do dia anterior (CSV) e mescla com as que já estavam em memória
+    let partidasAnterioresCSV = null;
     try {
-      partidasAnteriores = await this.csvLoader.loadScheduleForDate(diaAnterior);
+      partidasAnterioresCSV = await this.csvLoader.loadScheduleForDate(diaAnterior);
     } catch (e) {
       console.warn('[rollover] erro ao carregar dia anterior:', e);
     }
 
-    if (!Array.isArray(partidasAnteriores) || partidasAnteriores.length === 0) {
-      console.log('[rollover] nenhuma partida do dia anterior para reter');
-      this.triggerScheduleUpdate();
-      return this.scheduleData;
+    const candidatasAnteriores = [
+      ...(Array.isArray(partidasAnterioresCSV) ? partidasAnterioresCSV : []),
+      ...anterioresEmMemoria.map(p => ({ ...p })), // reprocessa as que estavam em memória
+    ];
+
+    // 4) Deduplica por (vehicle, time, line)
+    const vistos = new Set();
+    const candidatasUnicas = [];
+    for (const p of candidatasAnteriores) {
+      const k = `${p.vehicle}|${p.time}|${p.line}`;
+      if (vistos.has(k)) continue;
+      vistos.add(k);
+      candidatasUnicas.push(p);
     }
 
-    // 3) Filtra só as que AINDA NÃO retornaram
+    // 5) Filtra as que AINDA NÃO retornaram
     const agora = new Date();
     const minAgora = agora.getHours() * 60 + agora.getMinutes();
 
-    const retidas = partidasAnteriores.filter(p => {
+    const retidas = candidatasUnicas.filter(p => {
       if (!p.time) return false;
       const [h, m] = p.time.split(':').map(Number);
       if (isNaN(h) || isNaN(m)) return false;
-
       const partidaMin = h * 60 + m;
       const retornoMin = partidaMin + (p.duracao || 90);
       const retornoReal = retornoMin >= partidaMin ? retornoMin : retornoMin + 1440;
       return (minAgora + 1440) < retornoReal;
     });
 
-    // 4) Marca origem e concatena SEM duplicar
+    // 6) Marca como dia anterior e concatena
     const marcadas = retidas.map(p => ({ ...p, _doDiaAnterior: true }));
     const chave = p => `${p.vehicle}|${p.time}|${p.line}`;
     const jaExiste = new Set(this.scheduleData.map(chave));

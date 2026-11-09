@@ -115,10 +115,8 @@ class BusDeparturesApp {
   // Refresh dos dados da escala
   async refreshScheduleData() {
     try {
-      const currentFile = this.scheduleManager.csvLoader.getCurrentFile();
-      await this.scheduleManager.loadSelectedFile(currentFile);
-
-      // Re-inicializar dados das linhas
+      // ✅ Usa rollover pra manter partidas do dia anterior que ainda estão em curso
+      await this.scheduleManager.loadScheduleDataWithRollover();
       this.initializeLinesFromSchedule();
     } catch (error) {
       console.error("Erro ao atualizar dados da escala:", error);
@@ -751,7 +749,8 @@ class BusDeparturesApp {
     // Adicionar partidas à tabela
     departuresToShow.forEach((departure) => {
       const minutesUntil = this.scheduleManager.minutesUntilDeparture(
-        departure.time
+        departure.time,
+        departure._doDiaAnterior === true
       );
       const status = this.scheduleManager.getDepartureStatus(departure.time);
 

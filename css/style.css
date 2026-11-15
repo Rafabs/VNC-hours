@@ -551,61 +551,246 @@ td:nth-child(5) {
    MEDIA QUERIES
    ============================================================ */
 
-@media (min-width: 768px) {
-  body { padding: 16px; }
+/* ============================================================
+   MOBILE (iPhone 15 — Chrome iOS / Safari)
+   ============================================================ */
+@media (max-width: 767px) {
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    /* iOS: evita bounce scroll no body */
+    position: fixed;
+    width: 100%;
+  }
 
+  /* HEADER fixo, sempre acima de tudo */
   .header {
-    flex-direction: row;
-    justify-content: space-between;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 56px;
+    padding: 0 10px;
+    z-index: 5000;
+    display: flex;
     align-items: center;
-    padding: 18px 24px;
-    gap: 20px;
+    gap: 6px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+    box-shadow: 0 2px 8px rgba(0,0,0,.4);
   }
-
   .header-title {
-    font-size: 22px;
-    order: 1;
+    font-size: .95rem;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header-clock { display: none; }
+
+  .header .file-btn {
+    padding: 8px 10px;
+    font-size: .72rem;
+    flex-shrink: 0;
+  }
+  .toggle-btn {
+    min-width: 40px;
+    padding: 8px 10px;
+    font-size: 1rem;
   }
 
-  .header-clock {
-    order: 2;
-    gap: 20px;
+  /* Botão de toggle SEMPRE visível e acima da gaveta */
+  #btnToggleSidebar {
+    position: relative;
+    z-index: 6000 !important;
+    pointer-events: auto !important;
+    background: #2ecc71 !important;
+    border-color: #27ae60 !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+  }
+  /* Quando a gaveta está ABERTA, o botão fica neutro */
+  body:has(.side-panels:not(.hidden)) #btnToggleSidebar {
+    background: #334155 !important;
+    border-color: #475569 !important;
+    color: #fff !important;
   }
 
-  .clock { font-size: 28px; }
-  .date { font-size: 14px; }
-
-  .file-selector {
+  /* MAPA ocupa tudo abaixo do header */
+  #map {
     position: fixed;
-    top: 12px;
-    left: 12px;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  /* ===== BOTTOM SHEET (sidebar) ===== */
+  .side-panels {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    height: 62vh;
+    max-height: 62vh;
+    z-index: 4000 !important;
+    border-radius: 18px 18px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    background: #0f172a;
+    box-shadow: 0 -4px 30px rgba(0,0,0,.6);
+    display: flex;
     flex-direction: column;
-    opacity: 0.15;
-    margin-bottom: 0;
-  }
-  .file-selector:hover { opacity: 1; }
-
-  .file-btn { max-width: none; }
-
-  .lines-grid {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    /* Safe area iPhone */
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    transform: translateY(0);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
   }
 
-  td:nth-child(3) { max-width: none; }
+  /* Estado ESCONDIDO — sai da tela e NÃO captura cliques */
+  .side-panels.hidden {
+    transform: translateY(110%) !important;
+    visibility: hidden;
+    pointer-events: none !important;
+    opacity: 1 !important;
+  }
+  .side-panels:not(.hidden) {
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0) !important;
+  }
 
-  #scheduleInfo {
+  /* Handle no topo da gaveta */
+  .side-panels::before {
+    content: '';
+    display: block;
+    width: 44px;
+    height: 5px;
+    background: #475569;
+    border-radius: 3px;
+    margin: 8px auto 4px;
+    flex-shrink: 0;
+  }
+
+  /* Tabs compactas */
+  .sidebar-tabs {
+    display: flex;
+    flex-shrink: 0;
+    background: #020617;
+    border-bottom: 1px solid #1e293b;
+  }
+  .sidebar-tab {
+    flex: 1;
+    padding: 11px 4px;
+    font-size: .65rem;
+    gap: 3px;
+    flex-direction: column;
+  }
+  .sidebar-tab .badge {
+    font-size: .58rem;
+    padding: 1px 5px;
+  }
+
+  /* Corpo rolável */
+  .sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 8px;
+  }
+
+  /* ===== BOTÃO FLUTUANTE — acima da gaveta ===== */
+  .file-btn.floating {
     position: fixed;
-    top: 88px;
-    right: 24px;
-    left: auto;
-    max-width: 280px;
-    font-size: 11px;
+    bottom: calc(62vh + 16px + env(safe-area-inset-bottom, 0));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4500;
+    border-radius: 999px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 12px rgba(46,204,113,.4);
+    transition: bottom 0.3s;
+  }
+  body:has(.side-panels.hidden) .file-btn.floating {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0));
+  }
+
+  /* ===== PÁTIO: lista vertical ===== */
+  .waiting-5-grid,
+  .waiting-10-grid {
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+  }
+  .yard-lane {
+    flex-direction: column !important;
+    padding: 20px 6px 6px !important;
+    min-height: auto !important;
+    gap: 5px !important;
+  }
+  .yard-lane > span {
+    top: 4px !important;
+    left: 8px !important;
+    font-size: 9px !important;
+  }
+  .yard-vehicle-card {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    min-height: 44px !important;
+    padding: 8px 12px !important;
+    text-align: left !important;
+    gap: 8px !important;
+  }
+  .yard-vehicle-card .v-row-top {
+    flex-direction: row !important;
+    gap: 6px !important;
+    align-items: center !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  .yard-vehicle-card .v-prefix { font-size: .85rem !important; }
+  .yard-vehicle-card .v-line-badge {
+    font-size: .65rem;
+    background: rgba(255,255,255,.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .yard-vehicle-card .v-row-bottom { flex: 0 0 auto !important; width: auto !important; }
+  .yard-vehicle-card .v-time { font-size: .85rem !important; }
+
+  /* ===== RESERVA ===== */
+  .reserve-grid {
+    grid-template-columns: 1fr !important;
+    max-height: none;
+  }
+
+  /* ===== EM VIAGEM ===== */
+  .trip-card { padding: 10px 12px; }
+  .trip-card .prefixo-badge { font-size: .7rem; }
+  .trip-card .destino { font-size: .68rem; }
+
+  /* ===== PLATAFORMAS ===== */
+  #plataformasList {
+    grid-template-columns: 1fr !important;
+    gap: 6px;
+  }
+  .plataforma-slot { min-height: 72px; }
+
+  /* ===== TOAST ===== */
+  .status-toast {
+    bottom: calc(16px + env(safe-area-inset-bottom, 0)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: .78rem;
     padding: 8px 14px;
-    background: rgba(26, 31, 46, 0.8);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--border);
-    text-align: right;
-    margin: 0;
+    max-width: 90vw;
+    text-align: center;
+  }
+  body:has(.side-panels:not(.hidden)) .status-toast {
+    bottom: calc(62vh + 16px + env(safe-area-inset-bottom, 0)) !important;
   }
 }
 
@@ -839,7 +1024,6 @@ td:nth-child(5) {
     padding: 3px 6px;
   }
 }
-
 /* Landscape mobile */
 @media (max-height: 500px) and (orientation: landscape) {
   .table-container { max-height: 300px; }

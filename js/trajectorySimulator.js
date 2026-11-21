@@ -129,15 +129,7 @@ function criarMarcador(prefixo, veiculo) {
   setTimeout(() => {
     const img = marker.getElement()?.querySelector('.vehicle-icon');
     if (!img) return;
-    const aplicarFallback = () => {
-      img.style.display = 'none';
-      const fb = document.createElement('div');
-      fb.className = 'vehicle-icon no-img';
-      fb.textContent = prefixo.split(' ').pop();
-      img.parentNode.appendChild(fb);
-    };
-    if (!img.complete) img.onerror = aplicarFallback;
-    else if (img.naturalWidth === 0) aplicarFallback();
+    configurarFallbackImagem(img, veiculo, sentido);
   }, 200);
 
   const entry = {
@@ -176,6 +168,7 @@ function atualizarVisualMarcador(entry, veiculo, sentido) {
   if (img && img.tagName === 'IMG' && img.src.indexOf(imgUrl) === -1) {
     img.src = imgUrl;
     img.style.borderColor = sentido === 'volta' ? '#3498db' : '#2ecc71';
+    configurarFallbackImagem(img, veiculo, sentido);
   }
 }
 
@@ -641,12 +634,41 @@ function normalizar(valor, aliases) {
 }
 
 function imagemDoVeiculo(veiculo, sentido) {
+  const s      = sentido === 'volta' ? 'VOLTA' : 'IDA';
+  const prefixo = String(veiculo.prefixo || '').trim();
+  if (!prefixo) return placeholderImg(veiculo);
+
+  const arquivo = `${prefixo}-${s}.jpg`;
+  return `img/vehicles/${encodeURIComponent(arquivo)}`;
+}
+
+function imagemAlternativaDoVeiculo(veiculo, sentido) {
   const modelo = normalizar(veiculo.modelo, MODELO_ALIASES);
   const tipo   = normalizar(veiculo.tipo,   TIPO_ALIASES);
-  const s      = sentido === 'volta' ? 'VOLTA' : 'IDA';
-  if (!modelo || !tipo) return placeholderImg(veiculo);
-  const arquivo = `${modelo}-${tipo}-${s}.jpg`;
-  return `img/vehicles/${encodeURIComponent(arquivo)}`;
+  if (!modelo || !tipo) return null;
+
+  const s = sentido === 'volta' ? 'VOLTA' : 'IDA';
+  return `img/vehicles/${encodeURIComponent(`${modelo}-${tipo}-${s}.jpg`)}`;
+}
+
+function configurarFallbackImagem(img, veiculo, sentido) {
+  const aplicarFallback = () => {
+    const alternativa = imagemAlternativaDoVeiculo(veiculo, sentido);
+    if (alternativa && img.src.indexOf(alternativa) === -1) {
+      img.src = alternativa;
+      return;
+    }
+
+    img.style.display = 'none';
+    if (img.nextElementSibling?.classList.contains('no-img')) return;
+    const fb = document.createElement('div');
+    fb.className = 'vehicle-icon no-img';
+    fb.textContent = String(veiculo.prefixo || '?').split(' ').pop();
+    img.parentNode.appendChild(fb);
+  };
+
+  img.onerror = aplicarFallback;
+  if (img.complete && img.naturalWidth === 0) aplicarFallback();
 }
 
 function placeholderImg(veiculo) {
